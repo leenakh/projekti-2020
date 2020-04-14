@@ -1,20 +1,19 @@
-{ "kissat": [
+{
+  "kissat": [
     {
-        "id": 1,
-        "nimi": "Katti Matikainen",
-        "ika": 8
+      "id": 1,
+      "nimi": "Katti Matikainen",
+      "ika": 1
     },
     {
-        "id": 2,
-        "nimi": "Ville",
-        "ika": 12
+      "id": 2,
+      "nimi": "Ville",
+      "ika": 1
     },
     {
-        "id": 3,
-        "nimi": "Karvinen",
-        "ika": 55
+      "id": 4,
+      "nimi": "Bella",
+      "ika": 1
     }
-    
-
-]
+  ]
 }
