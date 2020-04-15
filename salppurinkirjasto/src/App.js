@@ -21,7 +21,6 @@ const App = () => {
   const addKissa = () => {
     //event.preventDefault()
     const uusiKissa = {
-      id: 11,
       nimi: 'Kissa',
       ika: 11
     }
@@ -37,7 +36,6 @@ const App = () => {
   }
 
   const muutaKissanIka = id => {
-    const url = `http://localhost:3001/kissat/${id}`
     const kissa = kissat.find(kissa => kissa.id === id)
     const muutettuKissa = {...kissa, ika: 1}
     kissaService
@@ -47,7 +45,7 @@ const App = () => {
       setKissa(muutettuKissa)
     })
     .catch(error => {
-      console.log('Ei onnistunut :)')
+      console.log('Ei onnistunut :(')
     })
   }
 
@@ -63,10 +61,12 @@ const App = () => {
   }
 
   const poistaKissa = id => {
+    id = kissa.id
     kissaService
     .remove(id)
     .then(response => {
-      setKissat(kissat.map(kissa => kissa.id !== id))
+      setKissat(kissat.filter(kissa => kissa.id !== id))
+      setKissa(kissat[0])
       console.log('kissat', kissat)
     })
   }
@@ -80,7 +80,6 @@ const App = () => {
     }
     setIndeksi(uusiIndeksi)
     console.log('uusikissa', uusikissa)
-    console.log(kissa)
   }
 
   if (kissa) {

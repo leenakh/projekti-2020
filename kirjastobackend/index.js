@@ -2,11 +2,15 @@ const express = require('express')
 const app = express()
 
 const morgan = require('morgan')
+const middlewares = require('./middlewares/logger')
+const cors = require('cors')
 
 app.use(express.json())
-app.use(morgan('dev'))
+//app.use(morgan('dev'))
+app.use(middlewares.requestLogger)
+app.use(cors())
 
-let jotain = [
+let kissat = [
     {
         'id': 1,
         'nimi': 'Katti Matikainen',
@@ -22,7 +26,7 @@ let jotain = [
         'nimi': 'Karvinen',
         'ika': 55
     }
-    
+
 
 ]
 
@@ -31,12 +35,12 @@ app.get('/', (req, res) => {
 })
 
 app.get('/api/kissat', (req, res) => {
-    res.json(jotain)
+    res.json(kissat)
 })
 
 app.get('/api/kissat/:id', (req, res) => {
     const id = Number(req.params.id)
-    const kissa = jotain.find(kissa => kissa.id === id)
+    const kissa = kissat.find(kissa => kissa.id === id)
 
     if (kissa) {
         res.json(kissa)
@@ -47,17 +51,52 @@ app.get('/api/kissat/:id', (req, res) => {
 
 app.delete('/api/kissat/:id', (req, res) => {
     const id = Number(req.params.id)
-    jotain = jotain.filter(kissa => kissa.id !== id)
+    kissat = kissat.filter(kissa => kissa.id !== id)
 
     res.status(204).end()
 })
 
 app.post('/api/kissat', (req, res) => {
-    const kissa = req.body
-    console.log(kissa)
+    let i = Math.floor(Math.random() * 10000)
+    let date = new Date()
+    let month = date.getMonth() + 1
+    const body = req.body
+    if (!body.nimi || !body.ika) {
+        return res.status(400).json({
+            error: 'Kissa puuttuu!'
+        })
+    }
+    const kissa = {
+        nimi: body.nimi,
+        ika: body.ika,
+        date: date.getDate() + '.' + month + '.' + date.getFullYear() + ' klo ' + date.getHours() + '.' + date.getMinutes(),
+        id: i
+    }
 
+    kissat = kissat.concat(kissa)
+    console.log(kissa)
     res.json(kissa)
 })
+
+app.put('/api/kissat/:id', (req, res) => {
+    const id = Number(req.params.id)
+    const body = req.body
+    if (!body.nimi || !body.ika) {
+        return res.status(400).json({
+            error: 'Kissa puuttuu!'
+        })
+    }
+    const muutettuKissa = {
+        nimi: body.nimi,
+        ika: body.ika
+    }
+    kissat = kissat.map(kissa => kissa.id !== id ? kissa : muutettuKissa)
+    console.log('uusi kissalista', kissat)
+    res.json(muutettuKissa)
+
+})
+
+app.use(middlewares.unknownEndpoint)
 
 const PORT = 3001
 app.listen(PORT, () => {
