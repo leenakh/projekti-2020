@@ -1,5 +1,7 @@
+require('dotenv').config()
 const express = require('express')
 const app = express()
+const mongoose = require('mongoose')
 
 const morgan = require('morgan')
 const middlewares = require('./middlewares/logger')
@@ -10,7 +12,27 @@ app.use(express.json())
 app.use(middlewares.requestLogger)
 app.use(cors())
 
-let kissat = [
+const url = process.env.MONGODB_URI
+mongoose.connect(url, {useNewUrlParser: true, useUnifiedTopology: true})
+
+const kissaSchema = new mongoose.Schema({
+    nimi: String,
+    ika: Number
+})
+
+const Kissa = mongoose.model('Kissa', kissaSchema)
+
+const kissa = new Kissa({
+    nimi: 'Ville',
+    ika: 12
+})
+
+kissa.save().then(response => {
+    console.log('Kissa valmis!')
+    
+})
+
+/* let kissat = [
     {
         'id': 1,
         'nimi': 'Katti Matikainen',
@@ -28,15 +50,19 @@ let kissat = [
     }
 
 
-]
+] */
 
 app.get('/', (req, res) => {
     res.send('<p>Hello, kirjastobackend!</p>')
 })
 
 app.get('/api/kissat', (req, res) => {
-    res.json(kissat)
+    Kissa.find({}).then(kissat => {
+        res.json(kissat)
+        //mongoose.connection.close()
+    })
 })
+
 
 app.get('/api/kissat/:id', (req, res) => {
     const id = Number(req.params.id)
@@ -98,7 +124,7 @@ app.put('/api/kissat/:id', (req, res) => {
 
 app.use(middlewares.unknownEndpoint)
 
-const PORT = 3001
+const PORT = process.env.PORT
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
 })
