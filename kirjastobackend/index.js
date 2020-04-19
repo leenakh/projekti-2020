@@ -1,111 +1,80 @@
 require('dotenv').config()
 const express = require('express')
 const app = express()
-const mongoose = require('mongoose')
 
 const morgan = require('morgan')
-const middlewares = require('./middlewares/logger')
+const logger = require('./middlewares/logger')
+const error = require('./middlewares/errors')
 const cors = require('cors')
 
 app.use(express.json())
 //app.use(morgan('dev'))
-app.use(middlewares.requestLogger)
+app.use(logger.requestLogger)
 app.use(cors())
 
-const url = process.env.MONGODB_URI
-mongoose.connect(url, {useNewUrlParser: true, useUnifiedTopology: true})
-
-const kissaSchema = new mongoose.Schema({
-    nimi: String,
-    ika: Number
-})
-
-const Kissa = mongoose.model('Kissa', kissaSchema)
-
-const kissa = new Kissa({
-    nimi: 'Ville',
-    ika: 12
-})
-
-kissa.save().then(response => {
-    console.log('Kissa valmis!')
-    
-})
-
-/* let kissat = [
-    {
-        'id': 1,
-        'nimi': 'Katti Matikainen',
-        'ika': 8
-    },
-    {
-        'id': 2,
-        'nimi': 'Ville',
-        'ika': 12
-    },
-    {
-        'id': 3,
-        'nimi': 'Karvinen',
-        'ika': 55
-    }
-
-
-] */
+const Kissa = require('./models/kissa')
 
 app.get('/', (req, res) => {
     res.send('<p>Hello, kirjastobackend!</p>')
 })
 
-app.get('/api/kissat', (req, res) => {
+app.get('/api/kissat', (req, res, next) => {
     Kissa.find({}).then(kissat => {
-        res.json(kissat)
-        //mongoose.connection.close()
+        if (kissat) {
+            res.json(kissat)
+        }
     })
+        .catch(error => {
+            console.log(error)
+            next(error)
+        })
 })
 
-
-app.get('/api/kissat/:id', (req, res) => {
-    const id = Number(req.params.id)
-    const kissa = kissat.find(kissa => kissa.id === id)
-
-    if (kissa) {
-        res.json(kissa)
-    } else {
-        res.status(404).end()
-    }
+app.get('/api/kissat/:id', (req, res, next) => {
+    //const id = Number(req.params.id)
+    Kissa.findById(req.params.id)
+        .then(kissa => {
+            if (kissa) {
+                res.json(kissa.toJSON())
+            } else {
+                res.status(404).end()
+            }
+        })
+        .catch(error => {
+            console.log(error)
+            next(error)
+        })
 })
 
-app.delete('/api/kissat/:id', (req, res) => {
-    const id = Number(req.params.id)
-    kissat = kissat.filter(kissa => kissa.id !== id)
-
-    res.status(204).end()
-})
-
-app.post('/api/kissat', (req, res) => {
-    let i = Math.floor(Math.random() * 10000)
+app.post('/api/kissat', (req, res, next) => {
+    /* let i = Math.floor(Math.random() * 10000)
     let date = new Date()
-    let month = date.getMonth() + 1
+    let month = date.getMonth() + 1 */
     const body = req.body
     if (!body.nimi || !body.ika) {
         return res.status(400).json({
             error: 'Kissa puuttuu!'
         })
     }
-    const kissa = {
+    const kissa = new Kissa({
         nimi: body.nimi,
-        ika: body.ika,
-        date: date.getDate() + '.' + month + '.' + date.getFullYear() + ' klo ' + date.getHours() + '.' + date.getMinutes(),
-        id: i
-    }
+        ika: body.ika
+    })
 
-    kissat = kissat.concat(kissa)
-    console.log(kissa)
-    res.json(kissa)
+    kissa.save()
+        .then(kissa => {
+            console.log('Kissa valmis!')
+            if (kissa) {
+                res.json(kissa.toJSON())
+            }
+        })
+        .catch(error => {
+            console.log(error)
+            next(error)
+        })
 })
 
-app.put('/api/kissat/:id', (req, res) => {
-    const id = Number(req.params.id)
+app.put('/api/kissat/:id', (req, res, next) => {
     const body = req.body
     if (!body.nimi || !body.ika) {
         return res.status(400).json({
@@ -116,13 +85,32 @@ app.put('/api/kissat/:id', (req, res) => {
         nimi: body.nimi,
         ika: body.ika
     }
-    kissat = kissat.map(kissa => kissa.id !== id ? kissa : muutettuKissa)
-    console.log('uusi kissalista', kissat)
-    res.json(muutettuKissa)
 
+    Kissa.findByIdAndUpdate(req.params.id, muutettuKissa, { new: true })
+        .then(uusiKissa => {
+            res.json(uusiKissa.toJSON())
+        })
+        .catch(error => {
+            console.log(error)
+            next(error)
+        })
 })
 
-app.use(middlewares.unknownEndpoint)
+app.delete('/api/kissat/:id', (req, res, next) => {
+    Kissa.findByIdAndRemove(req.params.id)
+        .then(result => {
+            if (result) {
+                res.status(204).end()
+            }
+        })
+        .catch(error => {
+            console.log(error)
+            next(error)
+        })
+})
+
+app.use(error.errorHandler)
+app.use(error.unknownEndpoint)
 
 const PORT = process.env.PORT
 app.listen(PORT, () => {
