@@ -92,7 +92,7 @@ const App = () => {
         <button onClick={addKissa}>Lisää kissa!</button>
         <button onClick={() => muutaKissanIka(kissa.id)}>Kissanpentu!</button>
         <button onClick={() => getVille('5e9b1c9f62614f36a401935e')}>Ville!</button>
-        <button onClick={poistaKissa}>Poista Kissa!</button>
+        <button onClick={poistaKissa}>Poista kissa!</button>
         <Kissa nimi={kissa.nimi} ika={kissa.ika} />
       </div>
     )

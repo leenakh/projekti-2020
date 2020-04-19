@@ -1,0 +1,2 @@
+PVM		TUNTIA			TEHTÄVÄ
+19.4.2020	1			User-skeeman ja käyttäjän autentikoinnin toteutus backendiin
