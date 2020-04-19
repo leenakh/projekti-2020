@@ -1,74 +1,39 @@
 const kissaRouter = require('express').Router()
 const Kissa = require('../models/kissa')
 
-kissaRouter.get('/', (req, res, next) => {
-    Kissa.find({}).then(kissat => {
-        if (kissat) {
-            res.json(kissat)
-        }
-    })
-        .catch(error => {
-            next(error)
-        })
+kissaRouter.get('/', async (req, res, next) => {
+    const kissat = await Kissa.find({})
+    res.json(kissat.map(kissa => kissa.toJSON()))
 })
 
-kissaRouter.get('/:id', (req, res, next) => {
-    Kissa.findById(req.params.id)
-        .then(kissa => {
-            if (kissa) {
-                res.json(kissa.toJSON())
-            } else {
-                res.status(404).end()
-            }
-        })
-        .catch(error => {
-            next(error)
-        })
+kissaRouter.get('/:id', async (req, res, next) => {
+        const kissa = await Kissa.findById(req.params.id)
+        res.json(kissa.toJSON())
 })
 
-kissaRouter.post('/', (req, res, next) => {
+kissaRouter.post('/', async (req, res, next) => {
     const body = req.body
     const kissa = new Kissa({
         nimi: body.nimi,
         ika: body.ika
     })
-
-    kissa.save()
-        .then(kissa => {
-            if (kissa) {
-                res.json(kissa.toJSON())
-            }
-        })
-        .catch(error => {
-            next(error)
-        })
+        const palautettuKissa = await kissa.save()
+        res.json(palautettuKissa.toJSON())
 })
 
-kissaRouter.put('/:id', (req, res, next) => {
+kissaRouter.put('/:id', async (req, res, next) => {
     const body = req.body
     const muutettuKissa = {
         nimi: body.nimi,
         ika: body.ika
     }
-    Kissa.findByIdAndUpdate(req.params.id, muutettuKissa, { new: true })
-        .then(uusiKissa => {
-            res.json(uusiKissa.toJSON())
-        })
-        .catch(error => {
-            next(error)
-        })
+        const palautettuKissa = await Kissa.findByIdAndUpdate(req.params.id, muutettuKissa, { new: true })
+        res.json(palautettuKissa.toJSON())
 })
 
-kissaRouter.delete('/:id', (req, res, next) => {
-    Kissa.findByIdAndRemove(req.params.id)
-        .then(result => {
-            if (result) {
-                res.status(204).end()
-            }
-        })
-        .catch(error => {
-            next(error)
-        })
+kissaRouter.delete('/:id', async (req, res, next) => {
+        await Kissa.findByIdAndRemove(req.params.id)
+        res.status(204).end()
 })
 
 module.exports = kissaRouter

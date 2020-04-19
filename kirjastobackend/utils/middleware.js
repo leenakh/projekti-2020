@@ -11,7 +11,7 @@ const requestLogger = (request, response, next) => {
 const errorHandler = (error, req, res, next) => {
     logger.error(error.message)
 
-    if (error.name === 'ReferenceError') {
+    if (error.name === 'ReferenceError' || error.name === 'TypeError') {
         return res.status(404).send({ error: 'Kissoja ei löytynyt.' })
     } else if (error.name === 'CastError') {
         return res.status(400).send({ error: 'Malformatted request' })

@@ -69,11 +69,8 @@ const App = () => {
     kissaService
       .remove(id)
       .then(response => {
-        if (response) {
         setKissat(kissat.filter(k => k.id !== id))
-        setKissa({ nimi: 'Katti Matikainen', ika: 8 })
-        console.log('kissat', kissat)
-        }
+        setKissa(kissat[indeksi])
       })
   }
 
