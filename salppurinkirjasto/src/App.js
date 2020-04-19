@@ -21,8 +21,8 @@ const App = () => {
   const addKissa = () => {
     //event.preventDefault()
     const uusiKissa = {
-      nimi: 'Kissa',
-      ika: 11
+      nimi: 'Pekka Töpöhäntä',
+      ika: 6
     }
     kissaService
       .create(uusiKissa)

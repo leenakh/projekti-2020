@@ -1,18 +1,16 @@
 const mongoose = require('mongoose')
 mongoose.set('useFindAndModify', false)
 
-const url = process.env.MONGODB_URI
-mongoose.connect(url, {useNewUrlParser: true, useUnifiedTopology: true})
-.then(result => {
-    console.log('Yhdistettiin MongoDB:hen.')
-})
-.catch((error) => {
-console.log('Tapahtui virhe yhdistettäessä MongoDB:hen:', error.message)
-})
-
 const kissaSchema = new mongoose.Schema({
-    nimi: String,
-    ika: Number
+    nimi: {
+        type: String,
+        minlength: 2,
+        required: true
+    },
+    ika: {
+        type: Number,
+        required: true
+    }
 })
 
 kissaSchema.set('toJSON', {

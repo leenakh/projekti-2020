@@ -1,0 +1,31 @@
+const config = require('./utils/config')
+const express = require('express')
+const app = express()
+const cors = require('cors')
+const kissaRouter = require('./controllers/kissaRouter')
+const logger = require('./utils/logger')
+const middleware = require('./utils/middleware')
+const mongoose = require('mongoose')
+mongoose.set('useFindAndModify', false)
+
+logger.info('Yhdistetään MongoDB:hen.')
+
+const url = config.MONGODB_URI
+mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(result => {
+        logger.info('Yhdistettiin MongoDB:hen.')
+    })
+    .catch((error) => {
+        logger.error('Tapahtui virhe yhdistettäessä MongoDB:hen:', error.message)
+    })
+
+app.use(cors())
+app.use(express.json())
+app.use(middleware.requestLogger)
+
+app.use('/api/kissat', kissaRouter)
+
+app.use(middleware.errorHandler)
+app.use(middleware.unknownEndpoint)
+
+module.exports = app
