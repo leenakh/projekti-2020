@@ -2,12 +2,34 @@ import React, { useState, useEffect } from 'react'
 import Kissa from './components/Kissa'
 import './App.css';
 import kissaService from './services/kissat'
+import loginService from './services/login'
 
 const App = () => {
 
   const [kissa, setKissa] = useState({ id: 7, nimi: 'Kalle', ika: 0 })
   const [kissat, setKissat] = useState([])
   const [indeksi, setIndeksi] = useState(0)
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [user, setUser] = useState(null)
+  const [errorMessage, setErrorMessage] = useState('')
+
+  const handleLogin = async (event) => {
+    event.preventDefault()
+    try {
+      const user = await loginService.login({
+        username, password
+      })
+      setUser(user)
+      setUsername('')
+      setPassword('')
+    } catch (exception) {
+      setErrorMessage('Wrong credentials')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+    }
+  }
 
   useEffect(() => {
     console.log('effect')
@@ -85,8 +107,23 @@ const App = () => {
     console.log('uusikissa', uusikissa)
   }
 
+
   if (kissa) {
     return (
+      <>
+      <div>
+        <form onSubmit={handleLogin}>
+          <div>
+            username: <input type="text" value ={username} name="Username" onChange={({target}) => setUsername(target.value)} />
+          </div>
+          <div>
+            password: <input type="password" value={password} name="Password" onChange={({target}) => setPassword(target.value)} />
+          </div>
+          <div>
+            <button type="submit">Login</button>
+          </div>
+        </form>
+      </div>
       <div >
         <button onClick={handle}>Napsauta!</button>
         <button onClick={addKissa}>Lisää kissa!</button>
@@ -95,6 +132,7 @@ const App = () => {
         <button onClick={poistaKissa}>Poista kissa!</button>
         <Kissa nimi={kissa.nimi} ika={kissa.ika} />
       </div>
+      </>
     )
   } else {
     return null
