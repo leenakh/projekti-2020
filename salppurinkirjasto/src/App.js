@@ -20,11 +20,27 @@ const App = () => {
       const user = await loginService.login({
         username, password
       })
+
+      window.localStorage.setItem('loggedInUser', JSON.stringify(user))
+
+      kissaService.setToken(user.token)
       setUser(user)
       setUsername('')
       setPassword('')
     } catch (exception) {
       setErrorMessage('Wrong credentials')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+    }
+  }
+
+  const handleLogout = async (event) => {
+    try {
+      window.localStorage.removeItem('loggedInUser')
+      setUser(null)
+    } catch (exception) {
+      setErrorMessage('Could not log out')
       setTimeout(() => {
         setErrorMessage(null)
       }, 5000)
@@ -38,6 +54,15 @@ const App = () => {
         setKissat(response)
         console.log(kissat)
       })
+  }, [])
+
+  useEffect(() => {
+    const loggedInUserJSON = window.localStorage.getItem('loggedInUser')
+    if (loggedInUserJSON) {
+      const user = JSON.parse(loggedInUserJSON)
+      setUser(user)
+      kissaService.setToken(user.token)
+    }
   }, [])
 
   const addKissa = () => {
@@ -123,6 +148,7 @@ const App = () => {
 
   const kissanapit = () => (
     <div >
+      <p><button onClick={handleLogout}>Logout</button></p>
       <button onClick={handle}>Napsauta!</button>
       <button onClick={addKissa}>Lisää kissa!</button>
       <button onClick={() => muutaKissanIka(kissa.id)}>Kissanpentu!</button>
