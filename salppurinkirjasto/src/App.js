@@ -3,6 +3,7 @@ import Kissa from './components/Kissa'
 import './App.css';
 import kissaService from './services/kissat'
 import loginService from './services/login'
+import bookService from './services/books'
 
 const App = () => {
 
@@ -13,6 +14,7 @@ const App = () => {
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const [errorMessage, setErrorMessage] = useState('')
+  const [books, setBooks] = useState([])
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -132,6 +134,13 @@ const App = () => {
     console.log('uusikissa', uusikissa)
   }
 
+  const handleBooks = () => {
+    bookService.getAll()
+      .then(response => {
+        setBooks(response)
+      })
+  }
+
   const loginForm = () => (
     <form onSubmit={handleLogin}>
       <div>
@@ -148,6 +157,7 @@ const App = () => {
 
   const kissanapit = () => (
     <div >
+      <p><button onClick={handleBooks}>Kirjat</button></p>
       <p><button onClick={handleLogout}>Logout</button></p>
       <button onClick={handle}>Napsauta!</button>
       <button onClick={addKissa}>Lisää kissa!</button>
@@ -163,7 +173,7 @@ const App = () => {
       {user === null ? loginForm() :
         <div>
           <p>{user.firstName} {user.lastName} on kirjautunut sisään.</p>
-        {kissanapit()}
+          {kissanapit()}
         </div>}
     </div>
   )

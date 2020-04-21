@@ -3,3 +3,4 @@ PVM		TUNTIA			TEHTÄVÄ
 20.4.2020	1			Käyttäjän autentikoinnin ja kirjautumislomakkeen (alustava) toteutus frontendiin
 21.4.2020	0,5			Kirjautumislomakkeen ja aloitussivun parantelua
 21.4.2020	0,5			Kirjautumisen sekä uloskirjautumisen viimeistelyä frontendissä
+21.4.2020	1			Perehtymistä Finnan avoimen REST API:n käyttöön
