@@ -107,36 +107,40 @@ const App = () => {
     console.log('uusikissa', uusikissa)
   }
 
-
-  if (kissa) {
-    return (
-      <>
+  const loginForm = () => (
+    <form onSubmit={handleLogin}>
       <div>
-        <form onSubmit={handleLogin}>
-          <div>
-            username: <input type="text" value ={username} name="Username" onChange={({target}) => setUsername(target.value)} />
-          </div>
-          <div>
-            password: <input type="password" value={password} name="Password" onChange={({target}) => setPassword(target.value)} />
-          </div>
-          <div>
-            <button type="submit">Login</button>
-          </div>
-        </form>
+        username: <input type="text" value={username} name="Username" onChange={({ target }) => setUsername(target.value)} />
       </div>
-      <div >
-        <button onClick={handle}>Napsauta!</button>
-        <button onClick={addKissa}>Lisää kissa!</button>
-        <button onClick={() => muutaKissanIka(kissa.id)}>Kissanpentu!</button>
-        <button onClick={() => getVille('5e9b1c9f62614f36a401935e')}>Ville!</button>
-        <button onClick={poistaKissa}>Poista kissa!</button>
-        <Kissa nimi={kissa.nimi} ika={kissa.ika} />
+      <div>
+        password: <input type="password" value={password} name="Password" onChange={({ target }) => setPassword(target.value)} />
       </div>
-      </>
-    )
-  } else {
-    return null
-  }
+      <div>
+        <button type="submit">Login</button>
+      </div>
+    </form>
+  )
+
+  const kissanapit = () => (
+    <div >
+      <button onClick={handle}>Napsauta!</button>
+      <button onClick={addKissa}>Lisää kissa!</button>
+      <button onClick={() => muutaKissanIka(kissa.id)}>Kissanpentu!</button>
+      <button onClick={() => getVille('5e9b1c9f62614f36a401935e')}>Ville!</button>
+      <button onClick={poistaKissa}>Poista kissa!</button>
+      <Kissa nimi={kissa.nimi} ika={kissa.ika} />
+    </div>
+  )
+
+  return (
+    <div>
+      {user === null ? loginForm() :
+        <div>
+          <p>{user.firstName} {user.lastName} on kirjautunut sisään.</p>
+        {kissanapit()}
+        </div>}
+    </div>
+  )
 }
 
 export default App

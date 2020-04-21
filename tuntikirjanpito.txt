@@ -1,3 +1,4 @@
 PVM		TUNTIA			TEHTÄVÄ
 19.4.2020	1			User-skeeman ja käyttäjän autentikoinnin toteutus backendiin
 20.4.2020	1			Käyttäjän autentikoinnin ja kirjautumislomakkeen (alustava) toteutus frontendiin
+21.4.2020	0,5			Kirjautumislomakkeen ja aloitussivun parantelua

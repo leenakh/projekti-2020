@@ -15,12 +15,14 @@ loginRouter.post('/', async (req, res) => {
 
     const userForToken = {
         username: user.username,
+        firstName: user.firstName,
+        lastName: user.lastName,
         id: user._id
     }
 
     const token = jwt.sign(userForToken, process.env.SECRET)
 
-    res.status(200).send({token, username: user.username})
+    res.status(200).send({token, username: user.username, firstName: user.firstName, lastName: user.lastName})
 })
 
 module.exports = loginRouter
