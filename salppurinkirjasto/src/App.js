@@ -4,6 +4,7 @@ import './App.css';
 import kissaService from './services/kissat'
 import loginService from './services/login'
 import bookService from './services/books'
+import finnaService from './services/finna'
 
 const App = () => {
 
@@ -135,9 +136,18 @@ const App = () => {
   }
 
   const handleBooks = () => {
-    bookService.getAll()
+    const newBooks = finnaService.getAll()
       .then(response => {
-        setBooks(response)
+        console.log(newBooks)
+        const newObject = {
+          title: response.records[0].title,
+          authors: response.records[0].nonPresenterAuthors[0],
+          language: response.records[0].languages[0]
+        }
+        bookService.create(newObject)
+          .then(response => {
+            setBooks(response)
+          })
       })
   }
 

@@ -1,9 +1,18 @@
 import axios from 'axios'
-const baseUrl = 'https://api.finna.fi/v1/search?lookfor=9789511314318'
+const baseUrl = 'http://localhost:3001/api/books'
+const finna = 'https://api.finna.fi/v1/search?lookfor=9789511314318&field[]=title&field[]=authors&field[]=languages'
 
 const getAll = () => {
     const request = axios.get(baseUrl)
     return request.then(response => response.data)
 }
 
-export default { getAll }
+const create = (newObject) => {
+    const request = axios.post(baseUrl, newObject)
+    return request.then(response => response.data)
+}
+
+export default {
+    getAll,
+    create
+}
