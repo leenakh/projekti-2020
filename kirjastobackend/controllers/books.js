@@ -28,7 +28,8 @@ booksRouter.post('/', async (req, res) => {
     const book = new Book({
         title: body.title,
         authors: body.authors,
-        languages: body.languages
+        languages: body.languages,
+        isbn: body.isbn === undefined ? 0000000000000 : body.isbn
     })
     const returnedBook = await book.save()
     res.json(returnedBook.toJSON())

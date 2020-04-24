@@ -16,6 +16,7 @@ const App = () => {
   const [user, setUser] = useState(null)
   const [errorMessage, setErrorMessage] = useState('')
   const [book, setBook] = useState()
+  const [isbn, setIsbn] = useState()
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -137,13 +138,14 @@ const App = () => {
   }
 
   const handleBooks = () => {
-    finnaService.getAll()
+    finnaService.getOne(isbn)
       .then(result => {
         const bookInfo = result.records[0]
         const newBook = {
           title: bookInfo.title,
-          authors: bookInfo.nonPresenterAuthors[0].name,
-          languages: bookInfo.languages[0]
+          authors: bookInfo.nonPresenterAuthors,
+          languages: bookInfo.languages,
+          isbn: isbn
         }
         bookService.create(newBook)
           .then(result => console.log(result))
@@ -168,6 +170,17 @@ const App = () => {
     </form>
   )
 
+  const bookForm = () => (
+    <form onSubmit={handleBooks}>
+      <div>
+        isbn: <input type="text" value={isbn} name="isbn" onChange={({target}) => setIsbn(target.value)}/>
+      </div>
+      <div>
+        <button type="submit">Lähetä</button>
+      </div>
+    </form>
+  )
+
   const kissanapit = () => (
     <div >
       <p><button onClick={handleBooks}>Kirjat</button></p>
@@ -187,6 +200,7 @@ const App = () => {
         <div>
           <p>{user.firstName} {user.lastName} on kirjautunut sisään.</p>
           {kissanapit()}
+          {bookForm()}
         </div>}
     </div>
   )

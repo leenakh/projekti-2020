@@ -7,14 +7,20 @@ const bookSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    authors: {
+    authors: [{
+        type: Object,
+        required: true
+    }],
+    languages: [{
         type: String,
         required: true
-    },
-    languages: {
-        type: String,
+    }],
+    isbn: {
+        type: Number,
+        minlength: 10,
+        maxlength: 13,
         required: true
-    }
+    } 
 })
 
 bookSchema.set('toJSON', {
