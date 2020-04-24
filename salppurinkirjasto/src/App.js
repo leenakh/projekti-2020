@@ -15,7 +15,7 @@ const App = () => {
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const [errorMessage, setErrorMessage] = useState('')
-  const [books, setBooks] = useState([])
+  const [book, setBook] = useState()
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -27,6 +27,7 @@ const App = () => {
       window.localStorage.setItem('loggedInUser', JSON.stringify(user))
 
       kissaService.setToken(user.token)
+      bookService.setToken(user.token)
       setUser(user)
       setUsername('')
       setPassword('')
@@ -136,19 +137,21 @@ const App = () => {
   }
 
   const handleBooks = () => {
-    const newBooks = finnaService.getAll()
-      .then(response => {
-        console.log(newBooks)
-        const newObject = {
-          title: response.records[0].title,
-          authors: response.records[0].nonPresenterAuthors[0],
-          language: response.records[0].languages[0]
+    finnaService.getAll()
+      .then(result => {
+        const bookInfo = result.records[0]
+        const newBook = {
+          title: bookInfo.title,
+          authors: bookInfo.nonPresenterAuthors[0].name,
+          languages: bookInfo.languages[0]
         }
-        bookService.create(newObject)
-          .then(response => {
-            setBooks(response)
-          })
+        bookService.create(newBook)
+          .then(result => console.log(result))
       })
+      .catch(error => {
+        console.log(error)
+      })
+
   }
 
   const loginForm = () => (

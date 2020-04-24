@@ -1,7 +1,8 @@
-PVM		TUNTIA			TEHTÄVÄ
-19.4.2020	1			User-skeeman ja käyttäjän autentikoinnin toteutus backendiin
-20.4.2020	1			Käyttäjän autentikoinnin ja kirjautumislomakkeen (alustava) toteutus frontendiin
-21.4.2020	0,5			Kirjautumislomakkeen ja aloitussivun parantelua
-21.4.2020	0,5			Kirjautumisen sekä uloskirjautumisen viimeistelyä frontendissä
-21.4.2020	1			Perehtymistä Finnan avoimen REST API:n käyttöön
-22.4.2020	2			Book-modelin ja vastaavan routerin toteutus sekä Finna.fi:n API:n käyttöönoton luonnostelua
+PVM		TUNTIA		TEHTÄVÄ
+19.4.2020	1		User-skeeman ja käyttäjän autentikoinnin toteutus backendiin
+20.4.2020	1		Käyttäjän autentikoinnin ja kirjautumislomakkeen (alustava) toteutus frontendiin
+21.4.2020	0,5		Kirjautumislomakkeen ja aloitussivun parantelua
+21.4.2020	0,5		Kirjautumisen sekä uloskirjautumisen viimeistelyä frontendissä
+21.4.2020	1		Perehtymistä Finnan avoimen REST API:n käyttöön
+22.4.2020	2		Book-modelin ja vastaavan routerin toteutus sekä Finna.fi:n API:n käyttöönoton luonnostelua
+23.4.2020	2		Book-olion tietojen hakeminen Finna.fi:stä ja tallentaminen tietokantaan

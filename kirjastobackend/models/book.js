@@ -7,18 +7,12 @@ const bookSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    authors: [{
-        type: Object,
-        required: true
-    }],
-    language: [{
+    authors: {
         type: String,
         required: true
-    }],
-    isbn: {
-        type: Number,
-        minlength: 10,
-        maxlength: 13,
+    },
+    languages: {
+        type: String,
         required: true
     }
 })
