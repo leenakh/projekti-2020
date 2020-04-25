@@ -14,9 +14,11 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [errorMessage, setErrorMessage] = useState('')
+  const [errorMessage, setErrorMessage] = useState(null)
+  const [message, setMessage] = useState(null)
   const [book, setBook] = useState()
-  const [isbn, setIsbn] = useState()
+  const [isbn, setIsbn] = useState('')
+  const [copy, setCopy] = useState('')
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -137,24 +139,50 @@ const App = () => {
     console.log('uusikissa', uusikissa)
   }
 
-  const handleBooks = () => {
-    finnaService.getOne(isbn)
-      .then(result => {
-        const bookInfo = result.records[0]
-        const newBook = {
-          title: bookInfo.title,
-          authors: bookInfo.nonPresenterAuthors,
-          languages: bookInfo.languages,
-          isbn: isbn
-        }
-        bookService.create(newBook)
-          .then(result => console.log(result))
-      })
-      .catch(error => {
-        console.log(error)
-      })
-
+  const handleBooks = async (event) => {
+    event.preventDefault()
+    try {
+      const result = await finnaService.getOne(isbn)
+      const bookInfo = result.records[0]
+      const newBook = {
+        title: bookInfo.title,
+        authors: bookInfo.nonPresenterAuthors,
+        languages: bookInfo.languages,
+        isbn: isbn,
+        copy: copy
+      }
+      const returnedBook = await bookService.create(newBook)
+      if (returnedBook) {
+        await setMessage('Uuden kirjan lisääminen onnistui!')
+        setIsbn('')
+        setCopy('')
+        console.log(message)
+        setTimeout(() => {
+          setMessage(null)
+        }, 5000)
+        console.log(message)
+      }
+      console.log(returnedBook)
+    } catch (exception) {
+      await setErrorMessage('Uuden kirjan luominen ei onnistunut!')
+      console.log(errorMessage)
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+    }
   }
+
+  const showMessage = () => (
+    <div>
+      {message}
+    </div>
+  )
+
+  const showError = () => (
+    <div>
+      {errorMessage}
+    </div>
+  )
 
   const loginForm = () => (
     <form onSubmit={handleLogin}>
@@ -173,7 +201,8 @@ const App = () => {
   const bookForm = () => (
     <form onSubmit={handleBooks}>
       <div>
-        isbn: <input type="text" value={isbn} name="isbn" onChange={({target}) => setIsbn(target.value)}/>
+        isbn: <input type="text" value={isbn} name="isbn" onChange={({ target }) => setIsbn(target.value)} />
+        copy: <input type="text" value={copy} name="copy" onChange={({ target }) => setCopy(target.value)} />
       </div>
       <div>
         <button type="submit">Lähetä</button>
@@ -195,14 +224,22 @@ const App = () => {
   )
 
   return (
-    <div>
-      {user === null ? loginForm() :
-        <div>
-          <p>{user.firstName} {user.lastName} on kirjautunut sisään.</p>
-          {kissanapit()}
-          {bookForm()}
-        </div>}
-    </div>
+    <>
+      <div>
+        {user === null ? loginForm() :
+          <div>
+            <p>{user.firstName} {user.lastName} on kirjautunut sisään.</p>
+            {kissanapit()}
+          </div>}
+      </div>
+      <div>
+        {user !== null && user.username === 'admin' ? bookForm() : null}
+      </div>
+      <div>
+        {message === null ? null : showMessage()}
+        {errorMessage === null ? null : showError()}
+      </div>
+    </>
   )
 }
 

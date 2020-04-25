@@ -2,32 +2,28 @@ const mongoose = require('mongoose')
 mongoose.set('useFindAndModify', false)
 mongoose.set('useCreateIndex', true)
 
-const bookSchema = new mongoose.Schema({
-    title: {
-        type: String,
-        required: true
-    },
-    authors: [{
+const loanSchema = new mongoose.Schema({
+    beginDate: {
         type: Object,
         required: true
-    }],
-    languages: [{
-        type: String,
-        required: true
-    }],
-    isbn: {
-        type: String,
-        minlength: 10,
-        maxlength: 13,
+    },
+    endDate: {
+        type: Object,
         required: true
     },
-    copy: {
-        type: String,
+    customer: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Customer',
+        required: true
+    },
+    book: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Book',
         required: true
     }
 })
 
-bookSchema.set('toJSON', {
+loanSchema.set('toJSON', {
     transform: (document, returnedObject) => {
         returnedObject.id = returnedObject._id.toString()
         delete returnedObject._id
@@ -35,4 +31,4 @@ bookSchema.set('toJSON', {
     }
 })
 
-module.exports = mongoose.model('Book', bookSchema)
+module.exports = mongoose.model('Loan', loanSchema)
