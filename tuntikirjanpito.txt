@@ -7,4 +7,5 @@ PVM		TUNTIA		TEHTÄVÄ
 22.4.2020	2		Book-modelin ja vastaavan routerin toteutus sekä Finna.fi:n API:n käyttöönoton luonnostelua
 24.4.2020	2		Book-olion tietojen hakeminen Finna.fi:stä lomakkeella isbn:n perusteella ja tallentaminen tietokantaan
 25.4.2020	2		Virheenkäsittelyä, virheilmoituksen renderöinti, Book-modelin parantelua, kirjan lisäämisen salliminen vain ylläpitäjälle, kirjan lisäämislomakkeen renderöinti vain kirjautuneelle ylläpitäjälle, Loan-modelin luominen, tietokannan rakenteen suunnittelua, ajan käsittelyyn tarkoitetun Moment-kirjaston käytön suunnittelua
+26.4.2020	2		Tietokannan rakenteen suunnittelua ja backendin laajentamista: Loan-router, Customer-model ja -router
 
