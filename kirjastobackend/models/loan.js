@@ -12,14 +12,16 @@ const loanSchema = new mongoose.Schema({
         required: true
     },
     customer: {
-        type: mongoose.Schema.Types.ObjectId,
-        //type: String
-        ref: 'Customer',
+        type: String,
         required: true
     },
     book: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Book',
+        required: true
+    },
+    returned: {
+        type: Boolean,
         required: true
     }
 })

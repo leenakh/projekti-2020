@@ -12,20 +12,20 @@ const errorHandler = (error, req, res, next) => {
     logger.error(error.message)
 
     if (error.name === 'ReferenceError' || error.name === 'TypeError') {
-        return res.status(404).send({ error: 'Kissoja ei löytynyt.' })
+        return res.status(404).send({ error: 'The resource you requested could not be found.' })
     } else if (error.name === 'CastError') {
-        return res.status(400).send({ error: 'Malformatted request' })
+        return res.status(400).send({ error: 'Malformatted request.' })
     } else if (error.name === 'ValidationError') {
         return res.status(400).json({error: error.message})
     } else if (error.name === 'JsonWebTokenError') {
-        return res.status(401).json({error: 'invalid token'})
+        return res.status(401).json({error: 'Invalid token.'})
     }
 
     next(error)
 }
 
 const unknownEndpoint = (request, response) => {
-    response.status(404).send({ error: 'Kissa eksyksissä!' })
+    response.status(404).send({ error: 'The page you requested does not exist.' })
 }
 
 module.exports = {

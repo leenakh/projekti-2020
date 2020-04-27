@@ -15,8 +15,15 @@ getTokenFrom = req => {
 }
 
 loansRouter.get('/', async (req, res) => {
-    const loans = await Loan.find({})
-    res.json(loans.map(loan => loan.toJSON()))
+        const loans = await Loan.find({})
+            .populate('book', { title: 1, authors: 1, languages: 1, isbn: 1, copy: 1 })
+        res.json(loans.map(loan => loan.toJSON()))
+})
+
+loansRouter.get('/:id', async (req, res) => {
+        const loan = await Loan.findById(req.params.id)
+            .populate('book', { title: 1, authors: 1, languages: 1, isbn: 1, copy: 1 })
+        res.json(loan.toJSON())
 })
 
 loansRouter.post('/', async (req, res) => {
@@ -24,19 +31,35 @@ loansRouter.post('/', async (req, res) => {
     const token = getTokenFrom(req)
     const decodedToken = jwt.verify(token, process.env.SECRET)
     if (!token || !decodedToken.id) {
-        return res.status(401).json({error: 'token missing or invalid'})
+        return res.status(401).json({ error: 'token missing or invalid' })
     }
     const user = await User.findById(decodedToken.id)
-    const customer = await Customer.findById(body.customerId)
+    //const customer = await Customer.findById(body.customerId)
     const book = await Book.findById(body.bookId)
 
     const loan = new Loan({
         beginDate: body.beginDate,
         endDate: body.endDate,
-        customer: customer._id,
-        book: book._id
+        customer: body.customer,
+        book: book._id,
+        returned: false
     })
     const returnedLoan = await loan.save()
+    res.json(returnedLoan.toJSON())
+})
+
+loansRouter.put('/:id', async (req, res) => {
+    const token = getTokenFrom(req)
+    const decodedToken = jwt.verify(token, process.env.SECRET)
+    if (!token || !decodedToken.id) {
+        return res.status(401).json({ error: 'token missing or invalid' })
+    }
+    const body = req.body
+    const changedLoan = {
+        endDate: body.endDate,
+        returned: body.returned
+    }
+    const returnedLoan = await Loan.findByIdAndUpdate(req.params.id, changedLoan, { new: true })
     res.json(returnedLoan.toJSON())
 })
 

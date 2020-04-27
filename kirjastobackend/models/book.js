@@ -24,6 +24,10 @@ const bookSchema = new mongoose.Schema({
     copy: {
         type: String,
         required: true
+    },
+    loan: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Loan'
     }
 })
 
