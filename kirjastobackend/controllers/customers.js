@@ -17,12 +17,13 @@ customersRouter.get('/', async (req, res) => {
 })
 
 customersRouter.get('/:id', async (req, res) => {
-    const customer = await Customer.findOne({email: req.params.id})
+    const customer = await Customer.findOne({ username: req.params.id })
     res.json(customer.toJSON())
 })
 
 customersRouter.get('/:id/loans', async (req, res) => {
-    const customersLoans = await Loan.find({ customer: req.params.id })
+    const customersLoans = await Loan.find({ customer: req.params.id, returned: false })
+        .populate('book', { title: 1, authors: 1, copy: 1 })
     res.json(customersLoans.map(loan => loan.toJSON()))
 })
 
@@ -33,9 +34,8 @@ customersRouter.post('/', async (req, res) => {
     if (!token || !decodedToken.id) {
         res.status(401).json({ error: 'token missing or invalid' })
     }
-
     const customer = new Customer({
-        email: body.email,
+        username: body.username,
         accessAllowed: true
     })
     const returnedCustomer = await customer.save()
@@ -49,10 +49,12 @@ customersRouter.put('/:id', async (req, res) => {
     if (!token || !decodedToken.id) {
         res.status(401).json({ error: 'token missing or invalid' })
     }
+    const customer = await Customer.findOne({ username: req.params.id })
+    const id = customer._id.toString()
     const changedCustomer = {
         accessAllowed: body.accessAllowed
     }
-    const returnedCustomer = await Customer.findByIdAndUpdate(req.params.id, changedCustomer, { new: true })
+    const returnedCustomer = await Customer.findByIdAndUpdate(id, changedCustomer, { new: true })
     res.json(returnedCustomer.toJSON())
 })
 

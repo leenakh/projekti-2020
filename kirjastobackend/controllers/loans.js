@@ -15,15 +15,15 @@ getTokenFrom = req => {
 }
 
 loansRouter.get('/', async (req, res) => {
-        const loans = await Loan.find({})
-            .populate('book', { title: 1, authors: 1, languages: 1, isbn: 1, copy: 1 })
-        res.json(loans.map(loan => loan.toJSON()))
+    const loans = await Loan.find({})
+        .populate('book', { title: 1, authors: 1, languages: 1, isbn: 1, copy: 1 })
+    res.json(loans.map(loan => loan.toJSON()))
 })
 
 loansRouter.get('/:id', async (req, res) => {
-        const loan = await Loan.findById(req.params.id)
-            .populate('book', { title: 1, authors: 1, languages: 1, isbn: 1, copy: 1 })
-        res.json(loan.toJSON())
+    const loan = await Loan.findById(req.params.id)
+        .populate('book', { title: 1, authors: 1, languages: 1, isbn: 1, copy: 1 })
+    res.json(loan.toJSON())
 })
 
 loansRouter.post('/', async (req, res) => {
@@ -34,18 +34,22 @@ loansRouter.post('/', async (req, res) => {
         return res.status(401).json({ error: 'token missing or invalid' })
     }
     const user = await User.findById(decodedToken.id)
-    //const customer = await Customer.findById(body.customerId)
+    const customer = await Customer.findOne({ username: body.customerId })
     const book = await Book.findById(body.bookId)
 
-    const loan = new Loan({
-        beginDate: body.beginDate,
-        endDate: body.endDate,
-        customer: body.customer,
-        book: book._id,
-        returned: false
-    })
-    const returnedLoan = await loan.save()
-    res.json(returnedLoan.toJSON())
+    if (customer.accessAllowed === true && !book.loan) {
+        const loan = new Loan({
+            beginDate: body.beginDate,
+            endDate: body.endDate,
+            customer: body.customerId,
+            book: book._id,
+            returned: false
+        })
+        const returnedLoan = await loan.save()
+        res.json(returnedLoan.toJSON())
+    } else {
+        res.status(401).json({ error: 'Customer is not allowed access or book is already taken.' })
+    }
 })
 
 loansRouter.put('/:id', async (req, res) => {
