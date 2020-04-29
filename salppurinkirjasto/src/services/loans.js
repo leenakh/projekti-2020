@@ -1,5 +1,5 @@
 import axios from 'axios'
-const baseUrl = 'http://localhost:3001/api/books'
+const baseUrl = 'http://localhost:3001/api/loans'
 
 let token = null
 const setToken = newToken => {
@@ -11,18 +11,8 @@ const getAll = async () => {
     return response.data
 }
 
-const search = async (isbn) => {
-    const response = await axios.get(`${baseUrl}/search/${isbn}`)
-    return response.data
-}
-
 const getOne = async (id) => {
     const response = await axios.get(`${baseUrl}/${id}`)
-    return response.data
-}
-
-const getLoans = async (id) => {
-    const response = await axios.get(`${baseUrl}/${id}/loans`)
     return response.data
 }
 
@@ -44,9 +34,7 @@ const update = async (id, newObject) => {
 
 export default {
     getAll,
-    search,
     getOne,
-    getLoans,
     create,
     update,
     setToken

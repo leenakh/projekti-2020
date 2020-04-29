@@ -34,7 +34,7 @@ loansRouter.post('/', async (req, res) => {
         return res.status(401).json({ error: 'token missing or invalid' })
     }
     const user = await User.findById(decodedToken.id)
-    const customer = await Customer.findOne({ username: body.customerId })
+    const customer = await Customer.findOne({ email: body.customerId })
     const book = await Book.findById(body.bookId)
 
     if (customer.accessAllowed === true && !book.loan) {

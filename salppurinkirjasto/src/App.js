@@ -4,6 +4,7 @@ import './App.css';
 import kissaService from './services/kissat'
 import loginService from './services/login'
 import bookService from './services/books'
+import loanService from './services/loans'
 import finnaService from './services/finna'
 
 const App = () => {
@@ -17,8 +18,10 @@ const App = () => {
   const [errorMessage, setErrorMessage] = useState(null)
   const [message, setMessage] = useState(null)
   const [book, setBook] = useState()
+  const [books, setBooks] = useState([])
   const [isbn, setIsbn] = useState('')
   const [copy, setCopy] = useState('')
+  const [loans, setLoans] = useState([])
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -31,6 +34,7 @@ const App = () => {
 
       kissaService.setToken(user.token)
       bookService.setToken(user.token)
+      loanService.setToken(user.token)
       setUser(user)
       setUsername('')
       setPassword('')
@@ -139,7 +143,29 @@ const App = () => {
     console.log('uusikissa', uusikissa)
   }
 
-  const handleBooks = async (event) => {
+  const handleFetchBook = async (event) => {
+    event.preventDefault()
+    try {
+      const fetchedBooks = await bookService.search(isbn)
+      if (fetchedBooks.length > 0) {
+        setBooks(fetchedBooks)
+        setMessage('Kirjat löytyivät!')
+        setTimeout(() => {
+          setMessage(null)
+        }, 5000)
+        setIsbn('')
+      } else {
+        setErrorMessage('Kirjoja ei löytynyt!')
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
+      }
+    } catch (exception) {
+      console.log(exception)
+    }
+  }
+
+  const handleCreateBook = async (event) => {
     event.preventDefault()
     try {
       const result = await finnaService.getOne(isbn)
@@ -172,6 +198,19 @@ const App = () => {
     }
   }
 
+  const handleGetBooksLoans = async (id) => {
+    id = '5ea441ce119f2d3828edc9bb'
+    try {
+      const loans = await bookService.getLoans(id)
+      setLoans(loans)
+    } catch (exception) {
+      setErrorMessage('Lainoja ei voitu hakea.')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+    }
+  }
+
   const showMessage = () => (
     <div>
       {message}
@@ -198,8 +237,8 @@ const App = () => {
     </form>
   )
 
-  const bookForm = () => (
-    <form onSubmit={handleBooks}>
+  const createBookForm = () => (
+    <form onSubmit={handleCreateBook}>
       <div>
         isbn: <input type="text" value={isbn} name="isbn" onChange={({ target }) => setIsbn(target.value)} />
         copy: <input type="text" value={copy} name="copy" onChange={({ target }) => setCopy(target.value)} />
@@ -210,9 +249,35 @@ const App = () => {
     </form>
   )
 
+  const fetchBookForm = () => (
+    <form onSubmit={handleFetchBook}>
+      <div>
+        isbn: <input type="text" value={isbn} name="isbn" onChange={({ target }) => setIsbn(target.value)} />
+      </div>
+      <div>
+        <button type="submit">Lähetä</button>
+      </div>
+    </form>
+  )
+
+  const handleBorrowingBook = async () => {
+    const loan = {
+      beginDate: "30/04/2020",
+      endDate: "30/05/2020",
+      customerId: "katti.matikainen",
+      bookId: '5ea43a62c361ff352cb8d8f5'
+    }
+    console.log('loan', loan)
+    const returnedLoan = await loanService.create(loan)
+    console.log('reloan', returnedLoan)
+    const returnedBook = await bookService.update(loan.bookId, { loanId: returnedLoan.id })
+    setBook(returnedBook)
+  }
+
   const kissanapit = () => (
     <div >
-      <p><button onClick={handleBooks}>Kirjat</button></p>
+      <p><button onClick={handleBorrowingBook}>Lainaa kirja</button></p>
+      <p><button onClick={handleGetBooksLoans}>Lainat</button></p>
       <p><button onClick={handleLogout}>Logout</button></p>
       <button onClick={handle}>Napsauta!</button>
       <button onClick={addKissa}>Lisää kissa!</button>
@@ -233,7 +298,10 @@ const App = () => {
           </div>}
       </div>
       <div>
-        {user !== null && user.username === 'admin' ? bookForm() : null}
+        {fetchBookForm()}
+      </div>
+      <div>
+        {user !== null && user.username === 'admin' ? createBookForm() : null}
       </div>
       <div>
         {message === null ? null : showMessage()}
