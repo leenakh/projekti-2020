@@ -18,8 +18,14 @@ booksRouter.get('/', async (req, res) => {
     res.json(books.map(book => book.toJSON()))
 })
 
-booksRouter.get('/search/:isbn', async (req, res) => {
+booksRouter.get('/isbn/:isbn', async (req, res) => {
     const books = await Book.find({ isbn: req.params.isbn })
+        .populate('loan', { beginDate: 1, endDate: 1, customer: 1, returned: 1 })
+    res.json(books.map(book => book.toJSON()))
+})
+
+booksRouter.get('/title/:title', async (req, res) => {
+    const books = await Book.find({ title: { $regex: req.params.title, $options: 'i' } })
         .populate('loan', { beginDate: 1, endDate: 1, customer: 1, returned: 1 })
     res.json(books.map(book => book.toJSON()))
 })

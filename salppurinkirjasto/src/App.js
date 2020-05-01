@@ -20,6 +20,7 @@ const App = () => {
   const [book, setBook] = useState()
   const [books, setBooks] = useState([])
   const [isbn, setIsbn] = useState('')
+  const [title, setTitle] = useState('')
   const [copy, setCopy] = useState('')
   const [loans, setLoans] = useState([])
 
@@ -143,10 +144,10 @@ const App = () => {
     console.log('uusikissa', uusikissa)
   }
 
-  const handleFetchBook = async (event) => {
+  const handleFetchBookByISBN = async (event) => {
     event.preventDefault()
     try {
-      const fetchedBooks = await bookService.search(isbn)
+      const fetchedBooks = await bookService.searchISBN(isbn)
       if (fetchedBooks.length > 0) {
         setBooks(fetchedBooks)
         setMessage('Kirjat löytyivät!')
@@ -154,6 +155,29 @@ const App = () => {
           setMessage(null)
         }, 5000)
         setIsbn('')
+      } else {
+        setErrorMessage('Kirjoja ei löytynyt!')
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
+      }
+    } catch (exception) {
+      console.log(exception)
+    }
+  }
+
+  const handleFetchBookByTitle = async (event) => {
+    event.preventDefault()
+    try {
+      console.log(title)
+      const fetchedBooks = await bookService.searchTitle(title)
+      if (fetchedBooks.length > 0) {
+        setBooks(fetchedBooks)
+        setMessage('Kirjat löytyivät!')
+        setTimeout(() => {
+          setMessage(null)
+        }, 5000)
+        setTitle('')
       } else {
         setErrorMessage('Kirjoja ei löytynyt!')
         setTimeout(() => {
@@ -249,10 +273,21 @@ const App = () => {
     </form>
   )
 
-  const fetchBookForm = () => (
-    <form onSubmit={handleFetchBook}>
+  const fetchBookByISBNForm = () => (
+    <form onSubmit={handleFetchBookByISBN}>
       <div>
-        isbn: <input type="text" value={isbn} name="isbn" onChange={({ target }) => setIsbn(target.value)} />
+        ISBN: <input type="text" value={isbn} name="isbn" onChange={({ target }) => setIsbn(target.value)} />
+      </div>
+      <div>
+        <button type="submit">Lähetä</button>
+      </div>
+    </form>
+  )
+
+  const fetchBookByTitleForm = () => (
+    <form onSubmit={handleFetchBookByTitle}>
+      <div>
+        Title: <input type="text" value={title} name="title" onChange={({ target }) => setTitle(target.value)} />
       </div>
       <div>
         <button type="submit">Lähetä</button>
@@ -272,6 +307,36 @@ const App = () => {
     console.log('reloan', returnedLoan)
     const returnedBook = await bookService.update(loan.bookId, { loanId: returnedLoan.id })
     setBook(returnedBook)
+  }
+
+  const handleChooseBook = async (id) => {
+    console.log(id)
+    try {
+      const chosenBook = await bookService.getOne(id)
+      setBook(chosenBook)
+    } catch (exception) {
+      console.log(exception)
+      setErrorMessage('Kirjaa ei löytynyt.')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+    }
+  }
+
+  const showBooks = () => {
+    return (
+      <div>
+        Kirjat
+        <ul>
+          {books.map(book =>
+            <li key={book.id}>
+              {book.title}
+              <p><button onClick={() => handleChooseBook(book.id)}>{book.copy}</button></p>
+            </li>)}
+        </ul>
+      </div>
+
+    )
   }
 
   const kissanapit = () => (
@@ -298,7 +363,9 @@ const App = () => {
           </div>}
       </div>
       <div>
-        {fetchBookForm()}
+        {fetchBookByISBNForm()}
+        {fetchBookByTitleForm()}
+        {showBooks()}
       </div>
       <div>
         {user !== null && user.username === 'admin' ? createBookForm() : null}
