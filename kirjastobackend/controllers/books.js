@@ -75,16 +75,24 @@ booksRouter.post('/', async (req, res) => {
 
 booksRouter.put('/:id', async (req, res) => {
     const body = req.body
+    let changedBook = null
     const token = getTokenFrom(req)
     const decodedToken = jwt.verify(token, process.env.SECRET)
     if (!token || !decodedToken.id) {
         return res.status(401).json({ error: 'token missing or invalid' })
     }
-    const loan = await Loan.findById(body.loanId)
-    const changedBook = {
-        loan: loan._id
+    if (body.loanId !== null) {
+        const loan = await Loan.findById(body.loanId)
+        changedBook = {
+            loan: loan._id
+        }
+    } else {
+        changedBook = {
+            loan: null
+        }
     }
     const returnedBook = await Book.findByIdAndUpdate(req.params.id, changedBook, { new: true })
+        .populate('loan', { beginDate: 1, endDate: 1, customer: 1, returned: 1 })
     res.json(returnedBook.toJSON())
 })
 

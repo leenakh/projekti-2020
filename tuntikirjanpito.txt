@@ -12,3 +12,4 @@ PVM		TUNTIA		TEHTÄVÄ
 28.4.2020	1,5		Lainausoperaation suunnittelua ja toteutusta backendiin, Book-routerin laajennusta, Customer-routerin laajentamista
 29.4.2020	3		Book-service frontendiin, kirjan haku tietokannasta isbn:llä: toteutus backendiin ja hakulomake frontendiin, kirjan kaikkien lainausten haku tietokannasta: alustava toteutus frontendiin, kirjan lainaaminen: alustava toteutus frontendiin
 1.5.2020	1,5		Kirjan haku tietokannasta nimen osan perusteella: toteutus backendiin ja alustava toteutus frontendiin; kirjojen renderöiminen näkymään ja toiminnallisuus yksittäisen kirjan valitsemiseksi näkymästä ja hakemiseksi tietokannasta sovelluksen tilaan
+2.5.2020	2,5		Kirjan lainaaminen: lainauslomakkeen alustava toteutus frontendiin; kirjan palauttaminen: alustava toteutus frontendiin; kirjan lainaaminen, jos asiakasta ei ole vielä olemassa

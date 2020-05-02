@@ -5,6 +5,7 @@ import kissaService from './services/kissat'
 import loginService from './services/login'
 import bookService from './services/books'
 import loanService from './services/loans'
+import customerService from './services/customers'
 import finnaService from './services/finna'
 
 const App = () => {
@@ -22,6 +23,9 @@ const App = () => {
   const [isbn, setIsbn] = useState('')
   const [title, setTitle] = useState('')
   const [copy, setCopy] = useState('')
+  const [beginDate, setBeginDate] = useState('')
+  const [endDate, setEndDate] = useState('')
+  const [customer, setCustomer] = useState('')
   const [loans, setLoans] = useState([])
 
   const handleLogin = async (event) => {
@@ -36,6 +40,7 @@ const App = () => {
       kissaService.setToken(user.token)
       bookService.setToken(user.token)
       loanService.setToken(user.token)
+      customerService.setToken(user.token)
       setUser(user)
       setUsername('')
       setPassword('')
@@ -74,6 +79,9 @@ const App = () => {
       const user = JSON.parse(loggedInUserJSON)
       setUser(user)
       kissaService.setToken(user.token)
+      bookService.setToken(user.token)
+      loanService.setToken(user.token)
+      customerService.setToken(user.token)
     }
   }, [])
 
@@ -295,24 +303,57 @@ const App = () => {
     </form>
   )
 
-  const handleBorrowingBook = async () => {
-    const loan = {
-      beginDate: "30/04/2020",
-      endDate: "30/05/2020",
-      customerId: "katti.matikainen",
-      bookId: '5ea43a62c361ff352cb8d8f5'
+  const handleBorrowingBook = async (event) => {
+    event.preventDefault()
+    try {
+      const requestedCustomer = await customerService.search(customer)
+      console.log(requestedCustomer)
+      if (requestedCustomer.length === 0) {
+        const newCustomer = await customerService.create({
+          username: customer
+        })
+        setCustomer(newCustomer.id)
+        console.log(newCustomer)
+      }
+      
+      const loan = {
+        beginDate: beginDate,
+        endDate: endDate,
+        customerId: customer,
+        bookId: book.id
+      }
+      
+      console.log('loan', loan)
+      const returnedLoan = await loanService.create(loan)
+      console.log('reloan', returnedLoan)
+      const returnedBook = await bookService.update(loan.bookId, { loanId: returnedLoan.id })
+      setBook(returnedBook)
+      setBooks(books.map(b => b.id !== returnedBook.id ? b : returnedBook))
+      setBeginDate('')
+      setEndDate('')
+      setCustomer('')
+      if (returnedBook.loan.id === returnedLoan.id) {
+        console.log('returnedBook', returnedBook.loan.id)
+        console.log('returnedLoan', returnedLoan.id)
+        setMessage('Kirjan lainaaminen onnistui.')
+        console.log(message)
+        setTimeout(() => {
+          setMessage(null)
+        }, 5000)
+      }
+    } catch (exception) {
+      setErrorMessage('Kirjan lainaaminen ei onnistunut.')
+      console.log(errorMessage)
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
     }
-    console.log('loan', loan)
-    const returnedLoan = await loanService.create(loan)
-    console.log('reloan', returnedLoan)
-    const returnedBook = await bookService.update(loan.bookId, { loanId: returnedLoan.id })
-    setBook(returnedBook)
   }
 
   const handleChooseBook = async (id) => {
     console.log(id)
     try {
-      const chosenBook = await bookService.getOne(id)
+      const chosenBook = books.find(book => book.id === id)
       setBook(chosenBook)
     } catch (exception) {
       console.log(exception)
@@ -323,19 +364,66 @@ const App = () => {
     }
   }
 
+  const borrowingBookForm = () => (
+    <form onSubmit={handleBorrowingBook}>
+      <div>
+        Alkupäivä: <input type="text" value={beginDate} name="beginDate" onChange={({ target }) => setBeginDate(target.value)} />
+        Loppupäivä: <input type="text" value={endDate} name="endDate" onChange={({ target }) => setEndDate(target.value)} />
+        Nimi: <input type="text" value={customer} name="customer" onChange={({ target }) => setCustomer(target.value)} />
+      </div>
+      <div>
+        <button type="submit">Lainaa kirja</button>
+      </div>
+    </form>
+  )
+
+  const returnBook = () => (
+    <button onClick={handleReturnBook}>Palauta kirja</button>
+  )
+
+  const handleReturnBook = async () => {
+    try {
+      const changedBook = {
+        loan: null
+      }
+      const changedLoan = {
+        endDate: '03/05/2020',
+        returned: true
+      }
+      const returnedBook = await bookService.update(book.id, { book, loanId: null })
+      console.log('returnedBook', returnedBook)
+      const returnedLoan = await loanService.update(book.loan.id, changedLoan)
+      setBook(returnedBook)
+      setBooks(books.map(b => b.id !== returnedBook.id ? b : returnedBook))
+      console.log('returnedLoan', returnedLoan)
+    } catch (exception) {
+      setErrorMessage('Kirjan palauttaminen ei onnistunut.')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+    }
+    console.log('book returned')
+  }
+
   const showBooks = () => {
     return (
-      <div>
-        Kirjat
+      <>
+        <div>
+          Kirjat
         <ul>
-          {books.map(book =>
-            <li key={book.id}>
-              {book.title}
-              <p><button onClick={() => handleChooseBook(book.id)}>{book.copy}</button></p>
-            </li>)}
-        </ul>
-      </div>
+            {books.map(b =>
+              <li key={b.id}>
+                {b.title}
+                <p><button onClick={() => handleChooseBook(b.id)}>{b.copy}</button></p>
+                <div>
+                  {book && !b.loan && book.id === b.id ? borrowingBookForm() : null}
+                  {book && b.loan && book.id === b.id ? returnBook() : null}
+                </div>
+              </li>)}
+          </ul>
+        </div>
 
+      </>
     )
   }
 

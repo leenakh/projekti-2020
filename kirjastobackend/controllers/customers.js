@@ -21,6 +21,11 @@ customersRouter.get('/:id', async (req, res) => {
     res.json(customer.toJSON())
 })
 
+customersRouter.get('/search/:id', async (req, res) => {
+    const customers = await Customer.find({username: req.params.id})
+    res.json(customers.map(customer => customer.toJSON()))
+})
+
 customersRouter.get('/:id/loans', async (req, res) => {
     const customersLoans = await Loan.find({ customer: req.params.id, returned: false })
         .populate('book', { title: 1, authors: 1, copy: 1 })
