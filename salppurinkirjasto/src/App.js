@@ -1,18 +1,15 @@
 import React, { useState, useEffect } from 'react'
-import Kissa from './components/Kissa'
 import './App.css';
-import kissaService from './services/kissat'
 import loginService from './services/login'
 import bookService from './services/books'
 import loanService from './services/loans'
 import customerService from './services/customers'
 import finnaService from './services/finna'
+import Book from './components/Book'
+import Books from './components/Books'
 
 const App = () => {
 
-  const [kissa, setKissa] = useState({ id: 7, nimi: 'Kalle', ika: 0 })
-  const [kissat, setKissat] = useState([])
-  const [indeksi, setIndeksi] = useState(0)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
@@ -20,8 +17,11 @@ const App = () => {
   const [message, setMessage] = useState(null)
   const [book, setBook] = useState()
   const [books, setBooks] = useState([])
+  const [selectedBooks, setSelectedBooks] = useState(null)
+  const [bookTitles, setBookTitles] = useState(null)
   const [isbn, setIsbn] = useState('')
   const [title, setTitle] = useState('')
+  const [selectedTitle, setSelectedTitle] = useState('')
   const [copy, setCopy] = useState('')
   const [beginDate, setBeginDate] = useState('')
   const [endDate, setEndDate] = useState('')
@@ -34,10 +34,7 @@ const App = () => {
       const user = await loginService.login({
         username, password
       })
-
       window.localStorage.setItem('loggedInUser', JSON.stringify(user))
-
-      kissaService.setToken(user.token)
       bookService.setToken(user.token)
       loanService.setToken(user.token)
       customerService.setToken(user.token)
@@ -65,92 +62,15 @@ const App = () => {
   }
 
   useEffect(() => {
-    console.log('effect')
-    kissaService.getAll()
-      .then(response => {
-        setKissat(response)
-        console.log(kissat)
-      })
-  }, [])
-
-  useEffect(() => {
     const loggedInUserJSON = window.localStorage.getItem('loggedInUser')
     if (loggedInUserJSON) {
       const user = JSON.parse(loggedInUserJSON)
       setUser(user)
-      kissaService.setToken(user.token)
       bookService.setToken(user.token)
       loanService.setToken(user.token)
       customerService.setToken(user.token)
     }
   }, [])
-
-  const addKissa = () => {
-    //event.preventDefault()
-    const uusiKissa = {
-      nimi: 'Pekka Töpöhäntä',
-      ika: 6
-    }
-    kissaService
-      .create(uusiKissa)
-      .then(response => {
-        console.log(response)
-        setKissat(kissat.concat(response))
-        setKissa(response)
-      })
-      .catch(error => {
-        console.log('Ei onnistunut :)')
-      })
-  }
-
-  const muutaKissanIka = id => {
-    const muutettavaKissa = kissa
-    id = muutettavaKissa.id
-    console.log('muutettavan kissan id', id)
-    const muutettuKissa = { ...muutettavaKissa, ika: 1 }
-    kissaService
-      .update(muutettavaKissa.id, muutettuKissa)
-      .then(response => {
-        setKissat(kissat.map(kissa => kissa.id !== muutettavaKissa.id ? kissa : response))
-        setKissa(muutettuKissa)
-      })
-      .catch(error => {
-        console.log('Ei onnistunut :(')
-      })
-  }
-
-  const getVille = id => {
-    kissaService
-      .getOne(id)
-      .then(response => {
-        setKissa(response)
-      })
-      .catch(error => {
-        console.log('Ei onnistunut :)')
-      })
-  }
-
-  const poistaKissa = id => {
-    id = kissa.id
-    console.log('poistettava id', id)
-    kissaService
-      .remove(id)
-      .then(response => {
-        setKissat(kissat.filter(k => k.id !== id))
-        setKissa(kissat[indeksi])
-      })
-  }
-
-  const handle = () => {
-    let uusiIndeksi = 0
-    let uusikissa = kissat[indeksi]
-    setKissa(uusikissa)
-    if (indeksi < kissat.length - 1) {
-      uusiIndeksi = indeksi + 1
-    }
-    setIndeksi(uusiIndeksi)
-    console.log('uusikissa', uusikissa)
-  }
 
   const handleFetchBookByISBN = async (event) => {
     event.preventDefault()
@@ -174,12 +94,32 @@ const App = () => {
     }
   }
 
+  const handleSelectBookFromListOfTitles = (booksTitle) => {
+    try {
+      setSelectedTitle(booksTitle)
+      const booksForSelection = books.filter(b => b.title === booksTitle)
+      setBooks(booksForSelection)
+      setSelectedBooks(booksForSelection)
+      setTitle('')
+      setBookTitles(null)
+    } catch (exception) {
+      setErrorMessage('Kirjoja ei löytynyt.')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+    }
+  }
+
   const handleFetchBookByTitle = async (event) => {
     event.preventDefault()
+    let fetchedBooks = []
     try {
       console.log(title)
-      const fetchedBooks = await bookService.searchTitle(title)
-      if (fetchedBooks.length > 0) {
+      fetchedBooks = await bookService.searchTitle(title)
+      const uniqueBookTitles = [...new Set(fetchedBooks.map(b => b.title))]
+      console.log(uniqueBookTitles)
+      if (uniqueBookTitles.length > 0) {
+        setBookTitles(uniqueBookTitles)
         setBooks(fetchedBooks)
         setMessage('Kirjat löytyivät!')
         setTimeout(() => {
@@ -194,6 +134,33 @@ const App = () => {
       }
     } catch (exception) {
       console.log(exception)
+    }
+  }
+
+  const showBookTitles = () => (
+    <div>
+      <ul>
+        {bookTitles.map(title =>
+          <li key={title}>
+            {title}
+            <p><button onClick={() => handleSelectBookFromListOfTitles(title)}>Valitse</button></p>
+          </li>
+        )}
+      </ul>
+    </div>
+  )
+
+  const handleFetchBookByCopy = async (event) => {
+    event.preventDefault()
+    try {
+      const selectedCopies = selectedBooks.filter(b => b.copy === copy)
+      setBooks(selectedCopies)
+      setCopy('')
+    } catch (exception) {
+      setErrorMessage('Nidettä ei löytynyt.')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
     }
   }
 
@@ -303,6 +270,17 @@ const App = () => {
     </form>
   )
 
+  const fetchBookByCopyForm = () => (
+    <form onSubmit={handleFetchBookByCopy}>
+      <div>
+        Copy: <input type="text" value={copy} name="copy" onChange={({ target }) => setCopy(target.value)} />
+      </div>
+      <div>
+        <button type="submit">Lähetä</button>
+      </div>
+    </form>
+  )
+
   const handleBorrowingBook = async (event) => {
     event.preventDefault()
     try {
@@ -315,14 +293,12 @@ const App = () => {
         setCustomer(newCustomer.id)
         console.log(newCustomer)
       }
-      
       const loan = {
         beginDate: beginDate,
         endDate: endDate,
         customerId: customer,
         bookId: book.id
       }
-      
       console.log('loan', loan)
       const returnedLoan = await loanService.create(loan)
       console.log('reloan', returnedLoan)
@@ -367,9 +343,9 @@ const App = () => {
   const borrowingBookForm = () => (
     <form onSubmit={handleBorrowingBook}>
       <div>
-        Alkupäivä: <input type="text" value={beginDate} name="beginDate" onChange={({ target }) => setBeginDate(target.value)} />
-        Loppupäivä: <input type="text" value={endDate} name="endDate" onChange={({ target }) => setEndDate(target.value)} />
-        Nimi: <input type="text" value={customer} name="customer" onChange={({ target }) => setCustomer(target.value)} />
+        <p>Alkupäivä: <input type="text" value={beginDate} name="beginDate" onChange={({ target }) => setBeginDate(target.value)} /></p>
+        <p>Loppupäivä: <input type="text" value={endDate} name="endDate" onChange={({ target }) => setEndDate(target.value)} /></p>
+        <p>Nimi: <input type="text" value={customer} name="customer" onChange={({ target }) => setCustomer(target.value)} /></p>
       </div>
       <div>
         <button type="submit">Lainaa kirja</button>
@@ -383,14 +359,11 @@ const App = () => {
 
   const handleReturnBook = async () => {
     try {
-      const changedBook = {
-        loan: null
-      }
       const changedLoan = {
         endDate: '03/05/2020',
         returned: true
       }
-      const returnedBook = await bookService.update(book.id, { book, loanId: null })
+      const returnedBook = await bookService.update(book.id, { loanId: null })
       console.log('returnedBook', returnedBook)
       const returnedLoan = await loanService.update(book.loan.id, changedLoan)
       setBook(returnedBook)
@@ -407,38 +380,12 @@ const App = () => {
 
   const showBooks = () => {
     return (
-      <>
-        <div>
-          Kirjat
-        <ul>
-            {books.map(b =>
-              <li key={b.id}>
-                {b.title}
-                <p><button onClick={() => handleChooseBook(b.id)}>{b.copy}</button></p>
-                <div>
-                  {book && !b.loan && book.id === b.id ? borrowingBookForm() : null}
-                  {book && b.loan && book.id === b.id ? returnBook() : null}
-                </div>
-              </li>)}
-          </ul>
-        </div>
-
-      </>
+      <Books books={books} book={book} handleChooseBook={handleChooseBook} borrowingBookForm={borrowingBookForm} returnBook={returnBook} />
     )
   }
 
-  const kissanapit = () => (
-    <div >
-      <p><button onClick={handleBorrowingBook}>Lainaa kirja</button></p>
-      <p><button onClick={handleGetBooksLoans}>Lainat</button></p>
-      <p><button onClick={handleLogout}>Logout</button></p>
-      <button onClick={handle}>Napsauta!</button>
-      <button onClick={addKissa}>Lisää kissa!</button>
-      <button onClick={() => muutaKissanIka(kissa.id)}>Kissanpentu!</button>
-      <button onClick={() => getVille('5e9b1c9f62614f36a401935e')}>Ville!</button>
-      <button onClick={poistaKissa}>Poista kissa!</button>
-      <Kissa nimi={kissa.nimi} ika={kissa.ika} />
-    </div>
+  const showLogout = () => (
+    <p><button onClick={handleLogout}>Logout</button></p>
   )
 
   return (
@@ -447,13 +394,14 @@ const App = () => {
         {user === null ? loginForm() :
           <div>
             <p>{user.firstName} {user.lastName} on kirjautunut sisään.</p>
-            {kissanapit()}
+            {showLogout()}
           </div>}
       </div>
       <div>
         {fetchBookByISBNForm()}
         {fetchBookByTitleForm()}
-        {showBooks()}
+        {selectedTitle === '' ? null : fetchBookByCopyForm()}
+        {bookTitles === null ? showBooks() : showBookTitles()}
       </div>
       <div>
         {user !== null && user.username === 'admin' ? createBookForm() : null}
