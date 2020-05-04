@@ -1,14 +1,19 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import Book from '../components/Book'
+import ReturnBook from '../components/ReturnBook'
+import ChooseBook from '../components/ChooseBook'
 
-const Books = ({ books, book, handleChooseBook, borrowingBookForm, returnBook }) => {
+const Books = ({ books, setBooks, book, setBook, borrowingBookForm, setErrorMessage }) => {
+    const returnBook = () => (
+        <ReturnBook book={book} setBook={setBook} books={books} setBooks={setBooks} />
+    )
     return (
         <>
-            <p>Kirjat</p>
             {books.map((b) =>
                 <div key={b.id}>
                     <Book key={b.id} book={b} />
-                    <button onClick={() => handleChooseBook(b.id)}>{b.copy}</button>
+                    <ChooseBook book={b} setBook={setBook} books={books} />
+
                     <div>
                         {book && !b.loan && book.id === b.id ? borrowingBookForm() : null}
                         {book && b.loan && book.id === b.id ? returnBook() : null}
