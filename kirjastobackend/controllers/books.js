@@ -25,8 +25,29 @@ booksRouter.get('/isbn/:isbn', async (req, res) => {
 })
 
 booksRouter.get('/title/:title', async (req, res) => {
-    const books = await Book.find({ title: { $regex: req.params.title, $options: 'i' } })
+    let books = []
+    const search = req.params.title.split('&')
+    console.log(search)
+    const firstField = search[0].split('=')
+    const secondField = search[1].split('=')
+    let fieldsMap = new Map()
+    fieldsMap.set(firstField[0], firstField[1])
+    fieldsMap.set(secondField[0], secondField[1])
+    for (let [key, value] of fieldsMap) {
+        console.log(key, '=', value)
+    }
+    const searchTitle = fieldsMap.get('title')
+    const searchIsbn = fieldsMap.get('isbn')
+    console.log(searchTitle, searchIsbn)
+    if (searchIsbn !== '') {
+        books = await Book.find({ isbn: searchIsbn })
+        .populate('loan', { beginDate: 1, endDate: 1, customer: 1, returned: 1 }) 
+    } else {
+        books = await Book.find({ title: { $regex: searchTitle, $options: 'i' } })
         .populate('loan', { beginDate: 1, endDate: 1, customer: 1, returned: 1 })
+    }
+    
+    console.log(books.map(book => book.toJSON()))
     res.json(books.map(book => book.toJSON()))
 })
 

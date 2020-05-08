@@ -1,23 +1,22 @@
 import React from 'react'
 
-const SelectTitle = ({setSelectedTitle, books, setBooks, setSelectedBooks, setTitle, bookTitles, setBookTitles, setErrorMessage}) => {
-    const handleSelectBookFromListOfTitles = (booksTitle) => {
-        try {
-          setSelectedTitle(booksTitle)
-          const booksForSelection = books.filter(b => b.title === booksTitle)
-          setBooks(booksForSelection)
-          setSelectedBooks(booksForSelection)
-          setTitle('')
-          setBookTitles(null)
-        } catch (exception) {
-          setErrorMessage('Kirjoja ei löytynyt.')
-          setTimeout(() => {
-            setErrorMessage(null)
-          }, 5000)
-        }
-      }
+const SelectTitle = ({ books, setBooks, setSelectedBooks, setTitle, bookTitles, setBookTitles, setErrorMessage }) => {
+  const handleSelectBookFromListOfTitles = (booksTitle) => {
+    try {
+      const booksForSelection = books.filter(b => b.title === booksTitle)
+      setBooks(booksForSelection)
+      setSelectedBooks(booksForSelection)
+      setTitle('')
+      setBookTitles(null)
+    } catch (exception) {
+      setErrorMessage('Kirjoja ei löytynyt.')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+    }
+  }
 
-    return (
+  return (
     <div>
       <ul>
         {bookTitles.map(title =>
@@ -28,6 +27,7 @@ const SelectTitle = ({setSelectedTitle, books, setBooks, setSelectedBooks, setTi
         )}
       </ul>
     </div>
-  )}
+  )
+}
 
-  export default SelectTitle
+export default SelectTitle

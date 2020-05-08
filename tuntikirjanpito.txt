@@ -15,3 +15,8 @@ PVM		TUNTIA		TEHTÄVÄ
 2.5.2020	2,5		Kirjan lainaaminen: lainauslomakkeen alustava toteutus frontendiin; kirjan palauttaminen: alustava toteutus frontendiin; kirjan lainaaminen, jos asiakasta ei ole vielä olemassa
 3.5.2020	3		Kirjan hakeminen niteen numeron perusteella: alustava toteutus frontendiin. MongoDB:n query syntaxiin tutustumista -- ei ratkaissut ongelmaa. Kirjan haku nimen osan perusteella: toteutuksen hiomista. Komponenttien ehdollisen renderöinnin hiomista. Refaktorointiyritelmiä.
 4.5.2020	4		Refaktorointia.
+8.5.2020	2		Refaktorointia: kirjan hakutoiminnallisuuden toteutus yhdellä hakulomakkeella. Komponenttien näkyvyyden säätämistä.
+
+TODO
+Lainan palautukseen varmistus.
+Uuden asiakkaan lisäämiseen varmistus.

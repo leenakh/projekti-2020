@@ -5,8 +5,7 @@ import loanService from './services/loans'
 import customerService from './services/customers'
 import Books from './components/Books'
 import CreateBookForm from './components/CreateBookForm'
-import FetchBookByISBNForm from './components/FetchBookByISBNForm'
-import FetchBookByTitleForm from './components/FetchBookByTitleForm'
+import FetchBookForm from './components/FetchBookForm'
 import FetchBookByCopyForm from './components/FetchBookByCopyForm'
 import LoginForm from './components/LoginForm'
 import Logout from './components/Logout'
@@ -25,7 +24,6 @@ const App = () => {
   const [bookTitles, setBookTitles] = useState(null)
   const [isbn, setIsbn] = useState('')
   const [title, setTitle] = useState('')
-  const [selectedTitle, setSelectedTitle] = useState('')
   const [copy, setCopy] = useState('')
   const [beginDate, setBeginDate] = useState('')
   const [endDate, setEndDate] = useState('')
@@ -54,12 +52,8 @@ const App = () => {
     <CreateBookForm isbn={isbn} setIsbn={setIsbn} copy={copy} setCopy={setCopy} message={message} setMessage={setMessage} errorMessage={errorMessage} setErrorMessage={setErrorMessage} />
   )
 
-  const fetchBookByISBNForm = () => (
-    <FetchBookByISBNForm isbn={isbn} setIsbn={setIsbn} setBooks={setBooks} setMessage={setMessage} setErrorMessage={setErrorMessage} />
-  )
-
-  const fetchBookByTitleForm = () => (
-    <FetchBookByTitleForm title={title} setTitle={setTitle} setBookTitles={setBookTitles} setBooks={setBooks} setMessage={setMessage} setErrorMessage={setErrorMessage} />
+  const fetchBookForm = () => (
+    <FetchBookForm title={title} isbn={isbn} setTitle={setTitle} setIsbn={setIsbn} setSelectedBooks={setSelectedBooks} setBookTitles={setBookTitles} setBooks={setBooks} setMessage={setMessage} setErrorMessage={setErrorMessage} />
   )
 
   const fetchBookByCopyForm = () => (
@@ -77,7 +71,7 @@ const App = () => {
   }
 
   const showBookTitles = () => (
-    <SelectTitle setSelectedTitle={setSelectedTitle} books={books} setBooks={setBooks} setSelectedBooks={setSelectedBooks} setTitle={setTitle} bookTitles={bookTitles} setBookTitles={setBookTitles} setErrorMessage={setErrorMessage} />
+    <SelectTitle books={books} setBooks={setBooks} setSelectedBooks={setSelectedBooks} setTitle={setTitle} bookTitles={bookTitles} setBookTitles={setBookTitles} setErrorMessage={setErrorMessage} />
   )
 
   const showMessage = () => (
@@ -97,9 +91,8 @@ const App = () => {
         {user !== null && user.username === 'admin' ? createBookForm() : null}
       </div>
       <div>
-        {user === null ? null : fetchBookByISBNForm()}
-        {user === null ? null : fetchBookByTitleForm()}
-        {selectedTitle === '' ? null : fetchBookByCopyForm()}
+        {user === null ? null : fetchBookForm()}
+        {selectedBooks === null ? null : fetchBookByCopyForm()}
         {bookTitles === null ? showBooks() : showBookTitles()}
       </div>
       <div>
