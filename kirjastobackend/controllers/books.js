@@ -3,6 +3,7 @@ const Book = require('../models/book')
 const User = require('../models/user')
 const Loan = require('../models/loan')
 const jwt = require('jsonwebtoken')
+const logger = require('../utils/logger')
 
 const getTokenFrom = req => {
     const authorization = req.get('authorization')
@@ -18,27 +19,21 @@ booksRouter.get('/', async (req, res) => {
     res.json(books.map(book => book.toJSON()))
 })
 
-booksRouter.get('/isbn/:isbn', async (req, res) => {
-    const books = await Book.find({ isbn: req.params.isbn })
-        .populate('loan', { beginDate: 1, endDate: 1, customer: 1, returned: 1 })
-    res.json(books.map(book => book.toJSON()))
-})
-
-booksRouter.get('/title/:title', async (req, res) => {
+booksRouter.get('/search/:search', async (req, res) => {
     let books = []
-    const search = req.params.title.split('&')
-    console.log(search)
+    const search = req.params.search.split('&')
+    logger.info(search)
     const firstField = search[0].split('=')
     const secondField = search[1].split('=')
     let fieldsMap = new Map()
     fieldsMap.set(firstField[0], firstField[1])
     fieldsMap.set(secondField[0], secondField[1])
     for (let [key, value] of fieldsMap) {
-        console.log(key, '=', value)
+        logger.info(key, '=', value)
     }
     const searchTitle = fieldsMap.get('title')
     const searchIsbn = fieldsMap.get('isbn')
-    console.log(searchTitle, searchIsbn)
+    logger.info(searchTitle, searchIsbn)
     if (searchIsbn !== '') {
         books = await Book.find({ isbn: searchIsbn })
         .populate('loan', { beginDate: 1, endDate: 1, customer: 1, returned: 1 }) 
@@ -46,8 +41,6 @@ booksRouter.get('/title/:title', async (req, res) => {
         books = await Book.find({ title: { $regex: searchTitle, $options: 'i' } })
         .populate('loan', { beginDate: 1, endDate: 1, customer: 1, returned: 1 })
     }
-    
-    console.log(books.map(book => book.toJSON()))
     res.json(books.map(book => book.toJSON()))
 })
 
@@ -115,6 +108,11 @@ booksRouter.put('/:id', async (req, res) => {
     const returnedBook = await Book.findByIdAndUpdate(req.params.id, changedBook, { new: true })
         .populate('loan', { beginDate: 1, endDate: 1, customer: 1, returned: 1 })
     res.json(returnedBook.toJSON())
+})
+
+booksRouter.delete('/:id', async (req, res) => {
+    await Book.findByIdAndDelete(req.params.id)
+    res.status(204).end()
 })
 
 module.exports = booksRouter

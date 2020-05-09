@@ -11,13 +11,8 @@ const getAll = async () => {
     return response.data
 }
 
-const searchISBN = async (isbn) => {
-    const response = await axios.get(`${baseUrl}/isbn/${isbn}`)
-    return response.data
-}
-
-const searchTitle = async (title) => {
-    const response = await axios.get(`${baseUrl}/title/${title}`)
+const search = async (search) => {
+    const response = await axios.get(`${baseUrl}/search/${search}`)
     return response.data
 }
 
@@ -49,8 +44,7 @@ const update = async (id, newObject) => {
 
 export default {
     getAll,
-    searchISBN,
-    searchTitle,
+    search,
     getOne,
     getLoans,
     create,

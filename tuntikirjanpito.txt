@@ -16,7 +16,10 @@ PVM		TUNTIA		TEHTÄVÄ
 3.5.2020	3		Kirjan hakeminen niteen numeron perusteella: alustava toteutus frontendiin. MongoDB:n query syntaxiin tutustumista -- ei ratkaissut ongelmaa. Kirjan haku nimen osan perusteella: toteutuksen hiomista. Komponenttien ehdollisen renderöinnin hiomista. Refaktorointiyritelmiä.
 4.5.2020	4		Refaktorointia.
 8.5.2020	2		Refaktorointia: kirjan hakutoiminnallisuuden toteutus yhdellä hakulomakkeella. Komponenttien näkyvyyden säätämistä.
+9.5.2020	2		Testiympäristön konfigurointia. Testitapausten suunnittelua ja testien luonnostelua. Delete-metodin lisääminen backendiin Book-routeriin. Book-routeriin joitain testejä, jotka pohjustavat hakutoiminnallisuuden laajentamista.
 
 TODO
 Lainan palautukseen varmistus.
 Uuden asiakkaan lisäämiseen varmistus.
+Hakutermisyötteen käsittely virtaviivaisemmaksi?
+Komponenttien näkyvyyden säätelyyn jokin patenttiratkaisu? Props.children?

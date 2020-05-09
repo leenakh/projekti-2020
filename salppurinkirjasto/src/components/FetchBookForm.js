@@ -10,7 +10,7 @@ const FetchBookForm = ({ title, setTitle, isbn, setIsbn, setSelectedBooks, setBo
       console.log(title)
       const search = `title=${title}&isbn=${isbn}`
       console.log(search)
-      fetchedBooks = await bookService.searchTitle(search)
+      fetchedBooks = await bookService.search(search)
       const uniqueBookTitles = [...new Set(fetchedBooks.map(b => b.title))]
       console.log(uniqueBookTitles)
       if (uniqueBookTitles.length > 0) {
