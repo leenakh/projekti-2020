@@ -38,11 +38,11 @@ const FetchBookForm = ({ title, setTitle, isbn, setIsbn, setSelectedBooks, setBo
     <form onSubmit={handleFetchBook}>
       <div>
         <h3>Hae kirja ISBN-tunnuksen tai otsikon perusteella</h3>
-            ISBN: <input type="text" value={isbn} name="isbn" onChange={({ target }) => setIsbn(target.value)} />
-            Title: <input type="text" value={title} name="title" onChange={({ target }) => setTitle(target.value)} />
+            ISBN: <input type="text" value={isbn} id="isbn" onChange={({ target }) => setIsbn(target.value)} />
+            Title: <input type="text" value={title} id="title" onChange={({ target }) => setTitle(target.value)} />
       </div>
       <div>
-        <button type="submit">Lähetä</button>
+        <button id="fetch" type="submit">Lähetä</button>
       </div>
     </form>
   )

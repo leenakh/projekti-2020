@@ -15,7 +15,7 @@ const ChooseBook = ({ book, setBook, books, setErrorMessage }) => {
         }
     }
     return (
-        <button onClick={() => handleChooseBook(book.id)}>{book.copy}</button>
+        <button id="choose" onClick={() => handleChooseBook(book.id)}>{book.copy}</button>
     )
 }
 

@@ -8,9 +8,9 @@ const Books = ({ books, setBooks, book, setBook, borrowingBookForm, setErrorMess
         <ReturnBook book={book} setBook={setBook} books={books} setBooks={setBooks} />
     )
     return (
-        <>
+        <ul id="books">
             {books.map((b) =>
-                <div key={b.id}>
+                <li id="book" key={b.id}>
                     <Book key={b.id} book={b} />
                     <ChooseBook book={b} setBook={setBook} books={books} />
 
@@ -18,8 +18,8 @@ const Books = ({ books, setBooks, book, setBook, borrowingBookForm, setErrorMess
                         {book && !b.loan && book.id === b.id ? borrowingBookForm() : null}
                         {book && b.loan && book.id === b.id ? returnBook() : null}
                     </div>
-                </div>)}
-        </>
+                </li>)}
+        </ul>
     )
 }
 

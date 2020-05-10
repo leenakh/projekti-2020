@@ -19,10 +19,10 @@ const FetchBookByCopyForm = ({setBooks, selectedBooks, copy, setCopy, setErrorMe
     <form onSubmit={handleFetchBookByCopy}>
       <div>
           <h3>Hae kirja niteen numeron perusteella</h3>
-        Copy: <input type="text" value={copy} name="copy" onChange={({ target }) => setCopy(target.value)} />
+        Copy: <input id="copy" type="text" value={copy} name="copy" onChange={({ target }) => setCopy(target.value)} />
       </div>
       <div>
-        <button type="submit">Lähetä</button>
+        <button id="fetchCopy" type="submit">Lähetä</button>
       </div>
     </form>
   )}

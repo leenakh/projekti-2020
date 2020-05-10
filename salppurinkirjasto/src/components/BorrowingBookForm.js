@@ -50,7 +50,7 @@ const BorrowingBookForm = ({book, setBook, books, setBooks, beginDate, setBeginD
   }
 
   return (
-    <form onSubmit={handleBorrowingBook}>
+    <form id="borrow" onSubmit={handleBorrowingBook}>
       <div>
         <p>Alkupäivä: <input type="text" value={beginDate} name="beginDate" onChange={({ target }) => setBeginDate(target.value)} /></p>
         <p>Loppupäivä: <input type="text" value={endDate} name="endDate" onChange={({ target }) => setEndDate(target.value)} /></p>
