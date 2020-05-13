@@ -37,14 +37,14 @@ const CreateBookForm = ({ isbn, setIsbn, copy, setCopy, message, setMessage, err
   }
 
   return (
-    <form onSubmit={handleCreateBook}>
+    <form id="createBook" onSubmit={handleCreateBook}>
       <div>
         <h3>Lisää uusi kirja tietokantaan</h3>
-        isbn: <input type="text" value={isbn} name="isbn" onChange={({ target }) => setIsbn(target.value)} />
-        copy: <input type="text" value={copy} name="copy" onChange={({ target }) => setCopy(target.value)} />
+        isbn: <input type="text" value={isbn} id="isbn" onChange={({ target }) => setIsbn(target.value)} />
+        copy: <input type="text" value={copy} id="copy" onChange={({ target }) => setCopy(target.value)} />
       </div>
       <div>
-        <button type="submit">Lähetä</button>
+        <button id="create-button" type="submit">Lähetä</button>
       </div>
     </form>
   )

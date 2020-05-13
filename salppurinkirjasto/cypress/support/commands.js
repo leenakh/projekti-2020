@@ -23,3 +23,31 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
+/*import helper from '../test_helper'
+
+Cypress.Commands.add('reset', () => {
+    cy.request(helper.reset)
+})
+
+/*Cypress.Commands.add('insertBooks', (books) => {
+    cy.request(helper.insertBooks(books))
+})
+
+Cypress.Commands.add('createUser', (userObject) => {
+    cy.request(helper.createUser(userObject))
+})
+
+Cypress.Commands.add('login', (username, password) => {
+    cy.request({
+        method: 'POST',
+        url: 'http://localhost:3001/api/login',
+        body: {
+            username: 'admin', password: 'admin'
+        }
+    })
+        .then(({ body }) => {
+            localStorage.setItem('loggedInUser', JSON.stringify(body))
+        })
+})
+ */
+

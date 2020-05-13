@@ -18,6 +18,8 @@ PVM		TUNTIA		TEHTÄVÄ
 8.5.2020	2		Refaktorointia: kirjan hakutoiminnallisuuden toteutus yhdellä hakulomakkeella. Komponenttien näkyvyyden säätämistä.
 9.5.2020	2		Testiympäristön konfigurointia. Testitapausten suunnittelua ja testien luonnostelua. Delete-metodin lisääminen backendiin Book-routeriin. Book-routeriin joitain testejä, jotka pohjustavat hakutoiminnallisuuden laajentamista.
 10.5.2020	5		Cypress-testien kirjoittamista frontendiin. Sovelluksen muuttaminen käyttämään erillistä testitietokantaa myös e2e-testauksessa.
+11.5.2020	2,5		Cypress-testien laajentamista ja refaktorointia (kaikki rikki tällä hetkellä).
+13.5.2020	2,5		Cypress-testien debuggaamista epäonnistuneen Commands-tiedoston käyttöönottoyrityksen jäljiltä. Palaaminen itse tehdyn test_helper-tiedoston käyttöön.
 
 TODO
 Lainan palautukseen varmistus.

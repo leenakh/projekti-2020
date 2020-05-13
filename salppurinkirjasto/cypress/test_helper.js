@@ -132,19 +132,77 @@ const books =
     ]
 
 
-const insertBooks = {
-    method: 'POST',
-    url: `${baseUrl}/bookdata`,
-    body: books
+const user = {
+    username: 'testaaja',
+    firstName: 'Testaaja',
+    lastName: 'Testaaja',
+    password: 'testaaja'
 }
 
+const admin = {
+    username: 'admin',
+    firstName: 'Admin',
+    lastName: 'Admin',
+    password: 'admin'
+}
+
+
+const insertBooks = (booksArray) => {
+    const insertBooksObject = {
+        method: 'POST',
+        url: `${baseUrl}/bookdata`,
+        body: booksArray
+    }
+    return insertBooksObject
+}
+
+const createBasicUser = {
+    method: 'POST',
+    url: `${baseUrl}/user`,
+    body: user
+}
+
+const createUser = (userObject) => {
+    const createUserObject = {
+        method: 'POST',
+        url: `${baseUrl}/user`,
+        body: userObject
+    }
+    return createUserObject
+}
+
+const login = (username, password) => {
+    const loginObject = {
+        method: 'POST',
+        url: 'http://localhost:3001/api/login',
+        body: {
+            username: username, password: password
+        }
+    }
+    return loginObject
+}
+
+const loginAdmin = {
+    method: 'POST',
+    url: 'http://localhost:3001/api/login',
+    body: {
+        username: 'admin', password: 'admin'
+    }
+}
 
 const reset = {
-    method: 'POST',
-    url: `${baseUrl}/reset`
-}
+        method: 'POST',
+        url: `${baseUrl}/reset`
+    }
 
 export default {
+    books,
+    admin,
+    user,
     insertBooks,
+    createBasicUser,
+    createUser,
+    login,
+    loginAdmin,
     reset
 }
