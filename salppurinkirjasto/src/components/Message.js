@@ -10,7 +10,7 @@ const Message = ({ message, errorMessage }) => {
         )
     } else if (errorMessage) {
         return (
-            <div>
+            <div id="error">
                 {errorMessage}
             </div>
         )

@@ -1,4 +1,6 @@
 
+import { loginError } from '../src/components/LoginForm'
+
 const baseUrl = 'http://localhost:3001/api/testing'
 
 const books =
@@ -146,6 +148,7 @@ const admin = {
     password: 'admin'
 }
 
+const errorMessage = loginError
 
 const insertBooks = (booksArray) => {
     const insertBooksObject = {
@@ -156,16 +159,10 @@ const insertBooks = (booksArray) => {
     return insertBooksObject
 }
 
-const createBasicUser = {
-    method: 'POST',
-    url: `${baseUrl}/user`,
-    body: user
-}
-
 const createUser = (userObject) => {
     const createUserObject = {
         method: 'POST',
-        url: `${baseUrl}/user`,
+        url: 'http://localhost:3001/api/users',
         body: userObject
     }
     return createUserObject
@@ -182,27 +179,18 @@ const login = (username, password) => {
     return loginObject
 }
 
-const loginAdmin = {
-    method: 'POST',
-    url: 'http://localhost:3001/api/login',
-    body: {
-        username: 'admin', password: 'admin'
-    }
-}
-
 const reset = {
-        method: 'POST',
-        url: `${baseUrl}/reset`
-    }
+    method: 'POST',
+    url: `${baseUrl}/reset`
+}
 
 export default {
     books,
     admin,
     user,
+    errorMessage,
     insertBooks,
-    createBasicUser,
     createUser,
     login,
-    loginAdmin,
     reset
 }

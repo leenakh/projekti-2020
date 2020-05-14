@@ -20,6 +20,7 @@ PVM		TUNTIA		TEHTÄVÄ
 10.5.2020	5		Cypress-testien kirjoittamista frontendiin. Sovelluksen muuttaminen käyttämään erillistä testitietokantaa myös e2e-testauksessa.
 11.5.2020	2,5		Cypress-testien laajentamista ja refaktorointia (kaikki rikki tällä hetkellä).
 13.5.2020	2,5		Cypress-testien debuggaamista epäonnistuneen Commands-tiedoston käyttöönottoyrityksen jäljiltä. Palaaminen itse tehdyn test_helper-tiedoston käyttöön.
+14.5.2020	0,5		Cypress-testien refaktorointia.
 
 TODO
 Lainan palautukseen varmistus.

@@ -11,11 +11,25 @@ describe('Library', function () {
         cy.contains('Kirjaudu sisään')
     })
 
-    it('user can log in', function () {
+    it.only('user can log in', function () {
+        cy.get('#username').type(helper.user.username)
+        cy.get('#password').type(helper.user.password)
+        cy.get('#login').click()
+        cy.contains(`${helper.user.firstName} ${helper.user.lastName} on kirjautunut sisään.`)
+    })
+
+    it('login fails when wrong password is entered', function () {
         cy.get('#username').type('testaaja')
+        cy.get('#password').type('password')
+        cy.get('#login').click()
+        cy.get('#error').should('exist').and('contain', helper.errorMessage)
+    })
+
+    it('login fails when non-existent username is entered', function () {
+        cy.get('#username').type('t')
         cy.get('#password').type('testaaja')
         cy.get('#login').click()
-        cy.contains('Testaaja Testaaja on kirjautunut sisään.')
+        cy.get('#error').should('exist').and('contain', helper.errorMessage)
     })
 })
 
