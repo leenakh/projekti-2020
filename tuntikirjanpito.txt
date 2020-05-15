@@ -21,10 +21,11 @@ PVM		TUNTIA		TEHTÄVÄ
 11.5.2020	2,5		Cypress-testien laajentamista ja refaktorointia (kaikki rikki tällä hetkellä).
 13.5.2020	2,5		Cypress-testien debuggaamista epäonnistuneen Commands-tiedoston käyttöönottoyrityksen jäljiltä. Palaaminen itse tehdyn test_helper-tiedoston käyttöön.
 14.5.2020	0,5		Cypress-testien refaktorointia.
+15.5.2020	3		Cypress-testien laajentamista ja refaktorointia. Uusien käyttäjien lisääminen mahdolliseksi vain adminille.
 
 TODO
 Lainan palautukseen varmistus.
 Uuden asiakkaan lisäämiseen varmistus.
+Uuden asiakkaan lisääminen mahdolliseksi vain kirjautuneelle käyttäjälle.
 Hakutermisyötteen käsittely virtaviivaisemmaksi?
 Komponenttien näkyvyyden säätelyyn jokin patenttiratkaisu? Props.children?
-Käyttäjän lisääminen tietokantaan: luvalliseksi vain adminille.

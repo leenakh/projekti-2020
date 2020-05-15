@@ -3,7 +3,6 @@ import helper from '../test_helper'
 describe('Library', function () {
     beforeEach(function () {
         cy.request(helper.reset)
-        cy.request(helper.createUser(helper.user))
         cy.visit('http://localhost:3000')
     })
 
@@ -11,15 +10,15 @@ describe('Library', function () {
         cy.contains('Kirjaudu sisään')
     })
 
-    it.only('user can log in', function () {
+    it('user can log in', function () {
         cy.get('#username').type(helper.user.username)
         cy.get('#password').type(helper.user.password)
         cy.get('#login').click()
-        cy.contains(`${helper.user.firstName} ${helper.user.lastName} on kirjautunut sisään.`)
+        cy.contains(helper.loginMessage)
     })
 
     it('login fails when wrong password is entered', function () {
-        cy.get('#username').type('testaaja')
+        cy.get('#username').type(helper.user.username)
         cy.get('#password').type('password')
         cy.get('#login').click()
         cy.get('#error').should('exist').and('contain', helper.errorMessage)
@@ -37,8 +36,7 @@ describe('Library with basic user', function () {
     beforeEach(function () {
         cy.request(helper.reset)
         cy.request(helper.insertBooks(helper.books))
-        cy.request(helper.createUser(helper.user))
-        cy.request(helper.login('testaaja', 'testaaja'))
+        cy.request(helper.login(helper.user.username, helper.user.password))
             .then(response => {
                 localStorage.setItem('loggedInUser', JSON.stringify(response.body))
             })
@@ -46,8 +44,20 @@ describe('Library with basic user', function () {
     })
 
     it('create book form is not visible to basic user', function () {
-        cy.get('html').should('contain', 'Testaaja Testaaja on kirjautunut sisään.')
+        cy.get('html').should('contain', helper.loginMessage)
         cy.get('#createBook').should('not.exist')
+    })
+
+    it('user cannot be created by basic user', function () {
+        cy.request(helper.insertUser())
+            .then((response) => {
+                expect(response.status).to.eq(401)
+            })
+        cy.get('#logout').click()
+        cy.get('#username').type('matti')
+        cy.get('#password').type('matti')
+        cy.get('#login').click()
+        cy.get('#error').should('exist').and('contain', helper.errorMessage)
     })
 
     it('search book can be executed with isbn', function () {
@@ -116,7 +126,6 @@ describe('Library with admin', function () {
     beforeEach(function () {
         cy.request(helper.reset)
         cy.request(helper.insertBooks(helper.books))
-        cy.request(helper.createUser(helper.admin))
         cy.request(helper.login('admin', 'admin'))
             .then(({ body }) => {
                 localStorage.setItem('loggedInUser', JSON.stringify(body))
@@ -125,7 +134,7 @@ describe('Library with admin', function () {
     })
 
     it('create book form is visible to admin', function () {
-        cy.get('html').should('contain', 'Admin Admin on kirjautunut sisään.')
+        cy.get('html').should('contain', helper.adminLoginMessage)
         cy.get('#createBook').should('exist')
     })
 
@@ -136,5 +145,18 @@ describe('Library with admin', function () {
             cy.get('#create-button').click()
         })
         cy.get('html').should('contain', 'Uuden kirjan lisääminen onnistui!')
+    })
+
+    it('user can be created by admin', function () {
+        cy.request(helper.insertUser())
+            .then((response) => {
+                expect(response.status).to.eq(200)
+            })
+        cy.get('#logout').click()
+        cy.get('#username').type('matti')
+        cy.get('#password').type('matti')
+        cy.get('#login').click()
+        cy.get('html').should('contain', 'matti matti')
+        cy.request(helper.removeUser)
     })
 })

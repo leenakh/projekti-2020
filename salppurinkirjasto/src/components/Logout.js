@@ -14,7 +14,7 @@ const Logout = ({setUser, setErrorMessage}) => {
       }
     
     return (
-    <p><button onClick={handleLogout}>Logout</button></p>
+    <p><button id="logout" onClick={handleLogout}>Logout</button></p>
   )}
 
   export default Logout

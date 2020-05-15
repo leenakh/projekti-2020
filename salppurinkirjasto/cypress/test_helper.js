@@ -149,6 +149,8 @@ const admin = {
 }
 
 const errorMessage = loginError
+const loginMessage = `${user.firstName} ${user.lastName} on kirjautunut sisään.`
+const adminLoginMessage = `${admin.firstName} ${admin.lastName} on kirjautunut sisään.`
 
 const insertBooks = (booksArray) => {
     const insertBooksObject = {
@@ -157,6 +159,24 @@ const insertBooks = (booksArray) => {
         body: booksArray
     }
     return insertBooksObject
+}
+
+const insertUser = () => {
+    const insertUserObject = {
+        method: 'POST',
+        url: 'http://localhost:3001/api/users',
+        body: {
+            username: 'matti',
+            firstName: 'matti',
+            lastName: 'matti',
+            password: 'matti'
+        },
+        failOnStatusCode: false,
+        headers: {
+            'Authorization': `bearer ${JSON.parse(localStorage.getItem('loggedInUser')).token}`
+        }
+    }
+    return insertUserObject
 }
 
 const createUser = (userObject) => {
@@ -172,6 +192,7 @@ const login = (username, password) => {
     const loginObject = {
         method: 'POST',
         url: 'http://localhost:3001/api/login',
+        failOnStatusCode: false,
         body: {
             username: username, password: password
         }
@@ -184,13 +205,22 @@ const reset = {
     url: `${baseUrl}/reset`
 }
 
+const removeUser = {
+    method: 'DELETE',
+    url: `${baseUrl}/remove`
+}
+
 export default {
     books,
     admin,
     user,
     errorMessage,
+    loginMessage,
+    adminLoginMessage,
     insertBooks,
+    insertUser,
     createUser,
     login,
-    reset
+    reset,
+    removeUser
 }

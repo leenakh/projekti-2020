@@ -78,12 +78,16 @@ const App = () => {
     <Message message={message} errorMessage={errorMessage} />
   )
 
+  const loginMessage = () => (
+    <p>{user.firstName} {user.lastName} on kirjautunut sisään.</p>
+  )
+
   return (
     <>
       <div>
         {user === null ? loginForm() :
           <div>
-            <p>{user.firstName} {user.lastName} on kirjautunut sisään.</p>
+            {loginMessage()}
             {showLogout()}
           </div>}
       </div>
