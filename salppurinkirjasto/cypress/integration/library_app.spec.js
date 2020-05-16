@@ -107,16 +107,40 @@ describe('Library with basic user', function () {
                     .click()
             })
 
-            it('borrowing book form opens when specific copy is chosen from list of books', function () {
-                cy.get('button').contains('2').click()
-                cy.get('#borrow').should('exist')
-            })
-
             it('book can be selected by copy number from list of books', function () {
                 cy.get('#copy').type('2')
                 cy.get('#fetchCopy').click()
                 cy.get('#choose').should('contain', '2')
                 cy.get('li').should('have.length', 1)
+            })
+
+            it('borrowing book form opens when specific copy is chosen from list of books', function () {
+                cy.get('button').contains('2').click()
+                cy.get('#borrow').should('exist')
+            })
+
+            it('book can be borrowed', function () {
+                cy.get('button').contains('2').click()
+                cy.get('#beginDate').type('01/01/2020')
+                cy.get('#endDate').type('02/01/2020')
+                cy.get('#customer').type('katti')
+                cy.get('#borrow-button').click()
+                cy.get('#message').should('exist').and('contain', helper.borrowingMessage)
+            })
+
+            describe('when book has been borrowed', function () {
+                beforeEach(function () {
+                    cy.get('button').contains('2').click()
+                    cy.get('#beginDate').type('01/01/2020')
+                    cy.get('#endDate').type('02/01/2020')
+                    cy.get('#customer').type('katti')
+                    cy.get('#borrow-button').click()
+                })
+
+                it('book can be returned', function () {
+                    cy.get('#return-button').click()
+                    cy.get('#error').should('not.exist')
+                })
             })
         })
     })

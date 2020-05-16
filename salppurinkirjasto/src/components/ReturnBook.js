@@ -2,6 +2,9 @@ import React from 'react'
 import bookService from '../services/books'
 import loanService from '../services/loans'
 
+const returningMessage = 'Kirjan palauttaminen onnistui.'
+const failMessage = 'Kirjan palauttaminen ei onnistunut.'
+
 const ReturnBook = ({book, setBook, books, setBooks, setErrorMessage}) => {
     const handleReturnBook = async () => {
         try {
@@ -16,7 +19,7 @@ const ReturnBook = ({book, setBook, books, setBooks, setErrorMessage}) => {
           setBooks(books.map(b => b.id !== returnedBook.id ? b : returnedBook))
           console.log('returnedLoan', returnedLoan)
         } catch (exception) {
-          setErrorMessage('Kirjan palauttaminen ei onnistunut.')
+          setErrorMessage(failMessage)
           setTimeout(() => {
             setErrorMessage(null)
           }, 5000)
@@ -25,7 +28,7 @@ const ReturnBook = ({book, setBook, books, setBooks, setErrorMessage}) => {
       }
 
     return (
-    <button onClick={handleReturnBook}>Palauta kirja</button>
+    <button id="return-button" onClick={handleReturnBook}>Palauta kirja</button>
   )}
 
   export default ReturnBook

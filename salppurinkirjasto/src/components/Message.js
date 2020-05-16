@@ -4,7 +4,7 @@ const Message = ({ message, errorMessage }) => {
 
     if (message) {
         return (
-            <div>
+            <div id="message">
                 {message}
             </div>
         )

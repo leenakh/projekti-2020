@@ -4,10 +4,14 @@ const helper = require('./test_helper')
 const app = require('../app')
 const api = supertest(app)
 const Book = require('../models/book')
+const Loan = require('../models/loan')
+const Customer = require('../models/customer')
 
 describe('some books initially in the database', () => {
     beforeEach(async () => {
         await Book.deleteMany({})
+        await Loan.deleteMany({})
+        await Customer.deleteMany({})
         await Book.insertMany(helper.initialBooks)
     })
 
@@ -76,16 +80,102 @@ describe('some books initially in the database', () => {
         expect(titles).not.toContainEqual(booksAtStart[2].title)
     })
 
-    test('a book can be deleted', async () => {
+    test('book can be deleted by admin', async () => {
         const booksAtStart = await helper.booksInDatabase()
         const bookToDelete = booksAtStart[0]
+        const auth = await api.post('/api/login')
+            .send({ username: 'admin', password: 'admin' })
         await api
             .delete(`/api/books/${bookToDelete.id}`)
+            .set('Authorization', `bearer ${auth.body.token}`)
             .expect(204)
         const booksAtEnd = await helper.booksInDatabase()
         expect(booksAtEnd).toHaveLength(booksAtStart.length - 1)
         const titles = booksAtEnd.map(book => book.title)
         expect(titles).not.toContainEqual(bookToDelete.title)
+    })
+
+    test('book cannot be deleted without admin credentials', async () => {
+        const booksAtStart = await helper.booksInDatabase()
+        const bookToDelete = booksAtStart[0]
+        const auth = await api.post('/api/login')
+            .send({ username: 'testaaja', password: 'testaaja' })
+        await api
+            .delete(`/api/books/${bookToDelete.id}`)
+            .set('Authorization', `bearer ${auth.body.token}`)
+            .expect(401)
+        const booksAtEnd = await helper.booksInDatabase()
+        expect(booksAtEnd).toHaveLength(booksAtStart.length)
+    })
+
+    test('book cannot be deleted without credentials', async () => {
+        const booksAtStart = await helper.booksInDatabase()
+        const bookToDelete = booksAtStart[0]
+        await api
+            .delete(`/api/books/${bookToDelete.id}`)
+            .expect(401)
+        const booksAtEnd = await helper.booksInDatabase()
+        expect(booksAtEnd).toHaveLength(booksAtStart.length)
+    })
+
+    test('loan cannot be created without credentials', async () => {
+        const booksAtStart = await helper.booksInDatabase()
+        const bookToBorrow = booksAtStart[0]
+        await api.post('/api/loans')
+            .send({
+                beginDate: '01/02/2020',
+                endDate: '02/02/2020',
+                customerId: 'katti',
+                bookId: bookToBorrow.id,
+                returned: false
+            })
+            .expect(401)
+        const loansInDatabase = await helper.loansInDatabase()
+        expect(loansInDatabase).toHaveLength(0)
+    })
+
+    test('book cannot be modified without credentials', async () => {
+        const booksAtStart = await helper.booksInDatabase()
+        const bookToModify = booksAtStart[0]
+        await api.put(`/api/books/${bookToModify.id}`)
+            .send({
+                loan: { "$oid": "5eadf6fcd2f904085cbfc0ea" }
+            })
+            .expect(401)
+    })
+
+    test('book cannot be returned without credentials', async () => {
+        const booksAtStart = await helper.booksInDatabase()
+        const bookToBorrow = booksAtStart[0]
+        const auth = await api.post('/api/login')
+            .send({
+                username: 'testaaja',
+                password: 'testaaja'
+            })
+            .expect(200)
+        const customer = await api.post('/api/customers')
+            .send({ username: 'katti', accessAllowed: true })
+            .set('Authorization', `bearer ${auth.body.token}`)
+            .expect(200)
+        const loan = await api.post('/api/loans')
+            .send({
+                beginDate: '01/02/2020',
+                endDate: '02/02/2020',
+                customerId: customer.body.username,
+                bookId: bookToBorrow.id,
+                returned: false
+            })
+            .set('Authorization', `bearer ${auth.body.token}`)
+            .expect(200)
+        await api.put(`/api/loans/${loan.body.id}`)
+            .send({
+                endDate: '17/05/2020',
+                returned: true
+            })
+            .expect(401)
+        await api.put(`/api/books/${bookToBorrow}`)
+            .send({ loan: null })
+            .expect(401)
     })
 })
 

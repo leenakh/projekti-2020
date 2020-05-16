@@ -3,6 +3,9 @@ import customerService from '../services/customers'
 import loanService from '../services/loans'
 import bookService from '../services/books'
 
+const borrowingMessage = 'Kirjan lainaaminen onnistui.'
+const failMessage = 'Kirjan lainaaminen ei onnistunut.'
+
 const BorrowingBookForm = ({book, setBook, books, setBooks, beginDate, setBeginDate, endDate, setEndDate, customer, setCustomer, message, setMessage, errorMessage, setErrorMessage}) => {
   const handleBorrowingBook = async (event) => {
     event.preventDefault()
@@ -34,14 +37,14 @@ const BorrowingBookForm = ({book, setBook, books, setBooks, beginDate, setBeginD
       if (returnedBook.loan.id === returnedLoan.id) {
         console.log('returnedBook', returnedBook.loan.id)
         console.log('returnedLoan', returnedLoan.id)
-        setMessage('Kirjan lainaaminen onnistui.')
+        setMessage(borrowingMessage)
         console.log(message)
         setTimeout(() => {
           setMessage(null)
         }, 5000)
       }
     } catch (exception) {
-      setErrorMessage('Kirjan lainaaminen ei onnistunut.')
+      setErrorMessage(failMessage)
       console.log(errorMessage)
       setTimeout(() => {
         setErrorMessage(null)
@@ -52,12 +55,12 @@ const BorrowingBookForm = ({book, setBook, books, setBooks, beginDate, setBeginD
   return (
     <form id="borrow" onSubmit={handleBorrowingBook}>
       <div>
-        <p>Alkupäivä: <input type="text" value={beginDate} name="beginDate" onChange={({ target }) => setBeginDate(target.value)} /></p>
-        <p>Loppupäivä: <input type="text" value={endDate} name="endDate" onChange={({ target }) => setEndDate(target.value)} /></p>
-        <p>Nimi: <input type="text" value={customer} name="customer" onChange={({ target }) => setCustomer(target.value)} /></p>
+        <p>Alkupäivä: <input type="text" value={beginDate} id="beginDate" onChange={({ target }) => setBeginDate(target.value)} /></p>
+        <p>Loppupäivä: <input type="text" value={endDate} id="endDate" onChange={({ target }) => setEndDate(target.value)} /></p>
+        <p>Nimi: <input type="text" value={customer} id="customer" onChange={({ target }) => setCustomer(target.value)} /></p>
       </div>
       <div>
-        <button type="submit">Lainaa kirja</button>
+        <button id="borrow-button" type="submit">Lainaa kirja</button>
       </div>
     </form>
   )}

@@ -1,4 +1,4 @@
-
+import bookService from '../src/services/books'
 import { loginError } from '../src/components/LoginForm'
 
 const baseUrl = 'http://localhost:3001/api/testing'
@@ -151,6 +151,10 @@ const admin = {
 const errorMessage = loginError
 const loginMessage = `${user.firstName} ${user.lastName} on kirjautunut sisään.`
 const adminLoginMessage = `${admin.firstName} ${admin.lastName} on kirjautunut sisään.`
+const borrowingMessage = 'Kirjan lainaaminen onnistui.'
+const borrowingFailMessage = 'Kirjan lainaaminen ei onnistunut.'
+const returnMessage = 'Kirjan palauttaminen onnistui.'
+const returnFailMessage = 'Kirjan palauttaminen ei onnistunut.'
 
 const insertBooks = (booksArray) => {
     const insertBooksObject = {
@@ -217,6 +221,10 @@ export default {
     errorMessage,
     loginMessage,
     adminLoginMessage,
+    borrowingMessage,
+    borrowingFailMessage,
+    returnMessage,
+    returnFailMessage,
     insertBooks,
     insertUser,
     createUser,

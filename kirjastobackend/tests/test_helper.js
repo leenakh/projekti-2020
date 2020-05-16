@@ -1,4 +1,5 @@
 const Book = require('../models/book')
+const Loan = require('../models/loan')
 
 const initialBooks = [
     {
@@ -29,6 +30,11 @@ const booksInDatabase = async () => {
     return books.map(book => book.toJSON())
 }
 
+const loansInDatabase = async () => {
+    const loans = await Loan.find({})
+    return loans.map(loan => loan.toJSON())
+}
+
 module.exports = {
-    initialBooks, booksInDatabase
+    initialBooks, booksInDatabase, loansInDatabase
 }
