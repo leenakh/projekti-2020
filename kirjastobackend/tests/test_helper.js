@@ -1,5 +1,6 @@
 const Book = require('../models/book')
 const Loan = require('../models/loan')
+const Customer = require('../models/customer')
 
 const initialBooks = [
     {
@@ -35,6 +36,36 @@ const loansInDatabase = async () => {
     return loans.map(loan => loan.toJSON())
 }
 
+const customersInDatabase = async () => {
+    const customers = await Customer.find({})
+    return customers.map(customer => customer.toJSON())
+}
+
+const getCustomer = async () => {
+    const customerToFind = await Customer.find({username: customer.username})
+    return customerToFind[0]
+}
+
+const user = {
+    username: 'testaaja', password: 'testaaja'
+}
+
+const admin = {
+    username: 'admin', password: 'admin'
+}
+
+const customer = {
+    username: 'katti',
+    accessAllowed: true
+}
+
 module.exports = {
-    initialBooks, booksInDatabase, loansInDatabase
+    initialBooks,
+    booksInDatabase,
+    loansInDatabase,
+    user,
+    admin,
+    customer,
+    customersInDatabase,
+    getCustomer
 }

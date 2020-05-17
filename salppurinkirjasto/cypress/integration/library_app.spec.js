@@ -128,6 +128,19 @@ describe('Library with basic user', function () {
                 cy.get('#message').should('exist').and('contain', helper.borrowingMessage)
             })
 
+            it('when borrowing book a new customer can be created', function () {
+                cy.get('button').contains('2').click()
+                cy.get('#beginDate').type('01/01/2020')
+                cy.get('#endDate').type('02/01/2020')
+                cy.get('#customer').type('esko')
+                cy.get('#borrow-button').click()
+                cy.get('#message').should('exist').and('contain', helper.borrowingMessage)
+                cy.request('GET', 'http://localhost:3001/api/customers/esko')
+                .then((response) => {
+                    expect(response.body).to.have.property('username', 'esko')
+                })
+            })
+
             describe('when book has been borrowed', function () {
                 beforeEach(function () {
                     cy.get('button').contains('2').click()

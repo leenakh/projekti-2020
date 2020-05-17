@@ -84,7 +84,7 @@ describe('some books initially in the database', () => {
         const booksAtStart = await helper.booksInDatabase()
         const bookToDelete = booksAtStart[0]
         const auth = await api.post('/api/login')
-            .send({ username: 'admin', password: 'admin' })
+            .send(helper.admin)
         await api
             .delete(`/api/books/${bookToDelete.id}`)
             .set('Authorization', `bearer ${auth.body.token}`)
@@ -99,13 +99,15 @@ describe('some books initially in the database', () => {
         const booksAtStart = await helper.booksInDatabase()
         const bookToDelete = booksAtStart[0]
         const auth = await api.post('/api/login')
-            .send({ username: 'testaaja', password: 'testaaja' })
+            .send(helper.user)
         await api
             .delete(`/api/books/${bookToDelete.id}`)
             .set('Authorization', `bearer ${auth.body.token}`)
             .expect(401)
         const booksAtEnd = await helper.booksInDatabase()
         expect(booksAtEnd).toHaveLength(booksAtStart.length)
+        const titles = booksAtEnd.map(book => book.title)
+        expect(titles).toContainEqual(bookToDelete.title)
     })
 
     test('book cannot be deleted without credentials', async () => {
@@ -116,6 +118,8 @@ describe('some books initially in the database', () => {
             .expect(401)
         const booksAtEnd = await helper.booksInDatabase()
         expect(booksAtEnd).toHaveLength(booksAtStart.length)
+        const titles = booksAtEnd.map(book => book.title)
+        expect(titles).toContainEqual(bookToDelete.title)
     })
 
     test('loan cannot be created without credentials', async () => {
@@ -142,19 +146,41 @@ describe('some books initially in the database', () => {
                 loan: { "$oid": "5eadf6fcd2f904085cbfc0ea" }
             })
             .expect(401)
+        const booksAtEnd = await helper.booksInDatabase()
+        expect(booksAtEnd[0]).toEqual(bookToModify)
+    })
+
+    test('customer cannot be created without credentials', async () => {
+        await api.post('/api/customers')
+            .send(helper.customer)
+            .expect(401)
+        const customersInDatabase = await helper.customersInDatabase()
+        expect(customersInDatabase).toHaveLength(0)
+    })
+
+    test('customer cannot be modified without credentials', async () => {
+        const auth = await api.post('/api/login')
+            .send(helper.user)
+        const customer = await api.post('/api/customers')
+            .send(helper.customer)
+            .set('Authorization', `bearer ${auth.body.token}`)
+        await api.put(`/api/customers/${customer.id}`)
+            .send({ accessAllowed: false })
+            .expect(401)
+        const customersInDatabase = await helper.customersInDatabase()
+        expect(customersInDatabase).toHaveLength(1)
+        const customerFinally = await helper.getCustomer()
+        expect(customerFinally.accessAllowed).toBe(true)
     })
 
     test('book cannot be returned without credentials', async () => {
         const booksAtStart = await helper.booksInDatabase()
         const bookToBorrow = booksAtStart[0]
         const auth = await api.post('/api/login')
-            .send({
-                username: 'testaaja',
-                password: 'testaaja'
-            })
+            .send(helper.user)
             .expect(200)
         const customer = await api.post('/api/customers')
-            .send({ username: 'katti', accessAllowed: true })
+            .send(helper.customer)
             .set('Authorization', `bearer ${auth.body.token}`)
             .expect(200)
         const loan = await api.post('/api/loans')
@@ -176,6 +202,10 @@ describe('some books initially in the database', () => {
         await api.put(`/api/books/${bookToBorrow}`)
             .send({ loan: null })
             .expect(401)
+        const booksAtEnd = await helper.booksInDatabase()
+        expect(booksAtEnd[0]).toEqual(bookToBorrow)
+        const loansAtEnd = await helper.loansInDatabase()
+        expect(loansAtEnd[0].returned).toBe(false)
     })
 })
 
