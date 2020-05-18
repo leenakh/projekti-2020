@@ -3,10 +3,10 @@ import customerService from '../services/customers'
 import loanService from '../services/loans'
 import bookService from '../services/books'
 
-const borrowingMessage = 'Kirjan lainaaminen onnistui.'
-const failMessage = 'Kirjan lainaaminen ei onnistunut.'
+export const borrowingMessage = 'Kirjan lainaaminen onnistui.'
+export const failMessage = 'Kirjan lainaaminen ei onnistunut.'
 
-const BorrowingBookForm = ({book, setBook, books, setBooks, beginDate, setBeginDate, endDate, setEndDate, customer, setCustomer, message, setMessage, errorMessage, setErrorMessage}) => {
+export const BorrowingBookForm = ({ book, setBook, books, setBooks, beginDate, setBeginDate, endDate, setEndDate, customer, setCustomer, message, setMessage, errorMessage, setErrorMessage }) => {
   const handleBorrowingBook = async (event) => {
     event.preventDefault()
     try {
@@ -63,6 +63,11 @@ const BorrowingBookForm = ({book, setBook, books, setBooks, beginDate, setBeginD
         <button id="borrow-button" type="submit">Lainaa kirja</button>
       </div>
     </form>
-  )}
+  )
+}
 
-  export default BorrowingBookForm
+export default {
+  BorrowingBookForm,
+  borrowingMessage,
+  failMessage
+}

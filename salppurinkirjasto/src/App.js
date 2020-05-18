@@ -5,11 +5,11 @@ import loanService from './services/loans'
 import customerService from './services/customers'
 import Books from './components/Books'
 import CreateBookForm from './components/CreateBookForm'
-import FetchBookForm from './components/FetchBookForm'
+import { FetchBookForm } from './components/FetchBookForm'
 import FetchBookByCopyForm from './components/FetchBookByCopyForm'
 import { LoginForm } from './components/LoginForm'
 import Logout from './components/Logout'
-import BorrowingBookForm from './components/BorrowingBookForm'
+import { BorrowingBookForm } from './components/BorrowingBookForm'
 import SelectTitle from './components/SelectTitle'
 import Message from './components/Message'
 
@@ -66,7 +66,7 @@ const App = () => {
 
   const showBooks = () => {
     return (
-      <Books books={books} setBooks={setBooks} book={book} setBook={setBook} borrowingBookForm={borrowingBookForm} setErrorMessage={setErrorMessage} />
+      <Books books={books} setBooks={setBooks} book={book} setBook={setBook} borrowingBookForm={borrowingBookForm} setMessage={setMessage} setErrorMessage={setErrorMessage} />
     )
   }
 

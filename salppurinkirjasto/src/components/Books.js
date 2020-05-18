@@ -1,11 +1,11 @@
 import React from 'react'
 import Book from '../components/Book'
-import ReturnBook from '../components/ReturnBook'
+import { ReturnBook } from '../components/ReturnBook'
 import ChooseBook from '../components/ChooseBook'
 
-const Books = ({ books, setBooks, book, setBook, borrowingBookForm, setErrorMessage }) => {
+const Books = ({ books, setBooks, book, setBook, borrowingBookForm, setMessage, setErrorMessage }) => {
     const returnBook = () => (
-        <ReturnBook book={book} setBook={setBook} books={books} setBooks={setBooks} />
+        <ReturnBook book={book} setBook={setBook} books={books} setBooks={setBooks} setMessage={setMessage} setErrorMessage={setErrorMessage} />
     )
     return (
         <ul id="books">

@@ -84,6 +84,16 @@ describe('Library with basic user', function () {
             .and('not.contain', 'Maailma on teonsana')
     })
 
+    it('when search book results in no match nothing is rendered but error message', function () {
+        cy.get('#title').type('äidinkieli')
+        cy.get('#fetch').click()
+        cy.wait(5000)
+        cy.get('#title').clear().type('testi')
+        cy.get('#fetch').click()
+        cy.get('html').should('not.contain', 'äidinkieli')
+        cy.get('#error').should('contain', helper.searchBookError)
+    })
+
     describe('when book has been fetched', function () {
         beforeEach(function () {
             cy.get('#title').type('äidinkieli')
@@ -125,19 +135,31 @@ describe('Library with basic user', function () {
                 cy.get('#endDate').type('02/01/2020')
                 cy.get('#customer').type('katti')
                 cy.get('#borrow-button').click()
-                cy.get('#message').should('exist').and('contain', helper.borrowingMessage)
+                cy.get('#message').should('exist').and('contain', helper.borrowMessage)
+                cy.get('#return-button').should('exist')
+            })
+
+            it('book cannot be borrowed if customer lacks access', function () {
+                cy.request(helper.insertCustomer('esko'))
+                cy.request(helper.modifyCustomer('esko'))
+                cy.get('button').contains('2').click()
+                cy.get('#beginDate').type('01/01/2020')
+                cy.get('#endDate').type('02/01/2020')
+                cy.get('#customer').type('esko')
+                cy.get('#borrow-button').click()
+                cy.get('#error').should('exist').and('contain', helper.borrowFailMessage)
             })
 
             it('when borrowing book a new customer can be created', function () {
                 cy.get('button').contains('2').click()
                 cy.get('#beginDate').type('01/01/2020')
                 cy.get('#endDate').type('02/01/2020')
-                cy.get('#customer').type('esko')
+                cy.get('#customer').type('matti')
                 cy.get('#borrow-button').click()
-                cy.get('#message').should('exist').and('contain', helper.borrowingMessage)
-                cy.request('GET', 'http://localhost:3001/api/customers/esko')
+                cy.get('#message').should('exist').and('contain', helper.borrowMessage)
+                cy.request('GET', 'http://localhost:3001/api/customers/matti')
                 .then((response) => {
-                    expect(response.body).to.have.property('username', 'esko')
+                    expect(response.body).to.have.property('username', 'matti')
                 })
             })
 
@@ -152,7 +174,7 @@ describe('Library with basic user', function () {
 
                 it('book can be returned', function () {
                     cy.get('#return-button').click()
-                    cy.get('#error').should('not.exist')
+                    cy.get('#message').should('contain', helper.returnMessage)
                 })
             })
         })

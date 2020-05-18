@@ -1,7 +1,10 @@
 import React from 'react'
 import bookService from '../services/books'
 
-const FetchBookForm = ({ title, setTitle, isbn, setIsbn, setSelectedBooks, setBookTitles, setBooks, setMessage, setErrorMessage }) => {
+export const fetchBookMessage = 'Kirjat löytyivät!'
+export const fetchBookFailMessage = 'Kirjoja ei löytynyt.'
+
+export const FetchBookForm = ({ title, setTitle, isbn, setIsbn, setSelectedBooks, setBookTitles, setBooks, setMessage, setErrorMessage }) => {
   const handleFetchBook = async (event) => {
     event.preventDefault()
     setSelectedBooks(null)
@@ -16,14 +19,16 @@ const FetchBookForm = ({ title, setTitle, isbn, setIsbn, setSelectedBooks, setBo
       if (uniqueBookTitles.length > 0) {
         setBookTitles(uniqueBookTitles)
         setBooks(fetchedBooks)
-        setMessage('Kirjat löytyivät!')
+        setTitle('')
+        setIsbn('')
+        setMessage(fetchBookMessage)
         setTimeout(() => {
           setMessage(null)
         }, 5000)
-        setTitle('')
-        setIsbn('')
       } else {
-        setErrorMessage('Kirjoja ei löytynyt!')
+        setErrorMessage(fetchBookFailMessage)
+        setBookTitles([])
+        setTitle('')
         setTimeout(() => {
           setErrorMessage(null)
         }, 5000)
@@ -48,4 +53,9 @@ const FetchBookForm = ({ title, setTitle, isbn, setIsbn, setSelectedBooks, setBo
   )
 }
 
-export default FetchBookForm
+export default
+  {
+    FetchBookForm,
+    fetchBookMessage,
+    fetchBookFailMessage
+  }

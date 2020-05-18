@@ -1,5 +1,8 @@
 import bookService from '../src/services/books'
 import { loginError } from '../src/components/LoginForm'
+import { fetchBookMessage, fetchBookFailMessage } from '../src/components/FetchBookForm'
+import { borrowingMessage, failMessage } from '../src/components/BorrowingBookForm'
+import { returningMessage, returningFailMessage } from '../src/components/ReturnBook'
 
 const baseUrl = 'http://localhost:3001/api/testing'
 
@@ -151,10 +154,12 @@ const admin = {
 const errorMessage = loginError
 const loginMessage = `${user.firstName} ${user.lastName} on kirjautunut sisään.`
 const adminLoginMessage = `${admin.firstName} ${admin.lastName} on kirjautunut sisään.`
-const borrowingMessage = 'Kirjan lainaaminen onnistui.'
-const borrowingFailMessage = 'Kirjan lainaaminen ei onnistunut.'
-const returnMessage = 'Kirjan palauttaminen onnistui.'
-const returnFailMessage = 'Kirjan palauttaminen ei onnistunut.'
+const borrowMessage = borrowingMessage
+const borrowFailMessage = failMessage
+const returnMessage = returningMessage
+const returnFailMessage = returningFailMessage
+const searchBookMessage = fetchBookMessage
+const searchBookError = fetchBookFailMessage
 
 const insertBooks = (booksArray) => {
     const insertBooksObject = {
@@ -181,6 +186,35 @@ const insertUser = () => {
         }
     }
     return insertUserObject
+}
+
+const insertCustomer = (name) => {
+    const insertCustomerObject = {
+        method: 'POST',
+        url: 'http://localhost:3001/api/customers',
+        body: {
+            username: name
+        },
+        failOnStatusCode: false,
+        headers: {
+            'Authorization': `bearer ${JSON.parse(localStorage.getItem('loggedInUser')).token}`
+        }
+    }
+    return insertCustomerObject
+}
+
+const modifyCustomer = (name) => {
+    const modifyCustomerObject = {
+        method: 'PUT',
+        url: `http://localhost:3001/api/customers/${name}`,
+        body: {
+            accessAllowed: false
+        },
+        headers: {
+            'Authorization': `bearer ${JSON.parse(localStorage.getItem('loggedInUser')).token}`
+        }
+    }
+    return modifyCustomerObject
 }
 
 const createUser = (userObject) => {
@@ -221,12 +255,16 @@ export default {
     errorMessage,
     loginMessage,
     adminLoginMessage,
-    borrowingMessage,
-    borrowingFailMessage,
+    borrowMessage,
+    borrowFailMessage,
     returnMessage,
     returnFailMessage,
+    searchBookMessage,
+    searchBookError,
     insertBooks,
     insertUser,
+    insertCustomer,
+    modifyCustomer,
     createUser,
     login,
     reset,
