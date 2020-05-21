@@ -1,10 +1,15 @@
 import React from 'react'
 import bookService from '../services/books'
+import { useDispatch } from 'react-redux'
+import { setBooks } from '../reducers/bookReducer'
+import {setTitle} from '../reducers/titleReducer'
+import {setIsbn} from '../reducers/isbnReducer'
 
 export const fetchBookMessage = 'Kirjat löytyivät!'
 export const fetchBookFailMessage = 'Kirjoja ei löytynyt.'
 
-export const FetchBookForm = ({ title, setTitle, isbn, setIsbn, setSelectedBooks, setBookTitles, setBooks, setMessage, setErrorMessage }) => {
+export const FetchBookForm = ({ title, isbn, setSelectedBooks, setBookTitles, setMessage, setErrorMessage }) => {
+  const dispatch = useDispatch()
   const handleFetchBook = async (event) => {
     event.preventDefault()
     setSelectedBooks(null)
@@ -18,9 +23,9 @@ export const FetchBookForm = ({ title, setTitle, isbn, setIsbn, setSelectedBooks
       console.log(uniqueBookTitles)
       if (uniqueBookTitles.length > 0) {
         setBookTitles(uniqueBookTitles)
-        setBooks(fetchedBooks)
-        setTitle('')
-        setIsbn('')
+        dispatch(setBooks(fetchedBooks))
+        dispatch(setTitle(''))
+        dispatch(setIsbn(''))
         setMessage(fetchBookMessage)
         setTimeout(() => {
           setMessage(null)
@@ -28,7 +33,7 @@ export const FetchBookForm = ({ title, setTitle, isbn, setIsbn, setSelectedBooks
       } else {
         setErrorMessage(fetchBookFailMessage)
         setBookTitles([])
-        setTitle('')
+        dispatch(setTitle(''))
         setTimeout(() => {
           setErrorMessage(null)
         }, 5000)
@@ -43,8 +48,8 @@ export const FetchBookForm = ({ title, setTitle, isbn, setIsbn, setSelectedBooks
     <form onSubmit={handleFetchBook}>
       <div>
         <h3>Hae kirja ISBN-tunnuksen tai otsikon perusteella</h3>
-            ISBN: <input type="text" value={isbn} id="isbn" onChange={({ target }) => setIsbn(target.value)} />
-            Title: <input type="text" value={title} id="title" onChange={({ target }) => setTitle(target.value)} />
+            ISBN: <input type="text" value={isbn} id="isbn" onChange={({ target }) => dispatch(setIsbn(target.value))} />
+            Title: <input type="text" value={title} id="title" onChange={({ target }) => dispatch(setTitle(target.value))} />
       </div>
       <div>
         <button id="fetch" type="submit">Lähetä</button>

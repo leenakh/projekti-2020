@@ -1,8 +1,13 @@
 import React from 'react'
 import finnaService from '../services/finna'
 import bookService from '../services/books'
+import { useDispatch, useSelector } from 'react-redux'
+import { createBook } from '../reducers/bookReducer'
+import { setIsbn } from '../reducers/isbnReducer'
+import {setCopy} from '../reducers/copyReducer'
 
-const CreateBookForm = ({ isbn, setIsbn, copy, setCopy, message, setMessage, errorMessage, setErrorMessage }) => {
+const CreateBookForm = ({ isbn, copy, message, setMessage, errorMessage, setErrorMessage }) => {
+  const dispatch = useDispatch()
   const handleCreateBook = async (event) => {
     event.preventDefault()
     try {
@@ -18,8 +23,11 @@ const CreateBookForm = ({ isbn, setIsbn, copy, setCopy, message, setMessage, err
       const returnedBook = await bookService.create(newBook)
       if (returnedBook) {
         await setMessage('Uuden kirjan lisääminen onnistui!')
-        setIsbn('')
-        setCopy('')
+        //setIsbn('')
+        dispatch(setIsbn(''))
+        //setCopy('')
+        dispatch(setCopy(''))
+        dispatch(createBook(returnedBook))
         console.log(message)
         setTimeout(() => {
           setMessage(null)
@@ -40,8 +48,8 @@ const CreateBookForm = ({ isbn, setIsbn, copy, setCopy, message, setMessage, err
     <form id="createBook" onSubmit={handleCreateBook}>
       <div>
         <h3>Lisää uusi kirja tietokantaan</h3>
-        isbn: <input type="text" value={isbn} id="isbn" onChange={({ target }) => setIsbn(target.value)} />
-        copy: <input type="text" value={copy} id="copy" onChange={({ target }) => setCopy(target.value)} />
+        isbn: <input type="text" value={isbn} id="isbn" onChange={({ target }) => dispatch(setIsbn(target.value))} />
+        copy: <input type="text" value={copy} id="copy" onChange={({ target }) => dispatch(setCopy(target.value))} />
       </div>
       <div>
         <button id="create-button" type="submit">Lähetä</button>

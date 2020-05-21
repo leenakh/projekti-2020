@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import {useSelector, useDispatch} from 'react-redux'
 import './App.css'
 import bookService from './services/books'
 import loanService from './services/loans'
@@ -14,6 +15,10 @@ import SelectTitle from './components/SelectTitle'
 import Message from './components/Message'
 
 const App = () => {
+  const reduxBooks = useSelector(state => state.books)
+  const reduxIsbn = useSelector(state => state.isbn)
+  const reduxCopy = useSelector(state => state.copy)
+  const reduxTitle = useSelector(state => state.title)
 
   const [user, setUser] = useState(null)
   const [errorMessage, setErrorMessage] = useState(null)
@@ -49,15 +54,15 @@ const App = () => {
   )
 
   const createBookForm = () => (
-    <CreateBookForm isbn={isbn} setIsbn={setIsbn} copy={copy} setCopy={setCopy} message={message} setMessage={setMessage} errorMessage={errorMessage} setErrorMessage={setErrorMessage} />
+    <CreateBookForm isbn={reduxIsbn} setIsbn={setIsbn} copy={reduxCopy} setCopy={setCopy} message={message} setMessage={setMessage} errorMessage={errorMessage} setErrorMessage={setErrorMessage} />
   )
 
   const fetchBookForm = () => (
-    <FetchBookForm title={title} isbn={isbn} setTitle={setTitle} setIsbn={setIsbn} setSelectedBooks={setSelectedBooks} setBookTitles={setBookTitles} setBooks={setBooks} setMessage={setMessage} setErrorMessage={setErrorMessage} />
+    <FetchBookForm title={reduxTitle} isbn={reduxIsbn} setTitle={setTitle} setIsbn={setIsbn} setSelectedBooks={setSelectedBooks} setBookTitles={setBookTitles} setBooks={setBooks} setMessage={setMessage} setErrorMessage={setErrorMessage} />
   )
 
   const fetchBookByCopyForm = () => (
-    <FetchBookByCopyForm setBooks={setBooks} selectedBooks={selectedBooks} copy={copy} setCopy={setCopy} setErrorMessage={setErrorMessage} />
+    <FetchBookByCopyForm setBooks={setBooks} selectedBooks={selectedBooks} copy={reduxCopy} setCopy={setCopy} setErrorMessage={setErrorMessage} />
   )
 
   const borrowingBookForm = () => (
@@ -66,12 +71,12 @@ const App = () => {
 
   const showBooks = () => {
     return (
-      <Books books={books} setBooks={setBooks} book={book} setBook={setBook} borrowingBookForm={borrowingBookForm} setMessage={setMessage} setErrorMessage={setErrorMessage} />
+      <Books books={reduxBooks} setBooks={setBooks} book={book} setBook={setBook} borrowingBookForm={borrowingBookForm} setMessage={setMessage} setErrorMessage={setErrorMessage} />
     )
   }
 
   const showBookTitles = () => (
-    <SelectTitle books={books} setBooks={setBooks} setSelectedBooks={setSelectedBooks} setTitle={setTitle} bookTitles={bookTitles} setBookTitles={setBookTitles} setErrorMessage={setErrorMessage} />
+    <SelectTitle books={reduxBooks} setBooks={setBooks} setSelectedBooks={setSelectedBooks} setTitle={setTitle} bookTitles={bookTitles} setBookTitles={setBookTitles} setErrorMessage={setErrorMessage} />
   )
 
   const showMessage = () => (

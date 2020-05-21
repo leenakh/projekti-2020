@@ -1,10 +1,13 @@
 import React from 'react'
+import { useDispatch } from 'react-redux'
+import { setBooks } from '../reducers/bookReducer'
 
-const SelectTitle = ({ books, setBooks, setSelectedBooks, setTitle, bookTitles, setBookTitles, setErrorMessage }) => {
+const SelectTitle = ({ books, setSelectedBooks, setTitle, bookTitles, setBookTitles, setErrorMessage }) => {
+  const dispatch = useDispatch()
   const handleSelectBookFromListOfTitles = (booksTitle) => {
     try {
       const booksForSelection = books.filter(b => b.title === booksTitle)
-      setBooks(booksForSelection)
+      dispatch(setBooks(booksForSelection))
       setSelectedBooks(booksForSelection)
       setTitle('')
       setBookTitles(null)
