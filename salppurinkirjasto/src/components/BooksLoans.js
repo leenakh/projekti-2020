@@ -1,16 +1,20 @@
 import React, { useState } from 'react'
 import bookService from '../services/books'
+import {setErrorMessage} from '../reducers/errorMessageReducer'
+import { useDispatch, useSelector } from 'react-redux'
 
-const BooksLoans = ({ book, setErrorMessage }) => {
+const BooksLoans = () => {
+  const book = useSelector(state => state.book)
+  const dispatch = useDispatch()
   const [loans, setLoans] = useState([])
   const handleGetBooksLoans = async (id) => {
     try {
       const loans = await bookService.getLoans(book.id)
       setLoans(loans)
     } catch (exception) {
-      setErrorMessage('Lainoja ei voitu hakea.')
+      dispatch(setErrorMessage('Lainoja ei voitu hakea.'))
       setTimeout(() => {
-        setErrorMessage(null)
+        dispatch(setErrorMessage(null))
       }, 5000)
     }
   }

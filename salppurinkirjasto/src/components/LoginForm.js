@@ -3,10 +3,13 @@ import loginService from '../services/login'
 import bookService from '../services/books'
 import loanService from '../services/loans'
 import customerService from '../services/customers'
+import { setErrorMessage } from '../reducers/errorMessageReducer'
+import { useDispatch } from 'react-redux'
 
 export const loginError = 'Wrong credentials'
 
-export const LoginForm = ({ setUser, setErrorMessage }) => {
+export const LoginForm = ({ setUser }) => {
+  const dispatch = useDispatch()
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
@@ -24,9 +27,9 @@ export const LoginForm = ({ setUser, setErrorMessage }) => {
       setUsername('')
       setPassword('')
     } catch (exception) {
-      setErrorMessage(loginError)
+      dispatch(setErrorMessage(loginError))
       setTimeout(() => {
-        setErrorMessage(null)
+        dispatch(setErrorMessage(null))
       }, 5000)
     }
   }

@@ -2,12 +2,18 @@ import React from 'react'
 import finnaService from '../services/finna'
 import bookService from '../services/books'
 import { useDispatch, useSelector } from 'react-redux'
-import { createBook } from '../reducers/bookReducer'
+import { createBook } from '../reducers/booksReducer'
 import { setIsbn } from '../reducers/isbnReducer'
 import {setCopy} from '../reducers/copyReducer'
+import {setMessage} from '../reducers/messageReducer'
+import { setErrorMessage } from '../reducers/errorMessageReducer'
 
-const CreateBookForm = ({ isbn, copy, message, setMessage, errorMessage, setErrorMessage }) => {
+const CreateBookForm = () => {
+  const message = useSelector(state => state.message)
+  const errorMessage = useSelector(state => state.errorMessage)
   const dispatch = useDispatch()
+  const isbn = useSelector(state => state.isbn)
+  const copy = useSelector(state => state.copy)
   const handleCreateBook = async (event) => {
     event.preventDefault()
     try {
@@ -22,24 +28,22 @@ const CreateBookForm = ({ isbn, copy, message, setMessage, errorMessage, setErro
       }
       const returnedBook = await bookService.create(newBook)
       if (returnedBook) {
-        await setMessage('Uuden kirjan lisääminen onnistui!')
-        //setIsbn('')
+        await dispatch(setMessage('Uuden kirjan lisääminen onnistui!'))
         dispatch(setIsbn(''))
-        //setCopy('')
         dispatch(setCopy(''))
         dispatch(createBook(returnedBook))
         console.log(message)
         setTimeout(() => {
-          setMessage(null)
+          dispatch(setMessage(null))
         }, 5000)
         console.log(message)
       }
       console.log(returnedBook)
     } catch (exception) {
-      await setErrorMessage('Uuden kirjan luominen ei onnistunut!')
+      dispatch(setErrorMessage('Uuden kirjan luominen ei onnistunut!'))
       console.log(errorMessage)
       setTimeout(() => {
-        setErrorMessage(null)
+        dispatch(setErrorMessage(null))
       }, 5000)
     }
   }

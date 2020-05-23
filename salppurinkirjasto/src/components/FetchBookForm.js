@@ -1,18 +1,24 @@
 import React from 'react'
 import bookService from '../services/books'
-import { useDispatch } from 'react-redux'
-import { setBooks } from '../reducers/bookReducer'
-import {setTitle} from '../reducers/titleReducer'
-import {setIsbn} from '../reducers/isbnReducer'
+import { useDispatch, useSelector } from 'react-redux'
+import { setBooks } from '../reducers/booksReducer'
+import { setTitle } from '../reducers/titleReducer'
+import { setIsbn } from '../reducers/isbnReducer'
+import { setMessage } from '../reducers/messageReducer'
+import { setErrorMessage } from '../reducers/errorMessageReducer'
+import { setSelectedBooks } from '../reducers/selectedBooksReducer'
+import { setBookTitles } from '../reducers/bookTitlesReducer'
 
 export const fetchBookMessage = 'Kirjat löytyivät!'
 export const fetchBookFailMessage = 'Kirjoja ei löytynyt.'
 
-export const FetchBookForm = ({ title, isbn, setSelectedBooks, setBookTitles, setMessage, setErrorMessage }) => {
+export const FetchBookForm = () => {
+  const isbn = useSelector(state => state.isbn)
+  const title = useSelector(state => state.title)
   const dispatch = useDispatch()
   const handleFetchBook = async (event) => {
     event.preventDefault()
-    setSelectedBooks(null)
+    dispatch(setSelectedBooks(null))
     let fetchedBooks = []
     try {
       console.log(title)
@@ -22,20 +28,20 @@ export const FetchBookForm = ({ title, isbn, setSelectedBooks, setBookTitles, se
       const uniqueBookTitles = [...new Set(fetchedBooks.map(b => b.title))]
       console.log(uniqueBookTitles)
       if (uniqueBookTitles.length > 0) {
-        setBookTitles(uniqueBookTitles)
+        dispatch(setBookTitles(uniqueBookTitles))
         dispatch(setBooks(fetchedBooks))
         dispatch(setTitle(''))
         dispatch(setIsbn(''))
-        setMessage(fetchBookMessage)
+        dispatch(setMessage(fetchBookMessage))
         setTimeout(() => {
-          setMessage(null)
+          dispatch(setMessage(null))
         }, 5000)
       } else {
-        setErrorMessage(fetchBookFailMessage)
-        setBookTitles([])
+        dispatch(setErrorMessage(fetchBookFailMessage))
+        dispatch(setBookTitles([]))
         dispatch(setTitle(''))
         setTimeout(() => {
-          setErrorMessage(null)
+          dispatch(setErrorMessage(null))
         }, 5000)
       }
     } catch (exception) {

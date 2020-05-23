@@ -1,11 +1,19 @@
 import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import bookService from '../services/books'
 import loanService from '../services/loans'
+import { setBooks } from '../reducers/booksReducer'
+import { setBook } from '../reducers/bookReducer'
+import {setMessage} from '../reducers/messageReducer'
+import { setErrorMessage } from '../reducers/errorMessageReducer'
 
 export const returningMessage = 'Kirjan palauttaminen onnistui.'
 export const returningFailMessage = 'Kirjan palauttaminen ei onnistunut.'
 
-export const ReturnBook = ({ book, setBook, books, setBooks, setMessage, setErrorMessage }) => {
+export const ReturnBook = () => {
+  const books = useSelector(state => state.books)
+  const book = useSelector(state => state.book)
+  const dispatch = useDispatch()
   const handleReturnBook = async () => {
     try {
       const changedLoan = {
@@ -15,17 +23,17 @@ export const ReturnBook = ({ book, setBook, books, setBooks, setMessage, setErro
       const returnedBook = await bookService.update(book.id, { loanId: null })
       console.log('returnedBook', returnedBook)
       const returnedLoan = await loanService.update(book.loan.id, changedLoan)
-      setBook(returnedBook)
-      setBooks(books.map(b => b.id !== returnedBook.id ? b : returnedBook))
+      dispatch(setBook(returnedBook))
+      dispatch(setBooks(books.map(b => b.id !== returnedBook.id ? b : returnedBook)))
       console.log('returnedLoan', returnedLoan)
-      setMessage(returningMessage)
+      dispatch(setMessage(returningMessage))
       setTimeout(() => {
-        setMessage(null)
+        dispatch(setMessage(null))
       }, 5000)
     } catch (exception) {
-      setErrorMessage(returningFailMessage)
+      dispatch(setErrorMessage(returningFailMessage))
       setTimeout(() => {
-        setErrorMessage(null)
+        dispatch(setErrorMessage(null))
       }, 5000)
     }
     console.log('book returned')

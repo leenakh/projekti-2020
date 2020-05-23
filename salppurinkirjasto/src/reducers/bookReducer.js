@@ -1,28 +1,16 @@
-
-
-export const bookReducer = (state = [], action) => {
+export const bookReducer = (state = null, action) => {
     switch (action.type) {
-        case 'SET_BOOKS':
+        case 'SET_BOOK':
             return action.data
-        case 'NEW_BOOK':
-            return [...state, action.data]
         default:
             return state
     }
-
 }
 
-export const createBook = (book) => {
+export const setBook = (book) => {
     return {
-        type: 'NEW_BOOK',
+        type: 'SET_BOOK',
         data: book
-    }
-}
-
-export const setBooks = (books) => {
-    return {
-        type: 'SET_BOOKs',
-        data: books
     }
 }
 

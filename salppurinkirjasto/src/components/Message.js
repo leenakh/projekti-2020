@@ -1,17 +1,20 @@
 import React from 'react'
+import { useSelector } from 'react-redux'
 
-const Message = ({ message, errorMessage }) => {
+const Message = () => {
+    const reduxMessage = useSelector(state => state.message)
+    const reduxErrorMessage = useSelector(state => state.errorMessage)
 
-    if (message) {
+    if (reduxMessage) {
         return (
             <div id="message">
-                {message}
+                {reduxMessage}
             </div>
         )
-    } else if (errorMessage) {
+    } else if (reduxErrorMessage) {
         return (
             <div id="error">
-                {errorMessage}
+                {reduxErrorMessage}
             </div>
         )
     } else {

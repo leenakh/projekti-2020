@@ -25,9 +25,14 @@ PVM		TUNTIA		TEHTÄVÄ
 16.5.2020	3		Testien laajentamista (sekä frontend että backend). Kirjan poistaminen mahdolliseksi vain adminille.
 17.5.2020	2		Backendin ja frontendin testien laajentamista.
 18.5.2020	1,5		Cypress-testien laajentamista ja (vähän) refaktorointia.
-21.5.2020	3		Sovelluksen tilan hallinnan muuttaminen käyttämään Reduxia (osittain).
+21.5.2020	3		Sovelluksen tilanhallinnan muuttaminen käyttämään Reduxia (osittain).
+23.5.2020	6		Tilanhallinnan refaktorointia (Redux).
+-----------------------------------
+Yhteensä	63
 
 TODO
+BorrowingBookFormin refaktorointi/pilkkominen.
+Osa sovelluslogiikasta redusereihin?
 Lainan palautukseen varmistus.
 Uuden asiakkaan lisäämiseen varmistus.
 Hakutermisyötteen käsittely virtaviivaisemmaksi?

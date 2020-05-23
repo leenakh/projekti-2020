@@ -1,12 +1,24 @@
 import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import customerService from '../services/customers'
 import loanService from '../services/loans'
 import bookService from '../services/books'
+import { setBooks } from '../reducers/booksReducer'
+import { setBook } from '../reducers/bookReducer'
+import { setMessage } from '../reducers/messageReducer'
+import { setErrorMessage } from '../reducers/errorMessageReducer'
+import { setCustomer } from '../reducers/customerReducer'
 
 export const borrowingMessage = 'Kirjan lainaaminen onnistui.'
 export const failMessage = 'Kirjan lainaaminen ei onnistunut.'
 
-export const BorrowingBookForm = ({ book, setBook, books, setBooks, beginDate, setBeginDate, endDate, setEndDate, customer, setCustomer, message, setMessage, errorMessage, setErrorMessage }) => {
+export const BorrowingBookForm = ({ beginDate, setBeginDate, endDate, setEndDate }) => {
+  const customer = useSelector(state => state.customer)
+  const message = useSelector(state => state.message)
+  const errorMessage = useSelector(state => state.errorMessage)
+  const books = useSelector(state => state.books)
+  const book = useSelector(state => state.book)
+  const dispatch = useDispatch()
   const handleBorrowingBook = async (event) => {
     event.preventDefault()
     try {
@@ -16,8 +28,8 @@ export const BorrowingBookForm = ({ book, setBook, books, setBooks, beginDate, s
         const newCustomer = await customerService.create({
           username: customer
         })
-        setCustomer(newCustomer.id)
-        console.log(newCustomer)
+        dispatch(setCustomer(customer))
+        console.log('new customer', newCustomer)
       }
       const loan = {
         beginDate: beginDate,
@@ -29,25 +41,25 @@ export const BorrowingBookForm = ({ book, setBook, books, setBooks, beginDate, s
       const returnedLoan = await loanService.create(loan)
       console.log('reloan', returnedLoan)
       const returnedBook = await bookService.update(loan.bookId, { loanId: returnedLoan.id })
-      setBook(returnedBook)
-      setBooks(books.map(b => b.id !== returnedBook.id ? b : returnedBook))
+      dispatch(setBook(returnedBook))
+      dispatch(setBooks(books.map(b => b.id !== returnedBook.id ? b : returnedBook)))
       setBeginDate('')
       setEndDate('')
-      setCustomer('')
+      dispatch(setCustomer(''))
       if (returnedBook.loan.id === returnedLoan.id) {
         console.log('returnedBook', returnedBook.loan.id)
         console.log('returnedLoan', returnedLoan.id)
-        setMessage(borrowingMessage)
+        dispatch(setMessage(borrowingMessage))
         console.log(message)
         setTimeout(() => {
-          setMessage(null)
+          dispatch(setMessage(null))
         }, 5000)
       }
     } catch (exception) {
-      setErrorMessage(failMessage)
+      dispatch(setErrorMessage(failMessage))
       console.log(errorMessage)
       setTimeout(() => {
-        setErrorMessage(null)
+        dispatch(setErrorMessage(null))
       }, 5000)
     }
   }
@@ -57,7 +69,7 @@ export const BorrowingBookForm = ({ book, setBook, books, setBooks, beginDate, s
       <div>
         <p>Alkupäivä: <input type="text" value={beginDate} id="beginDate" onChange={({ target }) => setBeginDate(target.value)} /></p>
         <p>Loppupäivä: <input type="text" value={endDate} id="endDate" onChange={({ target }) => setEndDate(target.value)} /></p>
-        <p>Nimi: <input type="text" value={customer} id="customer" onChange={({ target }) => setCustomer(target.value)} /></p>
+        <p>Nimi: <input type="text" value={customer} id="customer" onChange={({ target }) => dispatch(setCustomer(target.value))} /></p>
       </div>
       <div>
         <button id="borrow-button" type="submit">Lainaa kirja</button>

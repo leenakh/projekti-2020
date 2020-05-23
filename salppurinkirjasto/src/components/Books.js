@@ -1,18 +1,21 @@
 import React from 'react'
+import {useSelector} from 'react-redux'
 import Book from '../components/Book'
 import { ReturnBook } from '../components/ReturnBook'
 import ChooseBook from '../components/ChooseBook'
 
-const Books = ({ books, setBooks, book, setBook, borrowingBookForm, setMessage, setErrorMessage }) => {
+const Books = ({ borrowingBookForm }) => {
+    const books = useSelector(state => state.books)
+    const book = useSelector(state => state.book)
     const returnBook = () => (
-        <ReturnBook book={book} setBook={setBook} books={books} setBooks={setBooks} setMessage={setMessage} setErrorMessage={setErrorMessage} />
+        <ReturnBook />
     )
     return (
         <ul id="books">
             {books.map((b) =>
                 <li id="book" key={b.id}>
                     <Book key={b.id} book={b} />
-                    <ChooseBook book={b} setBook={setBook} books={books} />
+                    <ChooseBook book={b} />
 
                     <div>
                         {book && !b.loan && book.id === b.id ? borrowingBookForm() : null}

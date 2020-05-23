@@ -1,20 +1,26 @@
 import React from 'react'
-import { useDispatch } from 'react-redux'
-import { setBooks } from '../reducers/bookReducer'
+import { useDispatch, useSelector } from 'react-redux'
+import { setBooks } from '../reducers/booksReducer'
+import {setTitle} from '../reducers/titleReducer'
+import { setErrorMessage } from '../reducers/errorMessageReducer'
+import {setSelectedBooks} from '../reducers/selectedBooksReducer'
+import {setBookTitles} from '../reducers/bookTitlesReducer'
 
-const SelectTitle = ({ books, setSelectedBooks, setTitle, bookTitles, setBookTitles, setErrorMessage }) => {
+const SelectTitle = () => {
+  const bookTitles = useSelector(state => state.bookTitles)
+  const books = useSelector(state => state.books)
   const dispatch = useDispatch()
   const handleSelectBookFromListOfTitles = (booksTitle) => {
     try {
       const booksForSelection = books.filter(b => b.title === booksTitle)
       dispatch(setBooks(booksForSelection))
-      setSelectedBooks(booksForSelection)
-      setTitle('')
-      setBookTitles(null)
+      dispatch(setSelectedBooks(booksForSelection))
+      dispatch(setTitle(''))
+      dispatch(setBookTitles(null))
     } catch (exception) {
-      setErrorMessage('Kirjoja ei löytynyt.')
+      dispatch(setErrorMessage('Kirjoja ei löytynyt.'))
       setTimeout(() => {
-        setErrorMessage(null)
+        dispatch(setErrorMessage(null))
       }, 5000)
     }
   }
