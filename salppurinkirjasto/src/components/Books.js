@@ -7,9 +7,7 @@ import ChooseBook from '../components/ChooseBook'
 const Books = ({ borrowingBookForm }) => {
     const books = useSelector(state => state.books)
     const book = useSelector(state => state.book)
-    const returnBook = () => (
-        <ReturnBook />
-    )
+
     return (
         <ul id="books">
             {books.map((b) =>
@@ -19,7 +17,7 @@ const Books = ({ borrowingBookForm }) => {
 
                     <div>
                         {book && !b.loan && book.id === b.id ? borrowingBookForm() : null}
-                        {book && b.loan && book.id === b.id ? returnBook() : null}
+                        {book && b.loan && book.id === b.id ? <ReturnBook /> : null}
                     </div>
                 </li>)}
         </ul>
