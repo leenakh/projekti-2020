@@ -28,8 +28,9 @@ PVM		TUNTIA		TEHTÄVÄ
 21.5.2020	3		Sovelluksen tilanhallinnan muuttaminen käyttämään Reduxia (osittain).
 23.5.2020	6		Tilanhallinnan refaktorointia (Redux).
 26.5.2020	2		Redux-thunk-kirjaston käyttöönotto ja uuden kirjan lisäämistoiminnallisuuden refaktorointi.
+27.5.2020	1		Kirjan hakemistoiminnallisuuden refaktorointi.
 -----------------------------------
-Yhteensä	65
+Yhteensä	66
 
 TODO
 BorrowingBookFormin refaktorointi/pilkkominen.

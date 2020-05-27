@@ -1,16 +1,9 @@
 import React from 'react'
-import bookService from '../services/books'
 import { useDispatch, useSelector } from 'react-redux'
-import { setBooks } from '../reducers/booksReducer'
 import { setTitle } from '../reducers/titleReducer'
 import { setIsbn } from '../reducers/isbnReducer'
-import { setMessage } from '../reducers/messageReducer'
-import { setErrorMessage } from '../reducers/errorMessageReducer'
 import { setSelectedBooks } from '../reducers/selectedBooksReducer'
-import { setBookTitles } from '../reducers/bookTitlesReducer'
-
-export const fetchBookMessage = 'Kirjat löytyivät!'
-export const fetchBookFailMessage = 'Kirjoja ei löytynyt.'
+import {fetchBook} from '../reducers/booksReducer'
 
 export const FetchBookForm = () => {
   const isbn = useSelector(state => state.isbn)
@@ -19,36 +12,10 @@ export const FetchBookForm = () => {
   const handleFetchBook = async (event) => {
     event.preventDefault()
     dispatch(setSelectedBooks(null))
-    let fetchedBooks = []
-    try {
-      console.log(title)
-      const search = `title=${title}&isbn=${isbn}`
-      console.log(search)
-      fetchedBooks = await bookService.search(search)
-      const uniqueBookTitles = [...new Set(fetchedBooks.map(b => b.title))]
-      console.log(uniqueBookTitles)
-      if (uniqueBookTitles.length > 0) {
-        dispatch(setBookTitles(uniqueBookTitles))
-        dispatch(setBooks(fetchedBooks))
-        dispatch(setTitle(''))
-        dispatch(setIsbn(''))
-        dispatch(setMessage(fetchBookMessage))
-        setTimeout(() => {
-          dispatch(setMessage(null))
-        }, 5000)
-      } else {
-        dispatch(setErrorMessage(fetchBookFailMessage))
-        dispatch(setBookTitles([]))
-        dispatch(setTitle(''))
-        setTimeout(() => {
-          dispatch(setErrorMessage(null))
-        }, 5000)
-      }
-    } catch (exception) {
-      console.log(exception)
-    }
+    dispatch(fetchBook(title, isbn))
+    dispatch(setTitle(''))
+    dispatch(setIsbn(''))
   }
-
 
   return (
     <form onSubmit={handleFetchBook}>
@@ -64,9 +31,4 @@ export const FetchBookForm = () => {
   )
 }
 
-export default
-  {
-    FetchBookForm,
-    fetchBookMessage,
-    fetchBookFailMessage
-  }
+export default FetchBookForm

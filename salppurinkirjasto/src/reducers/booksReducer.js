@@ -1,6 +1,10 @@
 import finnaService from '../services/finna'
 import bookService from '../services/books'
 import { setErrorMessage } from '../reducers/errorMessageReducer'
+import { setBookTitles } from '../reducers/bookTitlesReducer'
+
+export const fetchBookMessage = 'Kirjat löytyivät!'
+export const fetchBookFailMessage = 'Kirjoja ei löytynyt.'
 
 export const booksReducer = (state = [], action) => {
     switch (action.type) {
@@ -35,6 +39,31 @@ export const createBook = (isbn, copy) => {
             setTimeout(() => {
                 dispatch(setErrorMessage(null))
             }, 5000)
+        }
+    }
+}
+
+export const fetchBook = (title, isbn) => {
+    let fetchedBooks = []
+    return async dispatch => {
+        try {
+            const search = `title=${title}&isbn=${isbn}`
+            console.log(search)
+            fetchedBooks = await bookService.search(search)
+            const uniqueBookTitles = [...new Set(fetchedBooks.map(b => b.title))]
+            console.log(uniqueBookTitles)
+            if (uniqueBookTitles.length > 0) {
+                dispatch(setBookTitles(uniqueBookTitles))
+                dispatch(setBooks(fetchedBooks))
+            } else {
+                dispatch(setErrorMessage(fetchBookFailMessage))
+                dispatch(setBookTitles([]))
+                setTimeout(() => {
+                    dispatch(setErrorMessage(null))
+                }, 5000)
+            }
+        } catch (exception) {
+
         }
     }
 }
