@@ -29,8 +29,10 @@ PVM		TUNTIA		TEHTÄVÄ
 23.5.2020	6		Tilanhallinnan refaktorointia (Redux).
 26.5.2020	2		Redux-thunk-kirjaston käyttöönotto ja uuden kirjan lisäämistoiminnallisuuden refaktorointi.
 27.5.2020	1		Kirjan hakemistoiminnallisuuden refaktorointi.
+29.5.2020	1		Pieniä korjauksia ja kirjan lainaamistoiminnallisuuden refaktorointia.
+31.5.2020	5		Kirjan lainaamistoiminnallisuuden refaktorointia (isoja ongelmia reduxin kanssa). Testien korjailua. Kirjautumisen yhteydessä ilmaantuvan hämäräperäisen virheilmoituksen ihmettelyä ("Warning: Can't perform a React state update on an unmounted component. -- ").
 -----------------------------------
-Yhteensä	66
+Yhteensä	72
 
 TODO
 BorrowingBookFormin refaktorointi/pilkkominen.
@@ -39,3 +41,4 @@ Lainan palautukseen varmistus.
 Uuden asiakkaan lisäämiseen varmistus.
 Hakutermisyötteen käsittely virtaviivaisemmaksi?
 Komponenttien näkyvyyden säätelyyn jokin patenttiratkaisu? Props.children?
+Filtteri: vain lainattavissa olevat / kaikki kirjat

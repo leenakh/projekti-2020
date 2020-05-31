@@ -17,6 +17,13 @@ export const booksReducer = (state = [], action) => {
     }
 }
 
+export const setBooks = (books) => {
+    return {
+        type: 'SET_BOOKS',
+        data: books
+    }
+}
+
 export const createBook = (isbn, copy) => {
     return async dispatch => {
         try {
@@ -65,13 +72,6 @@ export const fetchBook = (title, isbn) => {
         } catch (exception) {
 
         }
-    }
-}
-
-export const setBooks = (books) => {
-    return {
-        type: 'SET_BOOKS',
-        data: books
     }
 }
 

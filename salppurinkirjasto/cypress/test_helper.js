@@ -1,7 +1,7 @@
 import bookService from '../src/services/books'
 import { loginError } from '../src/components/LoginForm'
-import { fetchBookMessage, fetchBookFailMessage } from '../src/components/FetchBookForm'
-import { borrowingMessage, failMessage } from '../src/components/BorrowingBookForm'
+import { fetchBookMessage, fetchBookFailMessage } from '../src/reducers/booksReducer'
+import { borrowingMessage, failMessage } from '../src/reducers/loansReducer'
 import { returningMessage, returningFailMessage } from '../src/components/ReturnBook'
 
 const baseUrl = 'http://localhost:3001/api/testing'

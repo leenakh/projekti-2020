@@ -1,7 +1,6 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { setBooks } from '../reducers/booksReducer'
-import {setTitle} from '../reducers/titleReducer'
 import { setErrorMessage } from '../reducers/errorMessageReducer'
 import {setSelectedBooks} from '../reducers/selectedBooksReducer'
 import {setBookTitles} from '../reducers/bookTitlesReducer'
@@ -15,7 +14,6 @@ const SelectTitle = () => {
       const booksForSelection = books.filter(b => b.title === booksTitle)
       dispatch(setBooks(booksForSelection))
       dispatch(setSelectedBooks(booksForSelection))
-      dispatch(setTitle(''))
       dispatch(setBookTitles(null))
     } catch (exception) {
       dispatch(setErrorMessage('Kirjoja ei löytynyt.'))

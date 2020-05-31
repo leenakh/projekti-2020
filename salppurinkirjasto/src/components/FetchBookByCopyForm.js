@@ -10,15 +10,16 @@ const FetchBookByCopyForm = () => {
   const dispatch = useDispatch()
   const handleFetchBookByCopy = async (event) => {
     event.preventDefault()
-    try {
-      const selectedCopies = selectedBooks.filter(b => b.copy === copy)
-      dispatch(setBooks(selectedCopies))
-      dispatch(setCopy(''))
-    } catch (exception) {
+    const selectedCopies = selectedBooks.filter(b => b.copy === copy)
+    if (selectedCopies.length < 1) {
       dispatch(setErrorMessage('Nidettä ei löytynyt.'))
       setTimeout(() => {
         dispatch(setErrorMessage(null))
       }, 5000)
+      dispatch(setBooks(selectedBooks))
+    } else {
+      dispatch(setBooks(selectedCopies))
+      dispatch(setCopy(''))
     }
   }
 

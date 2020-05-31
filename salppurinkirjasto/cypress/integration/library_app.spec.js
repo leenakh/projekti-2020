@@ -3,6 +3,7 @@ import helper from '../test_helper'
 describe('Library', function () {
     beforeEach(function () {
         cy.request(helper.reset)
+        cy.request(helper.removeUser)
         cy.visit('http://localhost:3000')
     })
 
@@ -135,7 +136,7 @@ describe('Library with basic user', function () {
                 cy.get('#endDate').type('02/01/2020')
                 cy.get('#customer').type('katti')
                 cy.get('#borrow-button').click()
-                cy.get('#message').should('exist').and('contain', helper.borrowMessage)
+                cy.get('#borrow').should('not.exist')
                 cy.get('#return-button').should('exist')
             })
 
@@ -156,7 +157,7 @@ describe('Library with basic user', function () {
                 cy.get('#endDate').type('02/01/2020')
                 cy.get('#customer').type('matti')
                 cy.get('#borrow-button').click()
-                cy.get('#message').should('exist').and('contain', helper.borrowMessage)
+                cy.get('#return-button').should('exist')
                 cy.request('GET', 'http://localhost:3001/api/customers/matti')
                 .then((response) => {
                     expect(response.body).to.have.property('username', 'matti')
@@ -203,7 +204,8 @@ describe('Library with admin', function () {
             cy.get('#copy').type('2')
             cy.get('#create-button').click()
         })
-        cy.get('html').should('contain', 'Uuden kirjan lisääminen onnistui!')
+        cy.get('html').should('contain', 'Maailma on teonsana : suomalaisia runoja')
+        cy.get('#choose').should('contain', '2')
     })
 
     it('user can be created by admin', function () {
@@ -216,6 +218,6 @@ describe('Library with admin', function () {
         cy.get('#password').type('matti')
         cy.get('#login').click()
         cy.get('html').should('contain', 'matti matti')
-        cy.request(helper.removeUser)
+        
     })
 })
