@@ -3,10 +3,13 @@ import bookService from '../services/books'
 import customerService from '../services/customers'
 import { setBook } from '../reducers/bookReducer'
 import { setCustomer } from '../reducers/customerReducer'
+import { setMessage } from '../reducers/messageReducer'
 import { setErrorMessage } from '../reducers/errorMessageReducer'
 import { setBooks } from '../reducers/booksReducer'
 
 export const failMessage = 'Kirjan lainaaminen ei onnistunut.'
+export const returningMessage = 'Kirjan palauttaminen onnistui.'
+export const returningFailMessage = 'Kirjan palauttaminen ei onnistunut.'
 
 export const loansReducer = (state = null, action) => {
     switch (action.type) {
@@ -54,6 +57,36 @@ export const createLoan = (beginDate, endDate, customer, bookId, books) => {
             dispatch(setBooks(filteredBooks))
         } catch {
             dispatch(setErrorMessage(failMessage))
+            setTimeout(() => {
+                dispatch(setErrorMessage(null))
+            }, 5000)
+        }
+    }
+}
+
+export const returnLoan = (book, books) => {
+    return async dispatch => {
+        try {
+            const changedLoan = {
+                endDate: '03/05/2020',
+                returned: true
+            }
+            const returnedBook = await bookService.update(book.id, { loanId: null })
+            console.log('returnedBook', returnedBook)
+            const returnedLoan = await loanService.update(book.loan.id, changedLoan)
+            dispatch(setBook(returnedBook))
+            dispatch(setBooks(books.map(b => b.id !== returnedBook.id ? b : returnedBook)))
+            console.log('returnedLoan', returnedLoan)
+            dispatch({
+                type: 'SET_LOAN',
+                data: returnedLoan
+            })
+            dispatch(setMessage(returningMessage))
+            setTimeout(() => {
+                dispatch(setMessage(null))
+            }, 5000)
+        } catch (exception) {
+            dispatch(setErrorMessage(returningFailMessage))
             setTimeout(() => {
                 dispatch(setErrorMessage(null))
             }, 5000)

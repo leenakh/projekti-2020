@@ -2,8 +2,8 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { setBooks } from '../reducers/booksReducer'
 import { setErrorMessage } from '../reducers/errorMessageReducer'
-import {setSelectedBooks} from '../reducers/selectedBooksReducer'
-import {setBookTitles} from '../reducers/bookTitlesReducer'
+import { setSelectedBooks } from '../reducers/selectedBooksReducer'
+import { setBookTitles } from '../reducers/bookTitlesReducer'
 
 const SelectTitle = () => {
   const bookTitles = useSelector(state => state.bookTitles)

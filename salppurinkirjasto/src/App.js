@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import './App.css'
 import bookService from './services/books'
@@ -15,12 +16,13 @@ import SelectTitle from './components/SelectTitle'
 import Message from './components/Message'
 
 const App = () => {
+  const date = new Date().toISOString().substring(0, 10)
   const bookTitles = useSelector(state => state.bookTitles)
   const selectedBooks = useSelector(state => state.selectedBooks)
   const [user, setUser] = useState(null)
-  const [beginDate, setBeginDate] = useState('')
+  const [beginDate, setBeginDate] = useState(date)
   const [endDate, setEndDate] = useState('')
-  
+
   useEffect(() => {
     const loggedInUserJSON = window.localStorage.getItem('loggedInUser')
     if (loggedInUserJSON) {
@@ -32,69 +34,50 @@ const App = () => {
     }
   }, [])
 
-  const loginForm = () => (
-    <LoginForm setUser={setUser} />
-  )
-
-  const showLogout = () => (
-    <Logout setUser={setUser} />
-  )
-
-  const createBookForm = () => (
-    <CreateBookForm />
-  )
-
-  const fetchBookForm = () => (
-    <FetchBookForm />
-  )
-
-  const fetchBookByCopyForm = () => (
-    <FetchBookByCopyForm />
-  )
-
   const borrowingBookForm = () => (
     <BorrowingBookForm beginDate={beginDate} setBeginDate={setBeginDate} endDate={endDate} setEndDate={setEndDate} />
-  )
-
-  const showBooks = () => {
-    return (
-      <Books borrowingBookForm={borrowingBookForm} />
-    )
-  }
-
-  const showBookTitles = () => (
-    <SelectTitle />
-  )
-
-  const showMessage = () => (
-    <Message />
   )
 
   const loginMessage = () => (
     <p>{user.firstName} {user.lastName} on kirjautunut sisään.</p>
   )
 
+  const style = {
+    padding: 5
+  }
+
   return (
-    <>
+    <Router>
       <div>
-        {user === null ? loginForm() :
+        <Link style={style} to="/">Etusivu</Link>
+        <Link style={style} to="/kirjat">Kirjasto</Link>
+        <Link style={style} to="/pusu">Pusu</Link>
+      </div>
+      <div>
+        {user !== null ? <div>
+          {loginMessage()}
+          <Logout setUser={setUser} />
+        </div> : <LoginForm setUser={setUser} />
+        }
+      </div>
+      <Switch>
+        <Route path="/kirjat">
           <div>
-            {loginMessage()}
-            {showLogout()}
-          </div>}
-      </div>
+            {user === null ? null : <FetchBookForm />}
+            {selectedBooks === null ? null : <FetchBookByCopyForm />}
+            {bookTitles === null ? <Books borrowingBookForm={borrowingBookForm} /> : <SelectTitle />}
+          </div>
+        </Route>
+        <Route path="/pusu">
+          {user !== null && user.username === 'admin' ? <CreateBookForm /> : null}
+        </Route>
+        <Route path="/">
+        </Route>
+      </Switch>
       <div>
-        {user !== null && user.username === 'admin' ? createBookForm() : null}
+        <Message />
       </div>
-      <div>
-        {user === null ? null : fetchBookForm()}
-        {selectedBooks === null ? null : fetchBookByCopyForm()}
-        {bookTitles === null ? showBooks() : showBookTitles()}
-      </div>
-      <div>
-        {showMessage()}
-      </div>
-    </>
+    </Router>
   )
 }
 
