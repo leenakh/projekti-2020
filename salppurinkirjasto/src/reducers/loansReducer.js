@@ -67,8 +67,9 @@ export const createLoan = (beginDate, endDate, customer, bookId, books) => {
 export const returnLoan = (book, books) => {
     return async dispatch => {
         try {
+            const date = new Date().toISOString().substring(0, 10)
             const changedLoan = {
-                endDate: '03/05/2020',
+                endDate: date,
                 returned: true
             }
             const returnedBook = await bookService.update(book.id, { loanId: null })

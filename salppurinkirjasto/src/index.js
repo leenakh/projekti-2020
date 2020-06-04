@@ -4,6 +4,7 @@ import { Provider } from 'react-redux'
 import store from './store'
 import './index.css'
 import App from './App'
+import 'react-app-polyfill/stable'
 
 ReactDOM.render(
   <Provider store={store}>

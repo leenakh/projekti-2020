@@ -1,19 +1,22 @@
 import React from 'react'
+import { useHistory } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { setTitle } from '../reducers/titleReducer'
 import { setIsbn } from '../reducers/isbnReducer'
 import { setSelectedBooks } from '../reducers/selectedBooksReducer'
-import {fetchBook} from '../reducers/booksReducer'
+import { fetchBook } from '../reducers/booksReducer'
 
 export const FetchBookForm = () => {
   const isbn = useSelector(state => state.isbn)
   const title = useSelector(state => state.title)
   const dispatch = useDispatch()
+  const history = useHistory()
   const handleFetchBook = async (event) => {
     event.preventDefault()
     dispatch(setSelectedBooks(null))
     dispatch(fetchBook(title, isbn))
-    dispatch(setTitle(''))
+    history.push(`/kirjat/${title}`)
+    //dispatch(setTitle(''))
     dispatch(setIsbn(''))
   }
 
