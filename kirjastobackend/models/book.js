@@ -28,6 +28,10 @@ const bookSchema = new mongoose.Schema({
     loan: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Loan'
+    },
+    reservation: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Reservation'
     }
 })
 

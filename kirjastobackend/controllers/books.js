@@ -2,8 +2,10 @@ const booksRouter = require('express').Router()
 const Book = require('../models/book')
 const User = require('../models/user')
 const Loan = require('../models/loan')
+const Reservation = require('../models/reservation')
 const jwt = require('jsonwebtoken')
 const logger = require('../utils/logger')
+const moment = require('moment')
 
 const getTokenFrom = req => {
     const authorization = req.get('authorization')
@@ -36,10 +38,10 @@ booksRouter.get('/search/:search', async (req, res) => {
     logger.info(searchTitle, searchIsbn)
     if (searchIsbn !== '') {
         books = await Book.find({ isbn: searchIsbn })
-        .populate('loan', { beginDate: 1, endDate: 1, customer: 1, returned: 1 }) 
+            .populate('loan', { beginDate: 1, endDate: 1, customer: 1, returned: 1 })
     } else {
         books = await Book.find({ title: { $regex: searchTitle, $options: 'i' } })
-        .populate('loan', { beginDate: 1, endDate: 1, customer: 1, returned: 1 })
+            .populate('loan', { beginDate: 1, endDate: 1, customer: 1, returned: 1 })
     }
     res.json(books.map(book => book.toJSON()))
 })
@@ -47,6 +49,7 @@ booksRouter.get('/search/:search', async (req, res) => {
 booksRouter.get('/:id', async (req, res) => {
     const book = await Book.findById(req.params.id)
         .populate('loan', { beginDate: 1, endDate: 1, customer: 1, returned: 1 })
+        .populate('reservation', { beginDate: 1, endDate: 1, user: 1, received: 1 })
     res.json(book.toJSON())
 })
 
@@ -95,16 +98,26 @@ booksRouter.put('/:id', async (req, res) => {
     if (!token || !decodedToken.id) {
         return res.status(401).json({ error: 'token missing or invalid' })
     }
-    if (body.loanId !== null) {
-        const loan = await Loan.findById(body.loanId)
+    if (body.loanId) {
+        const loanToAdd = await Loan.findById(body.loanId)
         changedBook = {
-            loan: loan._id
+            loan: loanToAdd._id
         }
-    } else {
-        changedBook = {
-            loan: null
+        console.log('loanToAdd', loanToAdd)
+    } else if (body.reservationId) {
+        console.log('body.reservationId', body.reservationId)
+        const reservationToAdd = await Reservation.findById(body.reservationId)
+        if (moment(reservationToAdd.beginDate).isBefore('2020-06-10')) {
+            changedBook = {
+                reservation: reservationToAdd._id
+            }
+        } else {
+            return res.status(400).json({ error: 'Väärä päivä!' })
         }
+        console.log('reservationToAdd', reservationToAdd)
+        reservation = reservationToAdd._id
     }
+    console.log('changedBook backend', changedBook)
     const returnedBook = await Book.findByIdAndUpdate(req.params.id, changedBook, { new: true })
         .populate('loan', { beginDate: 1, endDate: 1, customer: 1, returned: 1 })
     res.json(returnedBook.toJSON())

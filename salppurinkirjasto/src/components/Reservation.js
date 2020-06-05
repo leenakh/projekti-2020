@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setBook } from '../reducers/bookReducer'
 import { setErrorMessage } from '../reducers/errorMessageReducer'
 import reservationService from '../services/reservations'
+import bookService from '../services/books'
 
 const Reservation = ({ beginDate, setBeginDate, endDate, setEndDate }) => {
     const books = useSelector(state => state.books)
@@ -24,6 +25,16 @@ const Reservation = ({ beginDate, setBeginDate, endDate, setEndDate }) => {
         setEndDate(returnDate)
     }
 
+    /* const varaaKirja = () => {
+        (selectedBooks sisältää myös ne niteet, joihin on voimassa oleva varaus)
+        (backend ei hyväksy varatun kirjan lainauspyyntöä)
+        käy läpi selectedBooks ja tutki, mitkä ovat lainassa
+        laske varattavissa olevien määrä -> kerro käyttäjälle, kuinka monta on
+        pyydä vaihtamaan määrää tai aikaväliä, jos liian vähän kirjoja varattavissa
+        jos kirjoja tarpeeksi, käy lista läpi ja merkitse varaus pyydetylle määrälle kirjoja
+
+    } */
+
     const handleMakeReservation = async (event) => {
         event.preventDefault()
         try {
@@ -33,8 +44,20 @@ const Reservation = ({ beginDate, setBeginDate, endDate, setEndDate }) => {
                 book: bookToReserve,
                 numberOfCopies: numberOfCopies
             }
+            //const booksToReserve = book.filter(b => !b.loan)
+            console.log('booksToReserve', booksToReserve)
+            if (booksToReserve.length < reservation.numberOfCopies) {
+                dispatch(setErrorMessage('Liian vähän niteitä varattavissa'))
+            }
             const returnedReservation = await reservationService.create(reservation)
             console.log('Varasin!', returnedReservation)
+            console.log('returnedReservation.id', returnedReservation.id)
+            console.log('bookId', book[0].id)
+            let i = 0
+            for (i = 0; i < booksToReserve.length; i++) {
+                let bookId = booksToReserve[i].id
+                bookService.update(bookId, { reservationId: returnedReservation.id })
+            }
         } catch (exception) {
             console.log('Virhe!')
         }

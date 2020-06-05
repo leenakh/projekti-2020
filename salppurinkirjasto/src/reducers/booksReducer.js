@@ -2,6 +2,7 @@ import finnaService from '../services/finna'
 import bookService from '../services/books'
 import { setErrorMessage } from '../reducers/errorMessageReducer'
 import { setBookTitles } from '../reducers/bookTitlesReducer'
+import { setSelectedBooks } from './selectedBooksReducer'
 
 export const fetchBookMessage = 'Kirjat löytyivät!'
 export const fetchBookFailMessage = 'Kirjoja ei löytynyt.'
@@ -62,6 +63,7 @@ export const fetchBook = (title, isbn) => {
             if (uniqueBookTitles.length > 0) {
                 dispatch(setBookTitles(uniqueBookTitles))
                 dispatch(setBooks(fetchedBooks))
+                dispatch(setSelectedBooks(fetchedBooks))
             } else {
                 dispatch(setErrorMessage(fetchBookFailMessage))
                 dispatch(setBookTitles([]))

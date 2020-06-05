@@ -61,7 +61,7 @@ const App = () => {
       <div>
         <Link style={style} to="/">Etusivu</Link>
         <Link style={style} to="/kirjat">Kirjasto</Link>
-        <Link style={style} to="/kirjastonhoitaja">Kirjastonhoitaja</Link>
+        {user !== null && user.username === 'admin' ? <Link style={style} to="/kirjastonhoitaja">Kirjastonhoitaja</Link> : null }
         <Link style={style} to="/varaus">Varaus</Link>
       </div>
       <div>
@@ -80,8 +80,7 @@ const App = () => {
         <Route path="/kirjat">
           <div>
             {user === null ? null : <FetchBookForm />}
-            {selectedBooks === null ? null : <FetchBookByCopyForm />}
-            {bookTitles === null ? <Books borrowingBookForm={borrowingBookForm} /> : <SelectTitle />}
+            {bookTitles === null ? null : <SelectTitle />}
           </div>
         </Route>
         <Route path="/kirjastonhoitaja">

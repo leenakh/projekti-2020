@@ -10,13 +10,14 @@ export const BorrowingBookForm = ({ beginDate, setBeginDate, endDate, setEndDate
   end.setDate(end.getDate() + 28)
   const returnDate = end.toISOString().substring(0, 10)
   const customer = useSelector(state => state.customer)
-  const books = useSelector(state => state.books)
+  const books = useSelector(state => state.selectedBooks)
+  const allBooks = useSelector(state => state.books)
   const book = useSelector(state => state.book)
   const handleBorrowingBook = async (event) => {
     event.preventDefault()
     setBeginDate(date)
     setEndDate(returnDate)
-    dispatch(createLoan(beginDate, endDate, customer, book.id, books))
+    dispatch(createLoan(beginDate, endDate, customer, book.id, books, allBooks))
       .then(() => {
         dispatch(setCustomer(''))
         console.log('päivä')

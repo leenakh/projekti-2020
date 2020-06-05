@@ -34,8 +34,9 @@ PVM		TUNTIA		TEHTÄVÄ
 2.6.2020	1,5		Kirjan palauttamistoiminnallisuuden refaktorointia (redux). Kirjan lainaustoiminnallisuuden hiomista: laina-ajan määrittelyyn datepicker ja oletuspäiväys / varhaisin sallittu päiväys.
 3.6.2020	1		Kirjan laina-ajan ja palauttamispäivän määrittelyn hiomista (oletuslaina-ajaksi neljä viikkoa, palautuspäiväksi nykyinen päivä).
 4.6.2020	3,5		Kirjan varaustoiminnallisuuden alustava toteutus (sekä frontend että backend). Näkymien reitityksen hiomista.
+5.6.2020	3,5		Näkymien reitityksen hiomista ja siihen liittyen pieniä muutoksia sovelluslogiikkaan. Varaustoiminnallisuuden suunnittelua ja kehittelyä eteenpäin.
 -----------------------------------
-Yhteensä	78
+Yhteensä	81,5
 
 TODO
 Lainan palautukseen varmistus.

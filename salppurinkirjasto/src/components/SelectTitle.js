@@ -14,7 +14,7 @@ const SelectTitle = () => {
   const handleSelectBookFromListOfTitles = (booksTitle) => {
     try {
       const booksForSelection = books.filter(b => b.title === booksTitle)
-      dispatch(setBooks(booksForSelection))
+      //dispatch(setBooks(booksForSelection))
       dispatch(setSelectedBooks(booksForSelection))
       //dispatch(setBookTitles(null))
       history.push("/lainaa")

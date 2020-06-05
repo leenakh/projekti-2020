@@ -6,6 +6,7 @@ import { setCustomer } from '../reducers/customerReducer'
 import { setMessage } from '../reducers/messageReducer'
 import { setErrorMessage } from '../reducers/errorMessageReducer'
 import { setBooks } from '../reducers/booksReducer'
+import { setSelectedBooks } from '../reducers/selectedBooksReducer'
 
 export const failMessage = 'Kirjan lainaaminen ei onnistunut.'
 export const returningMessage = 'Kirjan palauttaminen onnistui.'
@@ -27,7 +28,7 @@ export const setLoan = (loan) => {
     }
 }
 
-export const createLoan = (beginDate, endDate, customer, bookId, books) => {
+export const createLoan = (beginDate, endDate, customer, bookId, books, allBooks) => {
     return async dispatch => {
         try {
             const requestedCustomer = await customerService.search(customer)
@@ -54,7 +55,9 @@ export const createLoan = (beginDate, endDate, customer, bookId, books) => {
             const returnedBook = await bookService.update(bookId, { loanId: returnedLoan.id })
             dispatch(setBook(returnedBook))
             const filteredBooks = books.map(b => b.id !== returnedBook.id ? b : returnedBook)
-            dispatch(setBooks(filteredBooks))
+            dispatch(setSelectedBooks(filteredBooks))
+            const filteredAllBooks = allBooks.map(b => b.id !== returnedBook.id ? b : returnedBook)
+            dispatch(setBooks(filteredAllBooks))
         } catch {
             dispatch(setErrorMessage(failMessage))
             setTimeout(() => {
@@ -64,7 +67,7 @@ export const createLoan = (beginDate, endDate, customer, bookId, books) => {
     }
 }
 
-export const returnLoan = (book, books) => {
+export const returnLoan = (book, books, allBooks) => {
     return async dispatch => {
         try {
             const date = new Date().toISOString().substring(0, 10)
@@ -76,7 +79,9 @@ export const returnLoan = (book, books) => {
             console.log('returnedBook', returnedBook)
             const returnedLoan = await loanService.update(book.loan.id, changedLoan)
             dispatch(setBook(returnedBook))
-            dispatch(setBooks(books.map(b => b.id !== returnedBook.id ? b : returnedBook)))
+            dispatch(setSelectedBooks(books.map(b => b.id !== returnedBook.id ? b : returnedBook)))
+            const filteredAllBooks = allBooks.map(b => b.id !== returnedBook.id ? b : returnedBook)
+            dispatch(setBooks(filteredAllBooks))
             console.log('returnedLoan', returnedLoan)
             dispatch({
                 type: 'SET_LOAN',

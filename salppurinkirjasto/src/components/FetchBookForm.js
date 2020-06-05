@@ -13,11 +13,11 @@ export const FetchBookForm = () => {
   const history = useHistory()
   const handleFetchBook = async (event) => {
     event.preventDefault()
-    dispatch(setSelectedBooks(null))
+    //dispatch(setSelectedBooks(null))
     dispatch(fetchBook(title, isbn))
-    history.push(`/kirjat/${title}`)
+    history.push(`/kirjat/${title}&${isbn}`)
     //dispatch(setTitle(''))
-    dispatch(setIsbn(''))
+    //dispatch(setIsbn(''))
   }
 
   return (
