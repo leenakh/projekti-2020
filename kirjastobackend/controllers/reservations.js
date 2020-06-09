@@ -35,7 +35,7 @@ reservationsRouter.post('/', async (req, res) => {
     const user = await User.findById(decodedToken.id)
     //const book = await Book.findById(body.bookId)
 
-    //if (customer.accessAllowed === true && !book.loan) {
+    if (moment(body.beginDate).isBefore(moment(body.endDate))) {
         const reservation = new Reservation({
             beginDate: body.beginDate,
             endDate: body.endDate,
@@ -46,9 +46,9 @@ reservationsRouter.post('/', async (req, res) => {
         })
         const returnedReservation = await reservation.save()
         res.json(returnedReservation.toJSON())
-    //} else {
-        //res.status(401).json({ error: 'Customer is not allowed access or book is already taken.' })
-    //}
+    } else {
+        res.status(400).json({ error: 'Reservation begin date must be before end date.' })
+    }
 })
 
 reservationsRouter.put('/:id', async (req, res) => {

@@ -14,4 +14,14 @@ export const setSelectedBooks = (selectedBooks) => {
     }
 }
 
+export const filterSelectedBooks = (selectedBooks, changedBook) => {
+    return async dispatch => {
+        const books = selectedBooks.map(b => b.id !== changedBook.id ? b : changedBook)
+        dispatch({
+            type: 'SET_SELECTED_BOOKS',
+            data: books
+        })
+    }
+}
+
 export default selectedBooksReducer

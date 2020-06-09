@@ -29,10 +29,10 @@ const bookSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Loan'
     },
-    reservation: {
+    reservations: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Reservation'
-    }
+    }]
 })
 
 bookSchema.set('toJSON', {

@@ -26,6 +26,11 @@ const getLoans = async (id) => {
     return response.data
 }
 
+const getAvailability = async (data) => {
+    const response = await axios.post(`${baseUrl}/availability`, data)
+    return response.data
+}
+
 const create = async (newObject) => {
     const config = {
         headers: { Authorization: token }
@@ -47,6 +52,7 @@ export default {
     search,
     getOne,
     getLoans,
+    getAvailability,
     create,
     update,
     setToken
