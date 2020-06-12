@@ -103,9 +103,17 @@ const isAvailable = async (book, reservation) => {
     console.log('bookToReserve', bookToReserve)
     for (i = 0; i < bookToReserve.reservations.length; i++) {
         //let r = await Reservation.findById(book.reservations[i].id)
+        let loanBeginDate = '2000-01-01'
+        let loanEndDate = '2000-02-01'
+        if (bookToReserve.loan) {
+            loanBeginDate = bookToReserve.loan.beginDate
+            loanEndDate = bookToReserve.loan.endDate
+        }
         let r = bookToReserve.reservations[i]
         result = (moment(reservation.endDate).isBefore(r.beginDate)
             || moment(reservation.beginDate).isAfter(r.endDate))
+            && (moment(reservation.endDate).isBefore(loanBeginDate)
+                || moment(reservation.beginDate).isAfter(loanEndDate))
         if (result === false) {
             toReturn = result
         }
@@ -146,32 +154,39 @@ booksRouter.put('/:id', async (req, res) => {
     }
     if (body.loanId) {
         const loanToAdd = await Loan.findById(body.loanId)
+        const book = await Book.findById(req.params.id)
+        const available = await isAvailable(book, loanToAdd)
+        if (available === true)
         changedBook = {
             loan: loanToAdd._id
         }
         console.log('loanToAdd', loanToAdd)
+    } else if (body.loanId === null) {
+        changedBook = {
+            loan: null
+        }
     } else if (body.reservations) {
         console.log('body.reservations', body.reservations)
-        changedBook = {
-            reservations: body.reservations
+        console.log('changedBook backend', changedBook)
+        const book = await Book.findById(req.params.id)
+        console.log('reservation', body.reservations[body.reservations.length - 1])
+        const reservation = await Reservation.findById(body.reservations[body.reservations.length - 1])
+        const available = await isAvailable(book, reservation)
+        console.log('available', available)
+        if (available === true) {
+            console.log('available', available)
+            changedBook = {
+                reservations: body.reservations
+            }
+        } else {
+            return res.status(400).json({ error: 'This copy is not available during requested time period.' })
         }
     }
-    console.log('changedBook backend', changedBook)
-    const book = await Book.findById(req.params.id)
-    console.log('reservation', body.reservations[body.reservations.length - 1])
-    const reservation = await Reservation.findById(body.reservations[body.reservations.length - 1])
-    const available = await isAvailable(book, reservation)
-    console.log('available', available)
-    if (available === true) {
-        console.log('available', available)
-        const returnedBook = await Book.findByIdAndUpdate(req.params.id, changedBook, { new: true })
-            .populate('loan', { beginDate: 1, endDate: 1, customer: 1, returned: 1 })
-            .populate('reservations')
-            .populate('reservation', { beginDate: 1, endDate: 1, user: 1, received: 1 })
-        return res.json(returnedBook.toJSON())
-    } else {
-        return res.status(400).json({ error: 'This copy is not available during requested time period.' })
-    }
+    const returnedBook = await Book.findByIdAndUpdate(req.params.id, changedBook, { new: true })
+        .populate('loan', { beginDate: 1, endDate: 1, customer: 1, returned: 1 })
+        .populate('reservations')
+        .populate('reservation', { beginDate: 1, endDate: 1, user: 1, received: 1 })
+    return res.json(returnedBook.toJSON())
 })
 
 booksRouter.delete('/:id', async (req, res) => {

@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { setMessage } from '../reducers/messageReducer'
 import { setErrorMessage } from '../reducers/errorMessageReducer'
 import { setSelectedBooks } from '../reducers/selectedBooksReducer'
 import { setBooks } from '../reducers/booksReducer'
@@ -36,6 +37,10 @@ const Reservation = ({ beginDate, setBeginDate, endDate, setEndDate }) => {
 
     const handleMakeReservation = async (event) => {
         event.preventDefault()
+        const beginDateParts = beginDate.split('-')
+        const beginDateString = `${beginDateParts[2]}.${beginDateParts[1]}.${beginDateParts[0]}`
+        const endDateParts = endDate.split('-')
+        const endDateString = `${endDateParts[2]}.${endDateParts[1]}.${endDateParts[0]}`
         try {
             const reservation = {
                 beginDate: beginDate,
@@ -46,6 +51,9 @@ const Reservation = ({ beginDate, setBeginDate, endDate, setEndDate }) => {
             const booksToReserve = selectedBooks
             if (booksToReserve.length < reservation.numberOfCopies) {
                 dispatch(setErrorMessage('Liian vähän niteitä varattavissa'))
+                setTimeout(() => {
+                    dispatch(setErrorMessage(''))
+                }, 5000)
             }
             const returnedReservation = await reservationService.create(reservation)
             const availableCopies = await bookService.getAvailability({ books: booksToReserve, reservation: returnedReservation })
@@ -73,11 +81,20 @@ const Reservation = ({ beginDate, setBeginDate, endDate, setEndDate }) => {
                     numberOfReservedBooks++
                     booksToChange = booksToChange.map(b => b.id !== changedBook.id ? b : changedBook)
                     changedBooks = changedBooks.map(b => b.id !== changedBook.id ? b : changedBook)
+                    
                 }
             }
             dispatch(setSelectedBooks((changedBooks)))
             dispatch(setBooks(booksToChange))
+            dispatch(setMessage(`Kirjan varaus onnistui: ${returnedReservation.numberOfCopies} nidettä ajalle ${beginDateString} - ${endDateString}.`))
+                    setTimeout(() => {
+                        dispatch(setMessage(''))
+                    }, 10000)
         } catch (exception) {
+            dispatch(setErrorMessage('Kirjan varaus ei onnistunut.'))
+            setTimeout(() => {
+                dispatch(setErrorMessage(''))
+            }, 5000)
             console.log('Virhe!')
         }
     }
