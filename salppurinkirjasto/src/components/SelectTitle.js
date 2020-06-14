@@ -6,7 +6,7 @@ import { setErrorMessage } from '../reducers/errorMessageReducer'
 import { setSelectedBooks } from '../reducers/selectedBooksReducer'
 import { setBookTitles } from '../reducers/bookTitlesReducer'
 
-const SelectTitle = () => {
+const SelectTitle = ({ setShowReservation }) => {
   const bookTitles = useSelector(state => state.bookTitles)
   const books = useSelector(state => state.books)
   const history = useHistory()
@@ -27,8 +27,8 @@ const SelectTitle = () => {
   }
   const handleReserve = (booksTitle) => {
     const booksForSelection = books.filter(b => b.title === booksTitle)
-      dispatch(setSelectedBooks(booksForSelection))
-      history.push("/varaus")
+    dispatch(setSelectedBooks(booksForSelection))
+    history.push("/varaus")
   }
 
   return (
@@ -38,7 +38,7 @@ const SelectTitle = () => {
           <li key={title}>
             {title}
             <p><button onClick={() => handleSelectBookFromListOfTitles(title)}>Lainaa/palauta</button>
-            <button onClick={() => handleReserve(title)}>Varaa</button></p>
+              <button onClick={() => handleReserve(title)}>Varaa</button></p>
           </li>
         )}
       </ul>

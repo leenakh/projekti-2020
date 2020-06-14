@@ -54,6 +54,13 @@ export const createLoan = (beginDate, endDate, customer, bookId, books, allBooks
             })
             const returnedBook = await bookService.update(bookId, { loanId: returnedLoan.id })
             dispatch(setBook(returnedBook))
+            if (!returnedBook.loan) {
+                dispatch(setErrorMessage(failMessage))
+                setTimeout(() => {
+                    dispatch(setErrorMessage(''))
+                }, 5000)
+                dispatch(setBook(null))
+            }
             const filteredBooks = books.map(b => b.id !== returnedBook.id ? b : returnedBook)
             dispatch(setSelectedBooks(filteredBooks))
             const filteredAllBooks = allBooks.map(b => b.id !== returnedBook.id ? b : returnedBook)

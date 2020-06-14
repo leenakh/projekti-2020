@@ -15,13 +15,18 @@ getTokenFrom = req => {
 
 reservationsRouter.get('/', async (req, res) => {
     const reservations = await Reservation.find({})
-        //.populate('book', { title: 1, authors: 1, languages: 1, isbn: 1, copy: 1 })
     res.json(reservations.map(reservation => reservation.toJSON()))
+})
+
+reservationsRouter.get('/:title', async (req, res) => {
+    const title = req.params.title
+    const reservations = await Reservation.find({ book: title })
+    res.json(reservations.map(r => r.json()))
 })
 
 reservationsRouter.get('/:id', async (req, res) => {
     const reservation = await Reservation.findById(req.params.id)
-        //.populate('book', { title: 1, authors: 1, languages: 1, isbn: 1, copy: 1 })
+    //.populate('book', { title: 1, authors: 1, languages: 1, isbn: 1, copy: 1 })
     res.json(reservation.toJSON())
 })
 

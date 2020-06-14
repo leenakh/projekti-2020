@@ -144,6 +144,40 @@ booksRouter.post('/availability', async (req, res) => {
     res.json(booksToReturn)
 })
 
+/* booksRouter.post('/calendar', async (req, res) => {
+    const body = req.body
+    const books = body.books
+    console.log('books', books)
+    const date = body.date
+    console.log('date', date)
+    let result = 0
+    let available = true
+    let i = 0
+    for (i = 0; i < books.length; i++) {
+        let y = 0
+        let reservations = books[i].reservations
+        for (y = 0; y < reservations.length; y++) {
+            
+            let r = await Reservation.findById(reservations[y])
+            if (moment(date).isSameOrAfter(r.beginDate) && moment(date).isSameOrBefore(r.endDate)) {
+                available = false
+            }
+            console.log('available', available)
+        }
+        if (available === false) {
+            result--
+            console.log('result', result)
+        } else if (available === true) {
+            result++
+        }
+        if (result < 0) {
+            result = 0
+        }
+        available = true
+    }
+    res.json({availableCopies: result})
+}) */
+
 booksRouter.put('/:id', async (req, res) => {
     const body = req.body
     let changedBook = null
@@ -157,9 +191,9 @@ booksRouter.put('/:id', async (req, res) => {
         const book = await Book.findById(req.params.id)
         const available = await isAvailable(book, loanToAdd)
         if (available === true)
-        changedBook = {
-            loan: loanToAdd._id
-        }
+            changedBook = {
+                loan: loanToAdd._id
+            }
         console.log('loanToAdd', loanToAdd)
     } else if (body.loanId === null) {
         changedBook = {

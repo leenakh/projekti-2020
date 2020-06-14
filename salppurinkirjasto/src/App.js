@@ -27,7 +27,7 @@ const App = () => {
   const [user, setUser] = useState(null)
   const [beginDate, setBeginDate] = useState(date)
   const [endDate, setEndDate] = useState(returnDate)
-
+  const [showReservation, setShowReservation] = useState(true)
   useEffect(() => {
     const loggedInUserJSON = window.localStorage.getItem('loggedInUser')
     if (loggedInUserJSON) {
@@ -49,7 +49,7 @@ const App = () => {
   )
 
   const reservation = () => (
-    <Reservation beginDate={beginDate} setBeginDate={setBeginDate} endDate={endDate} setEndDate={setEndDate} />
+    <Reservation beginDate={beginDate} setBeginDate={setBeginDate} endDate={endDate} setEndDate={setEndDate} setShowReservation={setShowReservation} />
   )
 
   const style = {
@@ -62,7 +62,7 @@ const App = () => {
         <Link style={style} to="/">Etusivu</Link>
         <Link style={style} to="/kirjat">Kirjasto</Link>
         {user !== null && user.username === 'admin' ? <Link style={style} to="/kirjastonhoitaja">Kirjastonhoitaja</Link> : null }
-        <Link style={style} to="/varaus">Varaus</Link>
+        
       </div>
       <div>
         {user !== null ? <div>
@@ -80,7 +80,7 @@ const App = () => {
         <Route path="/kirjat">
           <div>
             {user === null ? null : <FetchBookForm />}
-            {bookTitles === null ? null : <SelectTitle />}
+            {bookTitles === null ? null : <SelectTitle setShowReservation={setShowReservation} />}
           </div>
         </Route>
         <Route path="/kirjastonhoitaja">
@@ -93,11 +93,11 @@ const App = () => {
         </Route>
         <Route path="/lainaa/:copy">
           <div>
-            <Books borrowingBookForm={borrowingBookForm} />}
+            <Books borrowingBookForm={borrowingBookForm} />
           </div>
         </Route>
         <Route path="/varaus">
-          {user !== null ? reservation() : null}
+          {user !== null && bookTitles !== null ? reservation() : null}
         </Route>
         <Route path="/">
         </Route>
