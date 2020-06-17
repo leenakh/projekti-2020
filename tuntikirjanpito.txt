@@ -40,8 +40,10 @@ PVM		TUNTIA		TEHTÄVÄ
 12.6.2020	2,5		Varaustoiminnallisuuden viimeistelyä (lainaustoiminnallisuuteen pieniä korjauksia sekä käyttäjälle näytettävä ilmoitus varauksen onnistumisesta/epäonnistumisesta). Confirm-komponentin ja vahvistustoiminnallisuuden alustava toteutus.
 13.6.2020	5		Vahvistusdialogin viimeistely kirjan lainaamiseen ja varaamiseen. Varauskalenterin luonnostelua.
 14.6.2020	3,5		Varauskalenterin alustava toteutus (backendiin ja osittain frontendiin).
+15.6.2020	1,5		Varauskalenterin alustava toteutus frontendiin (kesken).
+17.6.2020	2		Varaustoiminnallisuuden laajentamista: varauksen poistaminen (toteutus backendiin ja osittain frontendiin).
 -----------------------------------
-Yhteensä	109,5
+Yhteensä	113
 
 TODO
 Lainan palautukseen varmistus.

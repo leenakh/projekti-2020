@@ -18,11 +18,11 @@ reservationsRouter.get('/', async (req, res) => {
     res.json(reservations.map(reservation => reservation.toJSON()))
 })
 
-reservationsRouter.get('/:title', async (req, res) => {
+/* reservationsRouter.get('/:title', async (req, res) => {
     const title = req.params.title
     const reservations = await Reservation.find({ book: title })
     res.json(reservations.map(r => r.json()))
-})
+}) */
 
 reservationsRouter.get('/:id', async (req, res) => {
     const reservation = await Reservation.findById(req.params.id)
@@ -76,13 +76,15 @@ reservationsRouter.put('/:id', async (req, res) => {
 reservationsRouter.delete('/:id', async (req, res) => {
     const token = getTokenFrom(req)
     const decodedToken = jwt.verify(token, process.env.SECRET)
-    const user = await User.findById(decodedToken.id)
-    const reservationOwner = Reservation.findById(req.params.id).user
+    const reservation = await Reservation.findById(req.params.id)
+    const reservationOwner = await User.findById(reservation.user)
     if (!token || !decodedToken.id) {
         return res.status(401).json({ error: 'token missing or invalid' })
-    } else if (user._id === reservationOwner._id) {
+    } else if (reservationOwner._id.toString() === decodedToken.id) {
         await Reservation.findByIdAndDelete(req.params.id)
         res.status(204).end()
+    } else {
+        res.status(401).json({error: 'Oops.'})
     }
 })
 

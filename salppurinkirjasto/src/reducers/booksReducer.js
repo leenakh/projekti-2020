@@ -77,4 +77,11 @@ export const fetchBook = (title, isbn) => {
     }
 }
 
+/* export const updateBooksReservations = (bookTitle, reservationId) => {
+    return async dispatch => {
+        const books = await booksService.fetchBook(bookTitle, '')
+        const updatedBooks = await books.map(b => b.reservations.filter(r => r.id !== reservationId))
+    }
+} */
+
 export default booksReducer

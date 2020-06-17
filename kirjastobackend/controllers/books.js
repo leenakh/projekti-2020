@@ -201,25 +201,26 @@ booksRouter.put('/:id', async (req, res) => {
         }
     } else if (body.reservations) {
         console.log('body.reservations', body.reservations)
-        console.log('changedBook backend', changedBook)
+        /* console.log('changedBook backend', changedBook)
         const book = await Book.findById(req.params.id)
         console.log('reservation', body.reservations[body.reservations.length - 1])
         const reservation = await Reservation.findById(body.reservations[body.reservations.length - 1])
         const available = await isAvailable(book, reservation)
         console.log('available', available)
         if (available === true) {
-            console.log('available', available)
-            changedBook = {
-                reservations: body.reservations
-            }
-        } else {
-            return res.status(400).json({ error: 'This copy is not available during requested time period.' })
+            console.log('available', available) */
+        changedBook = {
+            reservations: body.reservations
         }
+        /* } else {
+            return res.status(400).json({ error: 'This copy is not available during requested time period.' })
+        } */
     }
     const returnedBook = await Book.findByIdAndUpdate(req.params.id, changedBook, { new: true })
         .populate('loan', { beginDate: 1, endDate: 1, customer: 1, returned: 1 })
         .populate('reservations')
         .populate('reservation', { beginDate: 1, endDate: 1, user: 1, received: 1 })
+    console.log('returnedBook', returnedBook)
     return res.json(returnedBook.toJSON())
 })
 

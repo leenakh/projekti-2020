@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setMessage } from '../reducers/messageReducer'
 import { setErrorMessage } from '../reducers/errorMessageReducer'
 import { setSelectedBooks } from '../reducers/selectedBooksReducer'
-import { setBooks } from '../reducers/booksReducer'
+import { setBooks, fetchBook } from '../reducers/booksReducer'
 import { setBookTitles } from '../reducers/bookTitlesReducer'
 import reservationService from '../services/reservations'
 import bookService from '../services/books'
@@ -123,6 +123,31 @@ const Reservation = ({ beginDate, setBeginDate, endDate, setEndDate, setShowRese
         }
     }
 
+    const removeReservation = async (id) => {
+        try {
+            const reservation = await reservationService.getOne(id)
+            //dispatch(fetchBook(reservation.book, ''))
+            const search = `title=${reservation.book}&isbn=`
+            console.log(search)
+            const books = await bookService.search(search)
+            console.log('books', books)
+            let i = 0
+            for (i = 0; i < books.length; i++) {
+                let bookToChange = books[i]
+                let changedReservations = await bookToChange.reservations.filter(r => r.id !== id)
+                let changedBook = await bookService.update(bookToChange.id, {reservations: changedReservations})
+                console.log('changedBook front', changedBook)
+            }
+            await reservationService.remove(id)
+            dispatch(setMessage('Varauksen poistaminen onnistui.'))
+            setTimeout(() => {
+                dispatch(setMessage(''))
+            }, 5000)
+        } catch (exception) {
+            console.log('Pieleen meni.')
+        }
+    }
+
     const handleMakeReservation = async (event) => {
         event.preventDefault()
         setShowConfirm(true)
@@ -130,6 +155,7 @@ const Reservation = ({ beginDate, setBeginDate, endDate, setEndDate, setShowRese
 
     return (
         <>
+            <button onClick={() => removeReservation('5edfeff846f53448c453dccc')}>Poista varaus</button>
             <Calendar />
             <div>
                 {bookToReserve !== '' ? <p>{bookToReserve}</p> : <p>Ei valittua kirjaa</p>}

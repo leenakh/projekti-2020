@@ -4,35 +4,57 @@ import calendarService from '../services/calendar'
 
 const Calendar = () => {
     const books = useSelector(state => state.selectedBooks)
-    const [calendar, setCalendar] = useState([])
+    const [calendarEntries, setCalendarEntries] = useState([])
+    const [reservationCalendar, setReservationCalendar] = useState(null)
+    const dateNow = new Date()
 
     useEffect(() => {
-        const getCalendar = async () => {
+        const getCalendarEntries = async () => {
             const entries = await calendarService.search(books[0].title)
             console.log('calendarEntries', entries)
-            setCalendar(entries)
+            setCalendarEntries(entries)
         }
-        getCalendar()
-        console.log('calendarState', calendar)
+        getCalendarEntries()
     }, [])
 
+    const calendar = (date) => {
+        let newDate = new Date(date)
+        let reservations = []
+        let i = 0
+        for (i = 0; i < 90; i++) {
+            let newDateString = newDate.toISOString().substring(0, 10)
+            let result = calendarEntries.filter(c => c.date === newDateString)
+            reservations = reservations.concat({ date: newDateString, reservations: result.length })
+            let nextDate = new Date(newDate)
+            nextDate.setDate(nextDate.getDate() + 1)
+            newDate = nextDate
+        }
+        setReservationCalendar(reservations)
+        console.log('reservationCalendar', reservationCalendar)
+    }
 
+    const handleGetCalendar = () => {
+        calendar(dateNow)
+    }
 
     const style = {
         textAlign: 'left'
     }
-    if (calendar) {
-        return (
-            <table>
-                <tbody>
-                    <tr><th style={style}></th></tr>
-                    {calendar.map(c =>
-                        <tr key={c.id}><td>{c.date}</td><td>{c.title}</td></tr>)}
-                </tbody>
-            </table>
-        )
-    }
-    return null
+
+    return (
+        <div>
+            {reservationCalendar === null ?
+                <button onClick={handleGetCalendar}>Kalenteri</button> :
+                <table>
+                    <tbody>
+                        <tr><th style={style}></th></tr>
+                        {reservationCalendar.map(c =>
+                            <tr key={c.date}><td>{c.date}</td><td>{c.reservations}</td></tr>)}
+                    </tbody>
+                </table>
+            }
+        </div>
+    )
 }
 
 export default Calendar
