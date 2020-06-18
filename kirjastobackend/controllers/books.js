@@ -41,9 +41,13 @@ booksRouter.get('/search/:search', async (req, res) => {
     if (searchIsbn !== '') {
         books = await Book.find({ isbn: searchIsbn })
             .populate('loan', { beginDate: 1, endDate: 1, customer: 1, returned: 1 })
+            .populate('reservations')
+            .populate('reservation', { beginDate: 1, endDate: 1, user: 1, received: 1 })
     } else {
         books = await Book.find({ title: { $regex: searchTitle, $options: 'i' } })
             .populate('loan', { beginDate: 1, endDate: 1, customer: 1, returned: 1 })
+            .populate('reservations')
+            .populate('reservation', { beginDate: 1, endDate: 1, user: 1, received: 1 })
     }
     res.json(books.map(book => book.toJSON()))
 })

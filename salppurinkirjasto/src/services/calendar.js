@@ -12,7 +12,7 @@ const getAll = async () => {
 }
 
 const search = async (search) => {
-    const response = await axios.get(`${baseUrl}/${search}`)
+    const response = await axios.get(`${baseUrl}/search/${search}`)
     return response.data
 }
 
@@ -23,9 +23,9 @@ const getOne = async (id) => {
 
 const create = async (newObject) => {
     const config = {
-        //headers: { Authorization: token }
+        headers: { Authorization: token }
     }
-    const response = await axios.post(baseUrl, newObject)
+    const response = await axios.post(baseUrl, newObject, config)
     return response.data
 }
 
@@ -37,11 +37,19 @@ const update = async (id, newObject) => {
     return response.data
 }
 
+const remove = async (id) => {
+    const config = {
+        headers: {Authorization: token}
+    }
+    const response = await axios.delete(`${baseUrl}/${id}`, config)
+}
+
 export default {
     getAll,
     search,
     getOne,
     create,
     update,
+    remove,
     setToken
 }

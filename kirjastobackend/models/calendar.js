@@ -10,6 +10,15 @@ const calendarSchema = new mongoose.Schema({
     title: {
         type: String,
         required: true
+    },
+    reservation: {
+        type: String,
+        required: true
+    },
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
     }
 })
 

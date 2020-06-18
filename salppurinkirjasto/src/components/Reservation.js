@@ -42,7 +42,7 @@ const Reservation = ({ beginDate, setBeginDate, endDate, setEndDate, setShowRese
     const endDateString = `${endDateParts[2]}.${endDateParts[1]}.${endDateParts[0]}`
 
     const Info = (
-        <>
+        <div>
             <h3>Ole hyvä ja tarkista varauksen tiedot.</h3>
             <table>
                 <tbody>
@@ -51,7 +51,7 @@ const Reservation = ({ beginDate, setBeginDate, endDate, setEndDate, setShowRese
                     <tr><td>Aika:</td><td>{beginDateString} - {endDateString}</td></tr>
                 </tbody>
             </table>
-        </>
+        </div>
     )
 
     const makeReservation = async () => {
@@ -102,7 +102,6 @@ const Reservation = ({ beginDate, setBeginDate, endDate, setEndDate, setShowRese
                     numberOfReservedBooks++
                     booksToChange = booksToChange.map(b => b.id !== changedBook.id ? b : changedBook)
                     changedBooks = changedBooks.map(b => b.id !== changedBook.id ? b : changedBook)
-                    //lisää varaus kalenteriin
                     let returnedCalendarEntry = await calendarService.create({ title: changedBook.title, reservation: returnedReservation })
                     console.log('returnedCalendar', returnedCalendarEntry)
                 }
@@ -126,19 +125,29 @@ const Reservation = ({ beginDate, setBeginDate, endDate, setEndDate, setShowRese
     const removeReservation = async (id) => {
         try {
             const reservation = await reservationService.getOne(id)
-            //dispatch(fetchBook(reservation.book, ''))
             const search = `title=${reservation.book}&isbn=`
-            console.log(search)
-            const books = await bookService.search(search)
-            console.log('books', books)
+            const booksToChange = await bookService.search(search)
+            let changedBooks = books
+            let changedSelectedBooks = selectedBooks
             let i = 0
-            for (i = 0; i < books.length; i++) {
-                let bookToChange = books[i]
-                let changedReservations = await bookToChange.reservations.filter(r => r.id !== id)
+            let y = 0
+            for (i = 0; i < booksToChange.length; i++) {
+                let bookToChange = booksToChange[i]
+                let changedReservations = await bookToChange.reservations.filter(r => r.id !== id).map(r => r.id.toString())
                 let changedBook = await bookService.update(bookToChange.id, {reservations: changedReservations})
-                console.log('changedBook front', changedBook)
+                changedBooks = await changedBooks.map(b => b.id === changedBook.id ? changedBook : b)
+                changedSelectedBooks = await changedSelectedBooks.map(b => b.id === changedBook.id ? changedBook : b)
+            }
+            const calendarEntries = await calendarService.search(reservation.book)
+            for (y = 0; y < calendarEntries.length; y++) {
+                let entry = calendarEntries[y]
+                if (entry.reservation === id) {
+                    await calendarService.remove(entry.id)
+                }
             }
             await reservationService.remove(id)
+            dispatch(setBooks(changedBooks))
+            dispatch(setSelectedBooks(changedSelectedBooks))
             dispatch(setMessage('Varauksen poistaminen onnistui.'))
             setTimeout(() => {
                 dispatch(setMessage(''))
@@ -155,7 +164,7 @@ const Reservation = ({ beginDate, setBeginDate, endDate, setEndDate, setShowRese
 
     return (
         <>
-            <button onClick={() => removeReservation('5edfeff846f53448c453dccc')}>Poista varaus</button>
+            <button onClick={() => removeReservation('5eeb942c69468117c859febc')}>Poista varaus</button>
             <Calendar />
             <div>
                 {bookToReserve !== '' ? <p>{bookToReserve}</p> : <p>Ei valittua kirjaa</p>}

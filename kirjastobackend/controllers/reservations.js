@@ -18,16 +18,17 @@ reservationsRouter.get('/', async (req, res) => {
     res.json(reservations.map(reservation => reservation.toJSON()))
 })
 
-/* reservationsRouter.get('/:title', async (req, res) => {
-    const title = req.params.title
-    const reservations = await Reservation.find({ book: title })
-    res.json(reservations.map(r => r.json()))
-}) */
-
 reservationsRouter.get('/:id', async (req, res) => {
     const reservation = await Reservation.findById(req.params.id)
     //.populate('book', { title: 1, authors: 1, languages: 1, isbn: 1, copy: 1 })
     res.json(reservation.toJSON())
+})
+
+reservationsRouter.get('/:user/reservations', async (req, res) => {
+    const user = await User.find({ username: req.params.user })
+    console.log('user', user)
+    const reservations = await Reservation.find({ user: user[0]._id.toString() })
+    res.json(reservations.map(r => r.toJSON()))
 })
 
 reservationsRouter.post('/', async (req, res) => {
@@ -84,7 +85,7 @@ reservationsRouter.delete('/:id', async (req, res) => {
         await Reservation.findByIdAndDelete(req.params.id)
         res.status(204).end()
     } else {
-        res.status(401).json({error: 'Oops.'})
+        res.status(401).json({ error: 'Oops.' })
     }
 })
 

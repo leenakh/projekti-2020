@@ -16,8 +16,8 @@ const getOne = async (id) => {
     return response.data
 }
 
-const getReservations = async (id) => {
-    const response = await axios.get(`${baseUrl}/${id}/reservations`)
+const getReservations = async (user) => {
+    const response = await axios.get(`${baseUrl}/${user}/reservations`)
     return response.data
 }
 

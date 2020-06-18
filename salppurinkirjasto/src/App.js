@@ -6,6 +6,7 @@ import bookService from './services/books'
 import loanService from './services/loans'
 import customerService from './services/customers'
 import reservationService from './services/reservations'
+import calendarService from './services/calendar'
 import Books from './components/Books'
 import CreateBookForm from './components/CreateBookForm'
 import { FetchBookForm } from './components/FetchBookForm'
@@ -16,6 +17,7 @@ import { BorrowingBookForm } from './components/BorrowingBookForm'
 import SelectTitle from './components/SelectTitle'
 import Message from './components/Message'
 import Reservation from './components/Reservation'
+import UserInfo from './components/UserInfo'
 
 const App = () => {
   const date = new Date().toISOString().substring(0, 10)
@@ -37,6 +39,7 @@ const App = () => {
       loanService.setToken(user.token)
       customerService.setToken(user.token)
       reservationService.setToken(user.token)
+      calendarService.setToken(user.token)
     }
   }, [])
 
@@ -61,8 +64,9 @@ const App = () => {
       <div>
         <Link style={style} to="/">Etusivu</Link>
         <Link style={style} to="/kirjat">Kirjasto</Link>
-        {user !== null && user.username === 'admin' ? <Link style={style} to="/kirjastonhoitaja">Kirjastonhoitaja</Link> : null }
-        
+        {user !== null && user.username === 'admin' ? <Link style={style} to="/kirjastonhoitaja">Kirjastonhoitaja</Link> : null}
+        {user !== null ? <Link style={style} to={user.username}>Omat tiedot</Link> : null}
+
       </div>
       <div>
         {user !== null ? <div>
@@ -98,6 +102,9 @@ const App = () => {
         </Route>
         <Route path="/varaus">
           {user !== null && bookTitles !== null ? reservation() : null}
+        </Route>
+        <Route path="/:username">
+          {user !== null ? <UserInfo user={user} /> : null}
         </Route>
         <Route path="/">
         </Route>
