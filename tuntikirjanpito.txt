@@ -43,12 +43,12 @@ PVM		TUNTIA		TEHTÄVÄ
 15.6.2020	1,5		Varauskalenterin alustava toteutus frontendiin (kesken).
 17.6.2020	2		Varaustoiminnallisuuden laajentamista: varauksen poistaminen (toteutus backendiin ja osittain frontendiin).
 18.6.2020	3,5		Varaustoiminnallisuuden kehittelyä eteenpäin: poistamisen viimeistely ja muutettujen tietojen päivittäminen sovelluksen tilaan. Vahvistusdialogi lainan palauttamiseen. Käyttäjän oman näkymän luonnostelua (omien varausten hallinta yms.).
+22.6.2020	4		Uudelleenkäytettävä Info-komponentti tietojen esittämiseen varaus-, lainaus-, palautus- ja hallintanäkymässä.
 -----------------------------------
-Yhteensä	116,5
+Yhteensä	120,5
 
 TODO
-Lainan palautukseen varmistus.
-Uuden asiakkaan lisäämiseen varmistus.
+Varauksen peruuttaminen ja lunastaminen hallintanäkymän kautta
 Hakutermisyötteen käsittely virtaviivaisemmaksi?
 Komponenttien näkyvyyden säätelyyn jokin patenttiratkaisu? Props.children?
 Filtteri: vain lainattavissa olevat / kaikki kirjat

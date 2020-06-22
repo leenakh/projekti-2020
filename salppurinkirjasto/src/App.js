@@ -52,7 +52,7 @@ const App = () => {
   )
 
   const reservation = () => (
-    <Reservation beginDate={beginDate} setBeginDate={setBeginDate} endDate={endDate} setEndDate={setEndDate} setShowReservation={setShowReservation} />
+    <Reservation beginDate={beginDate} setBeginDate={setBeginDate} endDate={endDate} setEndDate={setEndDate} />
   )
 
   const style = {
@@ -65,7 +65,7 @@ const App = () => {
         <Link style={style} to="/">Etusivu</Link>
         <Link style={style} to="/kirjat">Kirjasto</Link>
         {user !== null && user.username === 'admin' ? <Link style={style} to="/kirjastonhoitaja">Kirjastonhoitaja</Link> : null}
-        {user !== null ? <Link style={style} to={user.username}>Omat tiedot</Link> : null}
+        {user !== null ? <Link style={style} to={`/${user.username}`}>Omat tiedot</Link> : null}
 
       </div>
       <div>
@@ -84,7 +84,7 @@ const App = () => {
         <Route path="/kirjat">
           <div>
             {user === null ? null : <FetchBookForm />}
-            {bookTitles === null ? null : <SelectTitle setShowReservation={setShowReservation} />}
+            {bookTitles === null ? null : <SelectTitle />}
           </div>
         </Route>
         <Route path="/kirjastonhoitaja">

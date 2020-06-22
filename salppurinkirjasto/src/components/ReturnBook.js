@@ -2,45 +2,40 @@ import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { returnLoan } from '../reducers/loansReducer'
 import Confirmation from '../components/Confirmation'
+import Info from '../components/Info'
 
 export const ReturnBook = () => {
   const books = useSelector(state => state.selectedBooks)
   const allBooks = useSelector(state => state.books)
   const book = useSelector(state => state.book)
   const [showConfirm, setShowConfirm] = useState(false)
+  const [showReturnInfo, setShowReturnInfo] = useState(false)
   const dispatch = useDispatch()
 
   const returnBook = () => {
     setShowConfirm(false)
+    setShowReturnInfo(false)
     dispatch(returnLoan(book, books, allBooks))
   }
 
   const handleReturnBook = async () => {
     setShowConfirm(true)
+    setShowReturnInfo(true)
   }
 
-  const Info = () => {
-    if (book.loan) {
-      return (
-        <div>
-          <h3>Ole hyvä ja tarkista palautuksen tiedot.</h3>
-          <table>
-            <tbody>
-              <tr><td>Nimeke:</td><td>{book.title}</td></tr>
-              <tr><td>Nide:</td><td>nro {book.copy}</td></tr>
-              <tr><td>Asiakas:</td><td>{book.loan.customer}</td></tr>
-            </tbody>
-          </table>
-        </div>
-      )
-    }
+  const showInfo = (information) => {
+    const title = { propertyName: `Nimeke`, propertyValue: `${information[0]}` }
+    const copy = { propertyName: `Nide`, propertyValue: `${information[1]}` }
+    const customer = { propertyName: 'Asiakas', propertyValue: `${information[2]}` }
+    return [title, copy, customer]
   }
 
   return (
     <>
       <button id="return-button" onClick={handleReturnBook}>Palauta kirja</button>
       <div>
-        {showConfirm !== false ? <Confirmation execute={returnBook} setShowConfirm={setShowConfirm} info={Info()} /> : null}
+        {showReturnInfo !== false ? <Info information={showInfo([book.title, book.copy, book.loan.customer])} /> : null}
+        {showConfirm !== false ? <Confirmation execute={returnBook} setShowConfirm={setShowConfirm} /> : null}
       </div>
     </>
   )

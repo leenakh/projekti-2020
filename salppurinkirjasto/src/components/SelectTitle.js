@@ -6,7 +6,7 @@ import { setErrorMessage } from '../reducers/errorMessageReducer'
 import { setSelectedBooks } from '../reducers/selectedBooksReducer'
 import { setBookTitles } from '../reducers/bookTitlesReducer'
 
-const SelectTitle = ({ setShowReservation }) => {
+const SelectTitle = () => {
   const bookTitles = useSelector(state => state.bookTitles)
   const books = useSelector(state => state.books)
   const history = useHistory()

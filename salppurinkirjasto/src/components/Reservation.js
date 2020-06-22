@@ -10,16 +10,18 @@ import { setBookTitles } from '../reducers/bookTitlesReducer'
 import reservationService from '../services/reservations'
 import bookService from '../services/books'
 import calendarService from '../services/calendar'
+import Info from '../components/Info'
 
 export const reservationMessage = 'Kirjan varaaminen onnistui.'
 export const reservationFailMessage = 'Kirjan varaaminen ei onnistunut.'
 
-const Reservation = ({ beginDate, setBeginDate, endDate, setEndDate, setShowReservation }) => {
+const Reservation = ({ beginDate, setBeginDate, endDate, setEndDate }) => {
     const dispatch = useDispatch()
     const books = useSelector(state => state.books)
     const selectedBooks = useSelector(state => state.selectedBooks)
     const [numberOfCopies, setNumberOfCopies] = useState(0)
     const [showConfirm, setShowConfirm] = useState(false)
+    const [showReservationInfo, setShowReservationInfo] = useState(false)
     const [reservationToMake, setReservationToMake] = useState(null)
 
     let bookToReserve = ''
@@ -41,18 +43,15 @@ const Reservation = ({ beginDate, setBeginDate, endDate, setEndDate, setShowRese
     const endDateParts = endDate.split('-')
     const endDateString = `${endDateParts[2]}.${endDateParts[1]}.${endDateParts[0]}`
 
-    const Info = (
-        <div>
-            <h3>Ole hyvä ja tarkista varauksen tiedot.</h3>
-            <table>
-                <tbody>
-                    <tr><td>Nimeke:</td><td>{bookToReserve}</td></tr>
-                    <tr><td>Niteiden lukumäärä:</td><td>{numberOfCopies}</td></tr>
-                    <tr><td>Aika:</td><td>{beginDateString} - {endDateString}</td></tr>
-                </tbody>
-            </table>
-        </div>
-    )
+    const showInfo = (information) => {
+        const title = { propertyName: `Nimeke`, propertyValue: `${information[0]}` }
+        const copies = { propertyName: `Niteitä`, propertyValue: `${information[1]}` }
+        const beginParts = information[2].split('-')
+        const endParts = information[3].split('-')
+        const begin = { propertyName: 'Alkaa', propertyValue: `${beginParts[2]}.${beginParts[1]}.${beginParts[0]}` }
+        const end = { propertyName: 'Päättyy', propertyValue: `${endParts[2]}.${endParts[1]}.${endParts[0]}` }
+        return [title, copies, begin, end]
+    }
 
     const makeReservation = async () => {
         try {
@@ -106,6 +105,7 @@ const Reservation = ({ beginDate, setBeginDate, endDate, setEndDate, setShowRese
                     console.log('returnedCalendar', returnedCalendarEntry)
                 }
             }
+            setShowReservationInfo(false)
             dispatch(setSelectedBooks((changedBooks)))
             dispatch(setBooks(booksToChange))
             dispatch(setBookTitles(null))
@@ -134,7 +134,7 @@ const Reservation = ({ beginDate, setBeginDate, endDate, setEndDate, setShowRese
             for (i = 0; i < booksToChange.length; i++) {
                 let bookToChange = booksToChange[i]
                 let changedReservations = await bookToChange.reservations.filter(r => r.id !== id).map(r => r.id.toString())
-                let changedBook = await bookService.update(bookToChange.id, {reservations: changedReservations})
+                let changedBook = await bookService.update(bookToChange.id, { reservations: changedReservations })
                 changedBooks = await changedBooks.map(b => b.id === changedBook.id ? changedBook : b)
                 changedSelectedBooks = await changedSelectedBooks.map(b => b.id === changedBook.id ? changedBook : b)
             }
@@ -160,6 +160,7 @@ const Reservation = ({ beginDate, setBeginDate, endDate, setEndDate, setShowRese
     const handleMakeReservation = async (event) => {
         event.preventDefault()
         setShowConfirm(true)
+        setShowReservationInfo(true)
     }
 
     return (
@@ -180,7 +181,8 @@ const Reservation = ({ beginDate, setBeginDate, endDate, setEndDate, setShowRese
                 </div>
             </form>
             <div>
-                {showConfirm !== false ? <Confirmation execute={makeReservation} setShowConfirm={setShowConfirm} info={Info} /> : null}
+                {showReservationInfo !== false ? <Info information={showInfo([bookToReserve, numberOfCopies, beginDate, endDate])} /> : null}
+                {showConfirm !== false ? <Confirmation execute={makeReservation} setShowConfirm={setShowConfirm} /> : null}
             </div>
         </>
     )
