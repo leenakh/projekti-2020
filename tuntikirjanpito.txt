@@ -44,8 +44,9 @@ PVM		TUNTIA		TEHTÄVÄ
 17.6.2020	2		Varaustoiminnallisuuden laajentamista: varauksen poistaminen (toteutus backendiin ja osittain frontendiin).
 18.6.2020	3,5		Varaustoiminnallisuuden kehittelyä eteenpäin: poistamisen viimeistely ja muutettujen tietojen päivittäminen sovelluksen tilaan. Vahvistusdialogi lainan palauttamiseen. Käyttäjän oman näkymän luonnostelua (omien varausten hallinta yms.).
 22.6.2020	4		Uudelleenkäytettävä Info-komponentti tietojen esittämiseen varaus-, lainaus-, palautus- ja hallintanäkymässä.
+23.6.2020	1,5		Varauksen poistamisen viimeistely ja siirtäminen hallintanäkymässä tehtäväksi. Varauksen lunastamistoiminnallisuuden luonnostelua.
 -----------------------------------
-Yhteensä	120,5
+Yhteensä	122
 
 TODO
 Varauksen peruuttaminen ja lunastaminen hallintanäkymän kautta

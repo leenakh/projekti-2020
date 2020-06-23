@@ -122,7 +122,7 @@ const Reservation = ({ beginDate, setBeginDate, endDate, setEndDate }) => {
         }
     }
 
-    const removeReservation = async (id) => {
+    /* const removeReservation = async (id) => {
         try {
             const reservation = await reservationService.getOne(id)
             const search = `title=${reservation.book}&isbn=`
@@ -155,7 +155,7 @@ const Reservation = ({ beginDate, setBeginDate, endDate, setEndDate }) => {
         } catch (exception) {
             console.log('Pieleen meni.')
         }
-    }
+    } */
 
     const handleMakeReservation = async (event) => {
         event.preventDefault()
@@ -165,7 +165,6 @@ const Reservation = ({ beginDate, setBeginDate, endDate, setEndDate }) => {
 
     return (
         <>
-            <button onClick={() => removeReservation('5eeb942c69468117c859febc')}>Poista varaus</button>
             <Calendar />
             <div>
                 {bookToReserve !== '' ? <p>{bookToReserve}</p> : <p>Ei valittua kirjaa</p>}
