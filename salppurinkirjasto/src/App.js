@@ -104,7 +104,9 @@ const App = () => {
           {user !== null && bookTitles !== null ? reservation() : null}
         </Route>
         <Route path="/:username">
-          {user !== null ? <UserInfo user={user} /> : null}
+          <div>
+          {user !== null ? <UserInfo user={user} borrowingBookForm={borrowingBookForm} /> : null}
+          </div>
         </Route>
         <Route path="/">
         </Route>

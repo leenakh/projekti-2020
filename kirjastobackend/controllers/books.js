@@ -97,14 +97,17 @@ booksRouter.post('/', async (req, res) => {
     }
 })
 
-const isAvailable = async (book, reservation) => {
+const isAvailable = async (book, reservation, user) => {
     let i = 0
-    let toReturn = true
+    let available = true
+    let ownReservation = false
+    const isLoan = reservation.customer
+    console.log('user._id', user)
     const bookToReserve = await Book.findById(book.id)
         .populate('loan', { beginDate: 1, endDate: 1, customer: 1, returned: 1 })
         .populate('reservations')
         .populate('reservation', { beginDate: 1, endDate: 1, user: 1, received: 1 })
-    console.log('bookToReserve', bookToReserve)
+    /* console.log('bookToReserve', bookToReserve) */
     for (i = 0; i < bookToReserve.reservations.length; i++) {
         //let r = await Reservation.findById(book.reservations[i].id)
         let loanBeginDate = '2000-01-01'
@@ -114,16 +117,21 @@ const isAvailable = async (book, reservation) => {
             loanEndDate = bookToReserve.loan.endDate
         }
         let r = bookToReserve.reservations[i]
+        //console.log('r.user', r.user)
+        ownReservation = isLoan && moment().isSameOrAfter(r.beginDate) && moment(reservation.endDate).isSameOrBefore(r.endDate) && user === r.user.toString()
+        console.log('ownReservation', ownReservation)
         result = (moment(reservation.endDate).isBefore(r.beginDate)
             || moment(reservation.beginDate).isAfter(r.endDate))
             && (moment(reservation.endDate).isBefore(loanBeginDate)
                 || moment(reservation.beginDate).isAfter(loanEndDate))
-        if (result === false) {
-            toReturn = result
+        if (ownReservation === true) {
+            return true
+        } else if (result === false) {
+            available = result
         }
     }
-    console.log('toReturn', toReturn)
-    return toReturn
+    console.log('available', available)
+    return available
 }
 
 booksRouter.post('/availability', async (req, res) => {
@@ -190,21 +198,23 @@ booksRouter.put('/:id', async (req, res) => {
     if (!token || !decodedToken.id) {
         return res.status(401).json({ error: 'token missing or invalid' })
     }
+    const user = await User.findById(decodedToken.id)
+
     if (body.loanId) {
         const loanToAdd = await Loan.findById(body.loanId)
         const book = await Book.findById(req.params.id)
-        const available = await isAvailable(book, loanToAdd)
+        const available = await isAvailable(book, loanToAdd, user._id.toString())
         if (available === true)
             changedBook = {
                 loan: loanToAdd._id
             }
-        console.log('loanToAdd', loanToAdd)
+        //console.log('loanToAdd', loanToAdd)
     } else if (body.loanId === null) {
         changedBook = {
             loan: null
         }
     } else if (body.reservations) {
-        console.log('body.reservations', body.reservations)
+        //console.log('body.reservations', body.reservations)
         /* console.log('changedBook backend', changedBook)
         const book = await Book.findById(req.params.id)
         console.log('reservation', body.reservations[body.reservations.length - 1])
@@ -224,7 +234,7 @@ booksRouter.put('/:id', async (req, res) => {
         .populate('loan', { beginDate: 1, endDate: 1, customer: 1, returned: 1 })
         .populate('reservations')
         .populate('reservation', { beginDate: 1, endDate: 1, user: 1, received: 1 })
-    console.log('returnedBook', returnedBook)
+    //console.log('returnedBook', returnedBook)
     return res.json(returnedBook.toJSON())
 })
 

@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 
 const ChooseBook = ({ book }) => {
-    const books = useSelector(state => state.books)
+    const books = useSelector(state => state.selectedBooks)
     const dispatch = useDispatch()
     const history = useHistory()
     const handleChooseBook = async (id) => {

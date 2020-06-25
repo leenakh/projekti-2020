@@ -78,6 +78,8 @@ const Reservation = ({ beginDate, setBeginDate, endDate, setEndDate }) => {
                     dispatch(setErrorMessage(''))
                 }, 5000)
                 setShowConfirm(false)
+                setShowReservationInfo(false)
+                await reservationService.remove(returnedReservation.id)
                 console.log('Liian vähän niteitä varattavissa.')
                 return
             }

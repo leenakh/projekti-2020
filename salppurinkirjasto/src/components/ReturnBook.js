@@ -34,7 +34,12 @@ export const ReturnBook = () => {
     <>
       <button id="return-button" onClick={handleReturnBook}>Palauta kirja</button>
       <div>
-        {showReturnInfo !== false ? <Info information={showInfo([book.title, book.copy, book.loan.customer])} /> : null}
+        {showReturnInfo !== false ? 
+        <>
+        <p>Haluatko palauttaa tämän lainan?</p>
+        <Info information={showInfo([book.title, book.copy, book.loan.customer])} /> 
+        </> :
+        null}
         {showConfirm !== false ? <Confirmation execute={returnBook} setShowConfirm={setShowConfirm} /> : null}
       </div>
     </>

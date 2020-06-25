@@ -70,8 +70,8 @@ reservationsRouter.put('/:id', async (req, res) => {
         endDate: body.endDate,
         received: body.received
     }
-    const returnedLoan = await Loan.findByIdAndUpdate(req.params.id, changedReservation, { new: true })
-    res.json(returnedLoan.toJSON())
+    const returnedReservation = await Reservation.findByIdAndUpdate(req.params.id, changedReservation, { new: true })
+    res.json(returnedReservation.toJSON())
 })
 
 reservationsRouter.delete('/:id', async (req, res) => {
