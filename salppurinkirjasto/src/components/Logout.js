@@ -4,6 +4,8 @@ import { useDispatch } from 'react-redux'
 import loanService from '../services/loans'
 import bookService from '../services/books'
 import customerService from '../services/customers'
+import reservationService from '../services/reservations'
+import calendarService from '../services/calendar'
 
 const Logout = ({ setUser }) => {
   const dispatch = useDispatch()
@@ -13,6 +15,8 @@ const Logout = ({ setUser }) => {
       bookService.setToken('')
       loanService.setToken('')
       customerService.setToken('')
+      reservationService.setToken('')
+      calendarService.setToken('')
       setUser(null)
     } catch (exception) {
       dispatch(setErrorMessage('Could not log out'))

@@ -24,7 +24,23 @@ const Calendar = () => {
         for (i = 0; i < 90; i++) {
             let newDateString = newDate.toISOString().substring(0, 10)
             let result = calendarEntries.filter(c => c.date === newDateString)
-            reservations = reservations.concat({ date: newDateString, reservations: result.length })
+            let dateStringParts = newDateString.split('-')
+            let dateString = `${dateStringParts[2]}.${dateStringParts[1]}.${dateStringParts[0]}`
+            let names = result.map(c => c.user.username)
+            const uniqueNames = [...new Set(names)]
+            const uniqueNamesArray = Array.from(uniqueNames)
+            const namesTable = () => {
+                return (
+                    < div>
+                        {uniqueNamesArray.map(n =>
+                            <div  key={Math.random()}>
+                                <table><tbody><tr><td>{n}</td></tr></tbody></table>
+                            </div>)}
+                    </div>
+                )
+            }
+
+            reservations = reservations.concat({ date: dateString, reservations: result.length, names: namesTable() })
             let nextDate = new Date(newDate)
             nextDate.setDate(nextDate.getDate() + 1)
             newDate = nextDate
@@ -38,7 +54,9 @@ const Calendar = () => {
     }
 
     const style = {
-        textAlign: 'left'
+        textAlign: 'left',
+        minWidth: 300,
+        fontWeight: 'bold'
     }
 
     return (
@@ -46,10 +64,15 @@ const Calendar = () => {
             {reservationCalendar === null ?
                 <button onClick={handleGetCalendar}>Kalenteri</button> :
                 <table>
+                    <caption style={style}>Varaukset - {books[0].title}</caption>
                     <tbody>
-                        <tr><th style={style}></th></tr>
+                        
                         {reservationCalendar.map(c =>
-                            <tr key={c.date}><td>{c.date}</td><td>{c.reservations}</td></tr>)}
+                            <tr key={Math.random()}>
+                                <td>{c.date}</td>
+                                <td>{c.reservations}/{books.length}</td>
+                                <td>{c.names}</td>
+                            </tr>)}
                     </tbody>
                 </table>
             }

@@ -47,7 +47,7 @@ const UserInfo = ({ user, borrowingBookForm }) => {
 
     const filterReservations = (reservations, showDisabled) => {
         if (showDisabled) {
-            setReservationsToShow(reservations.filter(r => r.received === false))
+            setReservationsToShow(reservations.filter(r => r.received === false && new Date().getTime() - new Date(r.endDate).getTime() <= 86400000))
         } else {
             setReservationsToShow(reservations)
         }

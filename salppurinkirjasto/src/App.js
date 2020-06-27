@@ -30,6 +30,7 @@ const App = () => {
   const [beginDate, setBeginDate] = useState(date)
   const [endDate, setEndDate] = useState(returnDate)
   const [showReservation, setShowReservation] = useState(true)
+  
   useEffect(() => {
     const loggedInUserJSON = window.localStorage.getItem('loggedInUser')
     if (loggedInUserJSON) {
