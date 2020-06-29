@@ -3,13 +3,11 @@ import reservationService from '../services/reservations'
 import Info from '../components/Info'
 import RemoveReservation from '../components/RemoveReservation'
 import ReceiveReservation from '../components/ReceiveReservation'
-import Books from '../components/Books'
 import DisableReservation from './DisableReservation'
 
-const UserInfo = ({ user, borrowingBookForm }) => {
+const UserInfo = ({ user, setBeginDate, setEndDate }) => {
     const [reservations, setReservations] = useState([])
     const [reservationsToShow, setReservationsToShow] = useState([])
-    const [showBorrow, setShowBorrow] = useState('')
     const [showDisabled, setShowDisabled] = useState(false)
     const [toggleText, setToggleText] = useState('Näytä kaikki varaukset')
 
@@ -64,7 +62,7 @@ const UserInfo = ({ user, borrowingBookForm }) => {
                             <li id="reservation" key={r.id}>
                                 <Info information={showInfo([r.book, r.numberOfCopies, r.received, r.beginDate, r.endDate])} />
                                 <RemoveReservation id={r.id} reservations={reservations} setReservations={setReservations} />
-                                {r.received === false ? <ReceiveReservation id={r.id} setShowBorrow={setShowBorrow} /> : null}
+                                {r.received === false ? <ReceiveReservation id={r.id} setBeginDate={setBeginDate} setEndDate={setEndDate} /> : null}
                                 {r.received === false ? <DisableReservation id={r.id} reservations={reservations} setReservations={setReservations} /> : null}
                             </li>)}
                     </ul>

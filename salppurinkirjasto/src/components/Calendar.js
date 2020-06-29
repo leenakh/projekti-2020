@@ -6,6 +6,7 @@ const Calendar = () => {
     const books = useSelector(state => state.selectedBooks)
     const [calendarEntries, setCalendarEntries] = useState([])
     const [reservationCalendar, setReservationCalendar] = useState(null)
+    const [rows, setRows] = useState([])
     const dateNow = new Date()
 
     useEffect(() => {
@@ -19,9 +20,10 @@ const Calendar = () => {
 
     const calendar = (date) => {
         let newDate = new Date(date)
+        //const finalDate = new Date('2021-06-01')
         let reservations = []
         let i = 0
-        for (i = 0; i < 90; i++) {
+        for (i = 0; i < 300; i++) {
             let newDateString = newDate.toISOString().substring(0, 10)
             let result = calendarEntries.filter(c => c.date === newDateString)
             let dateStringParts = newDateString.split('-')
@@ -33,7 +35,7 @@ const Calendar = () => {
                 return (
                     < div>
                         {uniqueNamesArray.map(n =>
-                            <div  key={Math.random()}>
+                            <div key={Math.random()}>
                                 <table><tbody><tr><td>{n}</td></tr></tbody></table>
                             </div>)}
                     </div>
@@ -46,16 +48,41 @@ const Calendar = () => {
             newDate = nextDate
         }
         setReservationCalendar(reservations)
+        formCalendar(reservations)
         console.log('reservationCalendar', reservationCalendar)
     }
 
+    const formCalendar = (reservations) => {
+            let row = { reservation: [] }
+            let rows = []
+            let i = 0
+            let y = 0
+            while (y < reservations.length) {
+                row = { reservation: [] }
+                i = 0
+                while (i < 7) {
+                    let reservation = reservations[y]
+                    console.log('reservation', reservation)
+                    let rs = row.reservation.concat(reservation)
+                    row = { ...row, reservation: rs }
+                    console.log('row', row)
+                    i++
+                    y++
+                }
+                rows = rows.concat(row)
+                console.log('rows', rows)
+            
+        }
+        setRows(rows)
+    }
+
     const handleGetCalendar = () => {
-        calendar(dateNow)
+        calendar(calendarEntries[0].date)
     }
 
     const style = {
         textAlign: 'left',
-        minWidth: 300,
+        minWidth: 600,
         fontWeight: 'bold'
     }
 
@@ -66,13 +93,16 @@ const Calendar = () => {
                 <table>
                     <caption style={style}>Varaukset - {books[0].title}</caption>
                     <tbody>
+                    {rows.map(row => <tr key={Math.random()}>
+                    <td>{row.reservation[0].date}<br/>varauksia: {row.reservation[0].reservations}<br/>varattavissa: {books.length - row.reservation[0].reservations}<br/>{row.reservation[0].names}</td>
+                    <td>{row.reservation[1].date}<br/>varauksia: {row.reservation[1].reservations}<br/>varattavissa: {books.length - row.reservation[1].reservations}<br/>{row.reservation[1].names}</td>
+                    <td>{row.reservation[2].date}<br/>varauksia: {row.reservation[2].reservations}<br/>varattavissa: {books.length - row.reservation[2].reservations}<br/>{row.reservation[2].names}</td>
+                    <td>{row.reservation[3].date}<br/>varauksia: {row.reservation[3].reservations}<br/>varattavissa: {books.length - row.reservation[3].reservations}<br/>{row.reservation[3].names}</td>
+                    <td>{row.reservation[4].date}<br/>varauksia: {row.reservation[4].reservations}<br/>varattavissa: {books.length - row.reservation[4].reservations}<br/>{row.reservation[4].names}</td>
+                    <td>{row.reservation[5].date}<br/>varauksia: {row.reservation[5].reservations}<br/>varattavissa: {books.length - row.reservation[5].reservations}<br/>{row.reservation[5].names}</td>
                         
-                        {reservationCalendar.map(c =>
-                            <tr key={Math.random()}>
-                                <td>{c.date}</td>
-                                <td>{c.reservations}/{books.length}</td>
-                                <td>{c.names}</td>
-                            </tr>)}
+                        </tr>)}
+                        
                     </tbody>
                 </table>
             }

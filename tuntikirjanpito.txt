@@ -48,8 +48,9 @@ PVM		TUNTIA		TEHTÄVÄ
 24.6.2020	4		Varauksen lunastamistoiminnallisuuden frontend-toteutus (varauksen perusteella lainattavien kirjojen listaaminen ja lainauslomakkeen renderöinti) sekä backend-toteutuksen suunnittelua.
 25.6.2020	4		Varauksen lunastamistoiminnallisuuden viimeistely. Refaktorointia. Varauksen arkistoimisen toteutus. Varausten filtteröinti hallintanäkymään (kaikki / vain akviiviset ja ei-vanhentuneet).
 27.6.2020	2		Calendar-komponentin hiomista (varausten omistajien näyttäminen yms.) ja lopullisen esitystavan suunnittelua.
+29.6.2020	2		Varauskalenterikomponentin kehittelyä edelleen (varaustietojen ryhmittely viikoittain).
 -----------------------------------
-Yhteensä	130
+Yhteensä	132
 
 TODO
 Uloskirjautuminen --> useEffect: setToken
