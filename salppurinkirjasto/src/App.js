@@ -18,6 +18,7 @@ import SelectTitle from './components/SelectTitle'
 import Message from './components/Message'
 import Reservation from './components/Reservation'
 import UserInfo from './components/UserInfo'
+import Calendar from './components/Calendar'
 
 const App = () => {
   const date = new Date().toISOString().substring(0, 10)
@@ -29,8 +30,9 @@ const App = () => {
   const [user, setUser] = useState(null)
   const [beginDate, setBeginDate] = useState(date)
   const [endDate, setEndDate] = useState(returnDate)
-  const [showReservation, setShowReservation] = useState(true)
-  
+  const [reservations, setReservations] = useState([])
+  const [calendarEntries, setCalendarEntries] = useState([])
+
   useEffect(() => {
     const loggedInUserJSON = window.localStorage.getItem('loggedInUser')
     if (loggedInUserJSON) {
@@ -53,7 +55,7 @@ const App = () => {
   )
 
   const reservation = () => (
-    <Reservation beginDate={beginDate} setBeginDate={setBeginDate} endDate={endDate} setEndDate={setEndDate} />
+      <Reservation beginDate={beginDate} setBeginDate={setBeginDate} endDate={endDate} setEndDate={setEndDate} reservations={reservations} setReservations={setReservations} />
   )
 
   const style = {
@@ -103,10 +105,11 @@ const App = () => {
         </Route>
         <Route path="/varaus">
           {user !== null && bookTitles !== null ? reservation() : null}
+          {selectedBooks !== [] && selectedBooks !== null ? <Calendar setBeginDate={setBeginDate} setEndDate={setEndDate} reservations={reservations} /> : null}
         </Route>
         <Route path="/:username">
           <div>
-          {user !== null ? <UserInfo user={user} borrowingBookForm={borrowingBookForm} setBeginDate={setBeginDate} setEndDate={setEndDate} /> : null}
+            {user !== null ? <UserInfo user={user} borrowingBookForm={borrowingBookForm} setBeginDate={setBeginDate} setEndDate={setEndDate} /> : null}
           </div>
         </Route>
         <Route path="/">

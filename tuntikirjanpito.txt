@@ -49,11 +49,15 @@ PVM		TUNTIA		TEHTÄVÄ
 25.6.2020	4		Varauksen lunastamistoiminnallisuuden viimeistely. Refaktorointia. Varauksen arkistoimisen toteutus. Varausten filtteröinti hallintanäkymään (kaikki / vain akviiviset ja ei-vanhentuneet).
 27.6.2020	2		Calendar-komponentin hiomista (varausten omistajien näyttäminen yms.) ja lopullisen esitystavan suunnittelua.
 29.6.2020	2		Varauskalenterikomponentin kehittelyä edelleen (varaustietojen ryhmittely viikoittain).
+30.6.2020	2		Varauskalenterikomponentin kehittelyä (taulukkonäkymän asettelua, varauksen ajanmäärittely varauskalenterin kautta).
+8.7.2020	1		Varauskalenterikomponentin kehittelyä (varaustietojen päivittyminen kalenterinäkymään).
+10.7.2020	1		Filtteri valittujen kirjojen esittämiseen (kaikki / vain lainattavissa olevat). Varaukseen ja hallintanäkymään tieto opetusryhmästä.
 -----------------------------------
-Yhteensä	132
+Yhteensä	136
 
 TODO
-Uloskirjautuminen --> useEffect: setToken
+Lainauslomakkeen näkyvyys varauksen lunastamisessa (tilan muutos ei päivitä näkymää, kun kirja lainataan, koska renderöidään books eikä selectedBooks; lainausnapin ja palautusnapin pitää näkyä yhtä aikaa, jos ollaan lunastamassa varausta).
+Varauskalenterin laskuri ottaa huomioon myös lainassa olevat kirjat?
 Varaukseen tieto siitä, kenelle kirjat on varattu.
 Hakutermisyötteen käsittely virtaviivaisemmaksi?
 Komponenttien näkyvyyden säätelyyn jokin patenttiratkaisu? Props.children?

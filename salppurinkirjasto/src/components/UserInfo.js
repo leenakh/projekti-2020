@@ -31,10 +31,11 @@ const UserInfo = ({ user, setBeginDate, setEndDate }) => {
         }
         const beginParts = information[3].split('-')
         const endParts = information[4].split('-')
+        const course = { propertyName: 'Opetusryhmä', propertyValue: `${information[5]}` }
         const begin = { propertyName: 'Alkaa', propertyValue: `${beginParts[2]}.${beginParts[1]}.${beginParts[0]}` }
         const end = { propertyName: 'Päättyy', propertyValue: `${endParts[2]}.${endParts[1]}.${endParts[0]}` }
         const status = { propertyName: `Lunastettu`, propertyValue: `${statusValue()}` }
-        return [title, copies, status, begin, end]
+        return [title, copies, status, begin, end, course]
     }
 
     const toggle = () => {
@@ -60,7 +61,7 @@ const UserInfo = ({ user, setBeginDate, setEndDate }) => {
                     <ul id="books">
                         {reservationsToShow.map(r =>
                             <li id="reservation" key={r.id}>
-                                <Info information={showInfo([r.book, r.numberOfCopies, r.received, r.beginDate, r.endDate])} />
+                                <Info information={showInfo([r.book, r.numberOfCopies, r.received, r.beginDate, r.endDate, r.course])} />
                                 <RemoveReservation id={r.id} reservations={reservations} setReservations={setReservations} />
                                 {r.received === false ? <ReceiveReservation id={r.id} setBeginDate={setBeginDate} setEndDate={setEndDate} /> : null}
                                 {r.received === false ? <DisableReservation id={r.id} reservations={reservations} setReservations={setReservations} /> : null}

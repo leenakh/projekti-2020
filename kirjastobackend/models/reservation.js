@@ -24,6 +24,10 @@ const reservationSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
+    course: {
+        type: String,
+        required: true
+    },
     received: {
         type: Boolean,
         required: true

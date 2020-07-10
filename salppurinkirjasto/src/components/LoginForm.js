@@ -3,6 +3,8 @@ import loginService from '../services/login'
 import bookService from '../services/books'
 import loanService from '../services/loans'
 import customerService from '../services/customers'
+import reservationService from '../services/reservations'
+import calendarService from '../services/calendar'
 import { setErrorMessage } from '../reducers/errorMessageReducer'
 import { useDispatch } from 'react-redux'
 
@@ -23,6 +25,8 @@ export const LoginForm = ({ setUser }) => {
       bookService.setToken(user.token)
       loanService.setToken(user.token)
       customerService.setToken(user.token)
+      reservationService.setToken(user.token)
+      calendarService.setToken(user.token)
       setUser(user)
       setUsername('')
       setPassword('')

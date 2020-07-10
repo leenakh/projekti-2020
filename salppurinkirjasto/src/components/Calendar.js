@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import calendarService from '../services/calendar'
+import loanService from '../services/loans'
 
-const Calendar = () => {
+const Calendar = ({ setBeginDate, setEndDate }) => {
     const books = useSelector(state => state.selectedBooks)
     const [calendarEntries, setCalendarEntries] = useState([])
     const [reservationCalendar, setReservationCalendar] = useState(null)
@@ -16,11 +17,15 @@ const Calendar = () => {
             setCalendarEntries(entries)
         }
         getCalendarEntries()
-    }, [])
+        
+    }, [books])
+
+    useEffect(() => {
+        calendar('2020-08-11')
+    }, [calendarEntries])
 
     const calendar = (date) => {
         let newDate = new Date(date)
-        //const finalDate = new Date('2021-06-01')
         let reservations = []
         let i = 0
         for (i = 0; i < 300; i++) {
@@ -30,13 +35,13 @@ const Calendar = () => {
             let dateString = `${dateStringParts[2]}.${dateStringParts[1]}.${dateStringParts[0]}`
             let names = result.map(c => c.user.username)
             const uniqueNames = [...new Set(names)]
-            const uniqueNamesArray = Array.from(uniqueNames)
+            //const uniqueNamesArray = Array.from(uniqueNames)
             const namesTable = () => {
                 return (
-                    < div>
-                        {uniqueNamesArray.map(n =>
+                    <div>
+                        {uniqueNames.map(n =>
                             <div key={Math.random()}>
-                                <table><tbody><tr><td>{n}</td></tr></tbody></table>
+                                <span className="reservation-text">{n}</span><br />
                             </div>)}
                     </div>
                 )
@@ -47,37 +52,77 @@ const Calendar = () => {
             nextDate.setDate(nextDate.getDate() + 1)
             newDate = nextDate
         }
-        setReservationCalendar(reservations)
         formCalendar(reservations)
-        console.log('reservationCalendar', reservationCalendar)
     }
 
     const formCalendar = (reservations) => {
-            let row = { reservation: [] }
-            let rows = []
-            let i = 0
-            let y = 0
-            while (y < reservations.length) {
-                row = { reservation: [] }
-                i = 0
-                while (i < 7) {
-                    let reservation = reservations[y]
-                    console.log('reservation', reservation)
-                    let rs = row.reservation.concat(reservation)
-                    row = { ...row, reservation: rs }
-                    console.log('row', row)
-                    i++
-                    y++
-                }
-                rows = rows.concat(row)
-                console.log('rows', rows)
-            
+        let row = { reservation: [] }
+        let rows = []
+        let i = 0
+        let y = 0
+        while (y < reservations.length) {
+            row = { reservation: [] }
+            i = 0
+            while (i < 7) {
+                let reservation = reservations[y]
+                console.log('reservation', reservation)
+                let rs = row.reservation.concat(reservation)
+                row = { ...row, reservation: rs }
+                console.log('row', row)
+                i++
+                y++
+            }
+            rows = rows.concat(row)
+            console.log('rows', rows)
+
         }
         setRows(rows)
     }
 
     const handleGetCalendar = () => {
         calendar(calendarEntries[0].date)
+    }
+
+    const handleChooseDate = (begin) => {
+        const beginDateParts = begin.split('.')
+        const beginDate = `${beginDateParts[2]}-${beginDateParts[1]}-${beginDateParts[0]}`
+        setBeginDate(beginDate)
+        const endDate = new Date(beginDate)
+        endDate.setDate(endDate.getDate() + 28)
+        const returnDate = endDate.toISOString().substring(0, 10)
+        setEndDate(returnDate)
+    }
+
+    const CalendarCell = ({ reservation }) => {
+        const style = () => {
+            if (books.length - reservation.reservations === 0) {
+                return {
+                    backgroundColor: 'red',
+                    border: 'none'
+                }
+            } else if (reservation.reservations === 0) {
+                return {
+                    backgroundColor: 'green',
+                    border: 'none'
+                }
+            } else {
+                return {
+                    backgroundColor: 'yellow',
+                    border: 'none'
+                }
+            }
+        }
+        return (
+            <td style={style()} className="calendar-cell">
+                <button style={style()} onClick={() => handleChooseDate(reservation.date)}>
+                    <span className="reservation-text">varauksia: </span>
+                    <span className="reservations">{reservation.reservations}</span>
+                    <span className="reservation-text">varattavissa: </span>
+                    <span className="reservations">{books.length - reservation.reservations}</span>
+                    <span className="reservation-text">{reservation.names}</span>
+                </button>
+            </td>
+        )
     }
 
     const style = {
@@ -88,21 +133,22 @@ const Calendar = () => {
 
     return (
         <div>
-            {reservationCalendar === null ?
+            {calendarEntries === null ?
                 <button onClick={handleGetCalendar}>Kalenteri</button> :
                 <table>
                     <caption style={style}>Varaukset - {books[0].title}</caption>
                     <tbody>
-                    {rows.map(row => <tr key={Math.random()}>
-                    <td>{row.reservation[0].date}<br/>varauksia: {row.reservation[0].reservations}<br/>varattavissa: {books.length - row.reservation[0].reservations}<br/>{row.reservation[0].names}</td>
-                    <td>{row.reservation[1].date}<br/>varauksia: {row.reservation[1].reservations}<br/>varattavissa: {books.length - row.reservation[1].reservations}<br/>{row.reservation[1].names}</td>
-                    <td>{row.reservation[2].date}<br/>varauksia: {row.reservation[2].reservations}<br/>varattavissa: {books.length - row.reservation[2].reservations}<br/>{row.reservation[2].names}</td>
-                    <td>{row.reservation[3].date}<br/>varauksia: {row.reservation[3].reservations}<br/>varattavissa: {books.length - row.reservation[3].reservations}<br/>{row.reservation[3].names}</td>
-                    <td>{row.reservation[4].date}<br/>varauksia: {row.reservation[4].reservations}<br/>varattavissa: {books.length - row.reservation[4].reservations}<br/>{row.reservation[4].names}</td>
-                    <td>{row.reservation[5].date}<br/>varauksia: {row.reservation[5].reservations}<br/>varattavissa: {books.length - row.reservation[5].reservations}<br/>{row.reservation[5].names}</td>
-                        
+                        {rows.map(row => <tr key={Math.random()}>
+                            <td className="calendar-cell">{row.reservation[0].date} - {row.reservation[5].date}</td>
+                            <CalendarCell reservation={row.reservation[0]} />
+                            <CalendarCell reservation={row.reservation[1]} />
+                            <CalendarCell reservation={row.reservation[2]} />
+                            <CalendarCell reservation={row.reservation[3]} />
+                            <CalendarCell reservation={row.reservation[4]} />
+                            <CalendarCell reservation={row.reservation[5]} />
+
                         </tr>)}
-                        
+
                     </tbody>
                 </table>
             }

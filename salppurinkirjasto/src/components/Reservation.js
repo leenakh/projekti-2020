@@ -15,11 +15,12 @@ import Info from '../components/Info'
 export const reservationMessage = 'Kirjan varaaminen onnistui.'
 export const reservationFailMessage = 'Kirjan varaaminen ei onnistunut.'
 
-const Reservation = ({ beginDate, setBeginDate, endDate, setEndDate }) => {
+const Reservation = ({ beginDate, setBeginDate, endDate, setEndDate, reservations, setReservations }) => {
     const dispatch = useDispatch()
     const books = useSelector(state => state.books)
     const selectedBooks = useSelector(state => state.selectedBooks)
     const [numberOfCopies, setNumberOfCopies] = useState(0)
+    const [course, setCourse] = useState('')
     const [showConfirm, setShowConfirm] = useState(false)
     const [showReservationInfo, setShowReservationInfo] = useState(false)
     const [reservationToMake, setReservationToMake] = useState(null)
@@ -48,9 +49,10 @@ const Reservation = ({ beginDate, setBeginDate, endDate, setEndDate }) => {
         const copies = { propertyName: `Niteitä`, propertyValue: `${information[1]}` }
         const beginParts = information[2].split('-')
         const endParts = information[3].split('-')
+        const course = {propertyName: 'Opetusryhmä', propertyValue: `${information[4]}`}
         const begin = { propertyName: 'Alkaa', propertyValue: `${beginParts[2]}.${beginParts[1]}.${beginParts[0]}` }
         const end = { propertyName: 'Päättyy', propertyValue: `${endParts[2]}.${endParts[1]}.${endParts[0]}` }
-        return [title, copies, begin, end]
+        return [title, copies, begin, end, course]
     }
 
     const makeReservation = async () => {
@@ -59,7 +61,8 @@ const Reservation = ({ beginDate, setBeginDate, endDate, setEndDate }) => {
                 beginDate: beginDate,
                 endDate: endDate,
                 book: bookToReserve,
-                numberOfCopies: numberOfCopies
+                numberOfCopies: numberOfCopies,
+                course: course
             }
             const booksToReserve = selectedBooks
             if (booksToReserve.length < reservation.numberOfCopies) {
@@ -107,10 +110,11 @@ const Reservation = ({ beginDate, setBeginDate, endDate, setEndDate }) => {
                     console.log('returnedCalendar', returnedCalendarEntry)
                 }
             }
+            setReservations(reservations.concat(returnedReservation))
             setShowReservationInfo(false)
             dispatch(setSelectedBooks((changedBooks)))
             dispatch(setBooks(booksToChange))
-            dispatch(setBookTitles(null))
+            //dispatch(setBookTitles(null))
             dispatch(setMessage(reservationMessage))
             setTimeout(() => {
                 dispatch(setMessage(''))
@@ -167,7 +171,6 @@ const Reservation = ({ beginDate, setBeginDate, endDate, setEndDate }) => {
 
     return (
         <>
-            <Calendar />
             <div>
                 {bookToReserve !== '' ? <p>{bookToReserve}</p> : <p>Ei valittua kirjaa</p>}
             </div>
@@ -176,13 +179,14 @@ const Reservation = ({ beginDate, setBeginDate, endDate, setEndDate }) => {
                     <p>Alkupäivä: <input type="date" value={beginDate} min={dateNow} required pattern="\d{4}-\d{2}-\d{2}" id="beginDate" onChange={({ target }) => handleDate(target.value)} /></p>
                     <p>Loppupäivä: <input type="date" value={endDate} min={beginDate} id="endDate" onChange={({ target }) => setEndDate(target.value)} /></p>
                     <p>Määrä: <input type="number" value={numberOfCopies} id="numberOfBooks" onChange={({ target }) => setNumberOfCopies(target.value)} /></p>
+                    <p>Opetusryhmä: <input type="text" value={course} id="course" onChange={({ target }) => setCourse(target.value)} /></p>
                 </div>
                 <div>
                     <button id="borrow-button" type="submit">Varaa kirja</button>
                 </div>
             </form>
             <div>
-                {showReservationInfo !== false ? <Info information={showInfo([bookToReserve, numberOfCopies, beginDate, endDate])} /> : null}
+                {showReservationInfo !== false ? <Info information={showInfo([bookToReserve, numberOfCopies, beginDate, endDate, course])} /> : null}
                 {showConfirm !== false ? <Confirmation execute={makeReservation} setShowConfirm={setShowConfirm} /> : null}
             </div>
         </>

@@ -41,13 +41,14 @@ reservationsRouter.post('/', async (req, res) => {
     const user = await User.findById(decodedToken.id)
     //const book = await Book.findById(body.bookId)
 
-    if (moment(body.beginDate).isBefore(moment(body.endDate))) {
+    if (moment(body.beginDate).isSameOrBefore(moment(body.endDate))) {
         const reservation = new Reservation({
             beginDate: body.beginDate,
             endDate: body.endDate,
             user: user._id,
             book: body.book,
             numberOfCopies: body.numberOfCopies,
+            course: body.course,
             received: false
         })
         const returnedReservation = await reservation.save()
