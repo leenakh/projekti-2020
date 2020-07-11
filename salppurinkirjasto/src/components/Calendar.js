@@ -9,6 +9,8 @@ const Calendar = ({ setBeginDate, setEndDate }) => {
     const [reservationCalendar, setReservationCalendar] = useState(null)
     const [rows, setRows] = useState([])
     const dateNow = new Date()
+    const [show, setShow] = useState(false)
+    const [date, setDate] = useState('')
 
     useEffect(() => {
         const getCalendarEntries = async () => {
@@ -17,11 +19,11 @@ const Calendar = ({ setBeginDate, setEndDate }) => {
             setCalendarEntries(entries)
         }
         getCalendarEntries()
-        
+
     }, [books])
 
     useEffect(() => {
-        calendar('2020-08-11')
+        calendar('2020-07-06')
     }, [calendarEntries])
 
     const calendar = (date) => {
@@ -93,6 +95,14 @@ const Calendar = ({ setBeginDate, setEndDate }) => {
         setEndDate(returnDate)
     }
 
+    const handleMouseOver = (date) => {
+        setDate(date)
+    }
+
+    const handleMouseOut = () => {
+        //setShow(false)
+    }
+
     const CalendarCell = ({ reservation }) => {
         const style = () => {
             if (books.length - reservation.reservations === 0) {
@@ -114,13 +124,16 @@ const Calendar = ({ setBeginDate, setEndDate }) => {
         }
         return (
             <td style={style()} className="calendar-cell">
-                <button style={style()} onClick={() => handleChooseDate(reservation.date)}>
+                <div className="calendar-date-container">
+                        <div className="calendar-date">{date}</div>
+                <button id="calendar-button" style={style()} onMouseOver={() => handleMouseOver(reservation.date)} onMouseOut={handleMouseOut} onClick={() => handleChooseDate(reservation.date)}>
                     <span className="reservation-text">varauksia: </span>
                     <span className="reservations">{reservation.reservations}</span>
                     <span className="reservation-text">varattavissa: </span>
                     <span className="reservations">{books.length - reservation.reservations}</span>
                     <span className="reservation-text">{reservation.names}</span>
                 </button>
+                </div>
             </td>
         )
     }
@@ -128,29 +141,42 @@ const Calendar = ({ setBeginDate, setEndDate }) => {
     const style = {
         textAlign: 'left',
         minWidth: 600,
-        fontWeight: 'bold'
+    }
+
+    const toggleStyle = () => {
+        if (show === false)
+            return (
+                {
+                    display: 'none'
+                }
+            )
+        else if (show === true) {
+            return (
+                {
+                    display: 'block'
+                }
+            )
+        }
     }
 
     return (
         <div>
             {calendarEntries === null ?
                 <button onClick={handleGetCalendar}>Kalenteri</button> :
-                <table>
-                    <caption style={style}>Varaukset - {books[0].title}</caption>
-                    <tbody>
-                        {rows.map(row => <tr key={Math.random()}>
-                            <td className="calendar-cell">{row.reservation[0].date} - {row.reservation[5].date}</td>
-                            <CalendarCell reservation={row.reservation[0]} />
-                            <CalendarCell reservation={row.reservation[1]} />
-                            <CalendarCell reservation={row.reservation[2]} />
-                            <CalendarCell reservation={row.reservation[3]} />
-                            <CalendarCell reservation={row.reservation[4]} />
-                            <CalendarCell reservation={row.reservation[5]} />
+                    <table>
+                        <caption style={style}>Varaukset - {books[0].title}</caption>
+                        <tbody>
+                            {rows.map(row => <tr key={Math.random()}>
+                                <td className="calendar-cell">{rows.indexOf(row) + 28}</td>
+                                <CalendarCell reservation={row.reservation[0]} />
+                                <CalendarCell reservation={row.reservation[1]} />
+                                <CalendarCell reservation={row.reservation[2]} />
+                                <CalendarCell reservation={row.reservation[3]} />
+                                <CalendarCell reservation={row.reservation[4]} />
+                            </tr>)}
 
-                        </tr>)}
-
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
             }
         </div>
     )

@@ -6,11 +6,31 @@ body {
 }
 
 .calendar-cell {
-  width: 100px;
-  
+  width: 50px;
   vertical-align: top;
   text-align: left;
   padding: 5px;
+}
+
+.calendar-date-container {
+  position: relative;
+  display: inline-block;
+}
+
+.calendar-date-container .calendar-date {
+  visibility: hidden;
+  position: absolute;
+  z-index: 1;
+  bottom: 90%;
+  left: 10%;
+  margin-left: 20px;
+  background-color: white;
+  padding: 5px;
+}
+
+.calendar-date-container:hover .calendar-date {
+  visibility: visible;
+  opacity: 1
 }
 
 .reservations {

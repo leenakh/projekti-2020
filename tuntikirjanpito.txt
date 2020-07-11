@@ -52,14 +52,16 @@ PVM		TUNTIA		TEHTÄVÄ
 30.6.2020	2		Varauskalenterikomponentin kehittelyä (taulukkonäkymän asettelua, varauksen ajanmäärittely varauskalenterin kautta).
 8.7.2020	1		Varauskalenterikomponentin kehittelyä (varaustietojen päivittyminen kalenterinäkymään).
 10.7.2020	1		Filtteri valittujen kirjojen esittämiseen (kaikki / vain lainattavissa olevat). Varaukseen ja hallintanäkymään tieto opetusryhmästä.
+11.7.2020	1,5		Filtteröityjen tietojen päivittyminen näkymään korjattu. Varauskalenterin viimeistelyä: kalenteriruudun päivämäärän esittäminen näkymässä dynaamisesti, viikkonumeroiden esittäminen.
 -----------------------------------
-Yhteensä	136
+Yhteensä	137,5
 
 TODO
-Lainauslomakkeen näkyvyys varauksen lunastamisessa (tilan muutos ei päivitä näkymää, kun kirja lainataan, koska renderöidään books eikä selectedBooks; lainausnapin ja palautusnapin pitää näkyä yhtä aikaa, jos ollaan lunastamassa varausta).
 Varauskalenterin laskuri ottaa huomioon myös lainassa olevat kirjat?
 Varaukseen tieto siitä, kenelle kirjat on varattu.
 Hakutermisyötteen käsittely virtaviivaisemmaksi?
 Komponenttien näkyvyyden säätelyyn jokin patenttiratkaisu? Props.children?
 Filtteri: vain lainattavissa olevat / kaikki kirjat
 Lainan uusiminen
+
+onMouseOver={() => handleMouseOver(reservation.date)}

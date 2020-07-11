@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Confirmation = ({ execute, setShowConfirm }) => {
+const Confirmation = ({ execute, setShowConfirm, setShowInfo }) => {
 
     const handleConfirmation = (value) => {
         if (value === true) {
@@ -10,6 +10,7 @@ const Confirmation = ({ execute, setShowConfirm }) => {
             console.log('Eiku')
         }
         setShowConfirm(false)
+        setShowInfo(false)
     }
 
     return (

@@ -3,10 +3,12 @@ import { useDispatch, useSelector } from 'react-redux'
 import Book from '../components/Book'
 import { ReturnBook } from '../components/ReturnBook'
 import { setSelectedBooks } from '../reducers/selectedBooksReducer'
+import { setBooks } from '../reducers/booksReducer'
 import ChooseBook from '../components/ChooseBook'
 
 const Books = ({ borrowingBookForm }) => {
     const selectedBooks = useSelector(state => state.selectedBooks)
+    //const books = useSelector(state => state.books)
     const dispatch = useDispatch()
     const book = useSelector(state => state.book)
     const [filter, setFilter] = useState('ALL')
@@ -14,12 +16,12 @@ const Books = ({ borrowingBookForm }) => {
 
     const handleFilterBooks = () => {
         if (filter === 'ALL') {
-            setBooks(selectedBooks.filter(b => b.loan === null))
+            dispatch(setSelectedBooks(selectedBooks.filter(b => b.loan === null)))
             setFilter('FILTERED')
             console.log('books', books)
         }
         else if (filter === 'FILTERED') {
-            setBooks(selectedBooks)
+            dispatch(setSelectedBooks(books))
             setFilter('ALL')
             console.log('books', books)
         }
@@ -34,26 +36,26 @@ const Books = ({ borrowingBookForm }) => {
             text = 'Näytä kaikki kirjat'
         }
         return (
-        <button onClick={handleFilterBooks} >{text}</button>
+            <button onClick={handleFilterBooks} >{text}</button>
         )
     }
 
     if (selectedBooks) {
         return (
             <>
-            <FilterBooks />
-            <ul id="books">
-                {books.map((b) =>
-                    <li id="book" key={b.id}>
-                        <Book key={b.id} book={b} />
-                        <ChooseBook book={b} />
+                <FilterBooks />
+                <ul id="books">
+                    {selectedBooks.map((b) =>
+                        <li id="book" key={b.id}>
+                            <Book key={b.id} book={b} />
+                            <ChooseBook book={b} />
 
-                        <div>
-                            {book && book.id === b.id ? borrowingBookForm() : null}
-                            {book && b.loan && book.id === b.id ? <ReturnBook /> : null}
-                        </div>
-                    </li>)}
-            </ul>
+                            <div>
+                                {book && !b.loan && book.id === b.id ? borrowingBookForm() : null}
+                                {book && b.loan && book.id === b.id ? <ReturnBook /> : null}
+                            </div>
+                        </li>)}
+                </ul>
             </>
         )
     }

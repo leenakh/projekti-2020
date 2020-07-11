@@ -128,41 +128,6 @@ const Reservation = ({ beginDate, setBeginDate, endDate, setEndDate, reservation
         }
     }
 
-    /* const removeReservation = async (id) => {
-        try {
-            const reservation = await reservationService.getOne(id)
-            const search = `title=${reservation.book}&isbn=`
-            const booksToChange = await bookService.search(search)
-            let changedBooks = books
-            let changedSelectedBooks = selectedBooks
-            let i = 0
-            let y = 0
-            for (i = 0; i < booksToChange.length; i++) {
-                let bookToChange = booksToChange[i]
-                let changedReservations = await bookToChange.reservations.filter(r => r.id !== id).map(r => r.id.toString())
-                let changedBook = await bookService.update(bookToChange.id, { reservations: changedReservations })
-                changedBooks = await changedBooks.map(b => b.id === changedBook.id ? changedBook : b)
-                changedSelectedBooks = await changedSelectedBooks.map(b => b.id === changedBook.id ? changedBook : b)
-            }
-            const calendarEntries = await calendarService.search(reservation.book)
-            for (y = 0; y < calendarEntries.length; y++) {
-                let entry = calendarEntries[y]
-                if (entry.reservation === id) {
-                    await calendarService.remove(entry.id)
-                }
-            }
-            await reservationService.remove(id)
-            dispatch(setBooks(changedBooks))
-            dispatch(setSelectedBooks(changedSelectedBooks))
-            dispatch(setMessage('Varauksen poistaminen onnistui.'))
-            setTimeout(() => {
-                dispatch(setMessage(''))
-            }, 5000)
-        } catch (exception) {
-            console.log('Pieleen meni.')
-        }
-    } */
-
     const handleMakeReservation = async (event) => {
         event.preventDefault()
         setShowConfirm(true)
@@ -187,7 +152,7 @@ const Reservation = ({ beginDate, setBeginDate, endDate, setEndDate, reservation
             </form>
             <div>
                 {showReservationInfo !== false ? <Info information={showInfo([bookToReserve, numberOfCopies, beginDate, endDate, course])} /> : null}
-                {showConfirm !== false ? <Confirmation execute={makeReservation} setShowConfirm={setShowConfirm} /> : null}
+                {showConfirm !== false ? <Confirmation execute={makeReservation} setShowConfirm={setShowConfirm} setShowInfo={setShowReservationInfo}/> : null}
             </div>
         </>
     )
