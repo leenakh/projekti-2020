@@ -27,7 +27,7 @@ const Logout = ({ setUser }) => {
   }
 
   return (
-    <p><button id="logout" onClick={handleLogout}>Logout</button></p>
+    <p><button id="logout" onClick={handleLogout}>Kirjaudu ulos</button></p>
   )
 }
 

@@ -51,11 +51,11 @@ const App = () => {
   )
 
   const loginMessage = () => (
-    <p>{user.firstName} {user.lastName} on kirjautunut sisään.</p>
+    <div>{user.firstName} {user.lastName}</div>
   )
 
   const reservation = () => (
-      <Reservation beginDate={beginDate} setBeginDate={setBeginDate} endDate={endDate} setEndDate={setEndDate} reservations={reservations} setReservations={setReservations} />
+    <Reservation beginDate={beginDate} setBeginDate={setBeginDate} endDate={endDate} setEndDate={setEndDate} reservations={reservations} setReservations={setReservations} />
   )
 
   const style = {
@@ -64,20 +64,30 @@ const App = () => {
 
   return (
     <Router>
-      <div>
-        <Link style={style} to="/">Etusivu</Link>
-        <Link style={style} to="/kirjat">Kirjasto</Link>
-        {user !== null && user.username === 'admin' ? <Link style={style} to="/kirjastonhoitaja">Kirjastonhoitaja</Link> : null}
-        {user !== null ? <Link style={style} to={`/${user.username}`}>Omat tiedot</Link> : null}
+      <div className="nav responsive">
+        <div className="dropdown">
 
+          <button className="dropdown-button">
+            <i classNme="fa fa-caret-down"></i>
+          </button>
+
+
+          <div className="dropdown-menu" >
+            <Link className="dropdown-item" to="/">Etusivu</Link>
+            <Link className="dropdown-item" to="/kirjat">Kirjasto</Link>
+            {user !== null && user.username === 'admin' ? <Link className="dropdown-item" to="/kirjastonhoitaja">Kirjastonhoitaja</Link> : null}
+            {user !== null ? <Link className="dropdown-item" to={`/${user.username}`}>Omat tiedot</Link> : null}
+          </div>
+        </div>
+        <div className="logged-in-user">
+          {user !== null ? <div>
+            {loginMessage()}
+            <Logout setUser={setUser} />
+          </div> : null
+          }
+        </div>
       </div>
-      <div>
-        {user !== null ? <div>
-          {loginMessage()}
-          <Logout setUser={setUser} />
-        </div> : <LoginForm setUser={setUser} />
-        }
-      </div>
+      {user === null ? <LoginForm setUser={setUser} /> : null}
       <Switch>
         <Route path="/kirjat/:tunniste">
           <div>

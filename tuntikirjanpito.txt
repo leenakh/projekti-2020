@@ -53,10 +53,12 @@ PVM		TUNTIA		TEHTÄVÄ
 8.7.2020	1		Varauskalenterikomponentin kehittelyä (varaustietojen päivittyminen kalenterinäkymään).
 10.7.2020	1		Filtteri valittujen kirjojen esittämiseen (kaikki / vain lainattavissa olevat). Varaukseen ja hallintanäkymään tieto opetusryhmästä.
 11.7.2020	1,5		Filtteröityjen tietojen päivittyminen näkymään korjattu. Varauskalenterin viimeistelyä: kalenteriruudun päivämäärän esittäminen näkymässä dynaamisesti, viikkonumeroiden esittäminen.
+15.7.2020	3		Responsiivisen alasvetovalikon toteutus. Kirjan tietojen esitystavan viimeistelyä (lainauslomakkeen avaaminen/sulkeminen, kirjoittajien ja lainaustietojen näyttäminen/piilottaminen). Komponenttien tyylin ja asettelun hiomista.
 -----------------------------------
-Yhteensä	137,5
+Yhteensä	140,5
 
 TODO
+Lainauskielto automaattisesti?
 Varauskalenterin laskuri ottaa huomioon myös lainassa olevat kirjat?
 Varaukseen tieto siitä, kenelle kirjat on varattu.
 Hakutermisyötteen käsittely virtaviivaisemmaksi?

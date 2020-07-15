@@ -47,7 +47,7 @@ export const LoginForm = ({ setUser }) => {
         password: <input id="password" type="password" value={password} onChange={({ target }) => setPassword(target.value)} />
       </div>
       <div>
-        <button type="submit" id="login">Login</button>
+        <button type="submit" id="login">Kirjaudu sisään</button>
       </div>
     </form>
   )

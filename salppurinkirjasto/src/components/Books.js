@@ -47,9 +47,9 @@ const Books = ({ borrowingBookForm }) => {
                 <ul id="books">
                     {selectedBooks.map((b) =>
                         <li id="book" key={b.id}>
-                            <Book key={b.id} book={b} />
-                            <ChooseBook book={b} />
-
+                            <div className="book-container">
+                                <ChooseBook className="choose-book" book={b} /><Book className="book" key={b.id} book={b} />
+                            </div>
                             <div>
                                 {book && !b.loan && book.id === b.id ? borrowingBookForm() : null}
                                 {book && b.loan && book.id === b.id ? <ReturnBook /> : null}

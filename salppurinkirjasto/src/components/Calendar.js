@@ -6,10 +6,7 @@ import loanService from '../services/loans'
 const Calendar = ({ setBeginDate, setEndDate }) => {
     const books = useSelector(state => state.selectedBooks)
     const [calendarEntries, setCalendarEntries] = useState([])
-    const [reservationCalendar, setReservationCalendar] = useState(null)
     const [rows, setRows] = useState([])
-    const dateNow = new Date()
-    const [show, setShow] = useState(false)
     const [date, setDate] = useState('')
 
     useEffect(() => {
@@ -23,7 +20,7 @@ const Calendar = ({ setBeginDate, setEndDate }) => {
     }, [books])
 
     useEffect(() => {
-        calendar('2020-07-06')
+        calendar('2020-08-10')
     }, [calendarEntries])
 
     const calendar = (date) => {
@@ -99,8 +96,14 @@ const Calendar = ({ setBeginDate, setEndDate }) => {
         setDate(date)
     }
 
-    const handleMouseOut = () => {
-        //setShow(false)
+    const weekNumber = (row) => {
+        let week = 0
+        if (rows.indexOf(row) < 21) {
+            week = rows.indexOf(row) + 33
+        } else {
+            week = rows.indexOf(row) - 20
+        }
+        return week
     }
 
     const CalendarCell = ({ reservation }) => {
@@ -125,14 +128,14 @@ const Calendar = ({ setBeginDate, setEndDate }) => {
         return (
             <td style={style()} className="calendar-cell">
                 <div className="calendar-date-container">
-                        <div className="calendar-date">{date}</div>
-                <button id="calendar-button" style={style()} onMouseOver={() => handleMouseOver(reservation.date)} onMouseOut={handleMouseOut} onClick={() => handleChooseDate(reservation.date)}>
-                    <span className="reservation-text">varauksia: </span>
-                    <span className="reservations">{reservation.reservations}</span>
-                    <span className="reservation-text">varattavissa: </span>
-                    <span className="reservations">{books.length - reservation.reservations}</span>
-                    <span className="reservation-text">{reservation.names}</span>
-                </button>
+                    <div className="calendar-date">{date}</div>
+                    <button id="calendar-button" style={style()} onMouseOver={() => handleMouseOver(reservation.date)} onClick={() => handleChooseDate(reservation.date)}>
+                        <span className="reservation-text">varauksia: </span>
+                        <span className="reservations">{reservation.reservations}</span>
+                        <span className="reservation-text">varattavissa: </span>
+                        <span className="reservations">{books.length - reservation.reservations}</span>
+                        <span className="reservation-text">{reservation.names}</span>
+                    </button>
                 </div>
             </td>
         )
@@ -143,40 +146,24 @@ const Calendar = ({ setBeginDate, setEndDate }) => {
         minWidth: 600,
     }
 
-    const toggleStyle = () => {
-        if (show === false)
-            return (
-                {
-                    display: 'none'
-                }
-            )
-        else if (show === true) {
-            return (
-                {
-                    display: 'block'
-                }
-            )
-        }
-    }
-
     return (
         <div>
             {calendarEntries === null ?
                 <button onClick={handleGetCalendar}>Kalenteri</button> :
-                    <table>
-                        <caption style={style}>Varaukset - {books[0].title}</caption>
-                        <tbody>
-                            {rows.map(row => <tr key={Math.random()}>
-                                <td className="calendar-cell">{rows.indexOf(row) + 28}</td>
-                                <CalendarCell reservation={row.reservation[0]} />
-                                <CalendarCell reservation={row.reservation[1]} />
-                                <CalendarCell reservation={row.reservation[2]} />
-                                <CalendarCell reservation={row.reservation[3]} />
-                                <CalendarCell reservation={row.reservation[4]} />
-                            </tr>)}
+                <table className="calendar-table">
+                    <caption style={style}>Varaukset - {books[0].title}</caption>
+                    <tbody>
+                        {rows.map(row => <tr key={Math.random()}>
+                            <td className="calendar-cell">{weekNumber(row)}</td>
+                            <CalendarCell reservation={row.reservation[0]} />
+                            <CalendarCell reservation={row.reservation[1]} />
+                            <CalendarCell reservation={row.reservation[2]} />
+                            <CalendarCell reservation={row.reservation[3]} />
+                            <CalendarCell reservation={row.reservation[4]} />
+                        </tr>)}
 
-                        </tbody>
-                    </table>
+                    </tbody>
+                </table>
             }
         </div>
     )

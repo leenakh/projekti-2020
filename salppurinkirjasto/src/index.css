@@ -1,8 +1,132 @@
 body {
-  margin: 0;
+  margin: 10;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.nav {
+  background-color: #333;
+  overflow: hidden;
+  padding: 10px;
+}
+
+.nav a {
+  float: left;
+  display: block;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.active {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.nav .icon {
+  display: none;
+}
+
+.dropdown {
+  float: left;
+  overflow: hidden;
+}
+
+.dropdown .dropdown-button {
+  font-size: 17px;
+  border: none;
+  outline: none;
+  color: white;
+  padding: 14px 16px;
+  background-color: inherit;
+  font-family: inherit;
+  margin: 0;
+}
+
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+.dropdown-menu a {
+  float: none;
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
+
+.nav a:hover, .dropdown:hover .dropdown-button {
+  background-color: #555;
+  color: white;
+}
+
+.dropdown-menu a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+.dropdown:hover .dropdown-menu {
+  display: block;
+}
+
+@media screen and (max-width: 600px) {
+  .nav a:not(:first-child), .dropdown .dropdown-button {
+    display: none;
+  }
+  .nav a.icon {
+    float: right;
+    display: block;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .nav.responsive {
+    position: relative;
+  }
+  .nav.responsive a.icon {
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+  .nav.responsive a {
+    float: none;
+    display: block;
+    text-align: left;
+  }
+  .nav.responsive .dropdown {
+    float: none;
+  }
+  .nav.responsive .dropdown-menu {
+    position: relative;
+  }
+  .nav.responsive .dropdown .dropdown-button {
+    display: block;
+    width: 100%;
+    text-align: left;
+  }
+}
+
+.dropdown-button-container {
+  width: 100px;
+  float: left;
+}
+
+.logged-in-user {
+  float: right;
+  color: white;
+}
+
+.calendar-table {
+  min-width: 700px
 }
 
 .calendar-cell {
@@ -39,6 +163,32 @@ body {
 
 .reservation-text {
   float: left;
+}
+
+ul {
+  list-style-type: none;
+}
+
+.book-info {
+  background-color: transparent;
+  border-style: none;
+}
+
+.choose-book {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.book {
+  display: inline-block;
+}
+
+.authors {
+  float: left;
+}
+
+.loan-info {
+  float: right;
 }
 
 code {
