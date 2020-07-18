@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { createBook } from '../reducers/booksReducer'
 import { setIsbn } from '../reducers/isbnReducer'
@@ -8,9 +8,10 @@ const CreateBookForm = () => {
   const dispatch = useDispatch()
   const isbn = useSelector(state => state.isbn)
   const copy = useSelector(state => state.copy)
+  const [year, setYear] = useState('')
   const handleCreateBook = async (event) => {
     event.preventDefault()
-    dispatch(createBook(isbn, copy))
+    dispatch(createBook(isbn, copy, year))
     dispatch(setIsbn(''))
     dispatch(setCopy(''))
   }
@@ -20,6 +21,7 @@ const CreateBookForm = () => {
       <div>
         <h3>Lisää uusi kirja tietokantaan</h3>
         isbn: <input type="text" value={isbn} id="isbn" onChange={({ target }) => dispatch(setIsbn(target.value))} />
+        year: <input type="text" value={year} id="year" onChange={({ target }) => setYear(target.value)} />
         copy: <input type="text" value={copy} id="copy" onChange={({ target }) => dispatch(setCopy(target.value))} />
       </div>
       <div>

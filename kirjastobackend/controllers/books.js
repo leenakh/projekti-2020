@@ -87,6 +87,7 @@ booksRouter.post('/', async (req, res) => {
             title: body.title,
             authors: body.authors,
             languages: body.languages,
+            published: body.published === undefined ? '' : body.published,
             isbn: body.isbn,
             copy: body.copy
         })

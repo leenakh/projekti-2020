@@ -16,7 +16,7 @@ const Books = ({ borrowingBookForm }) => {
 
     const handleFilterBooks = () => {
         if (filter === 'ALL') {
-            dispatch(setSelectedBooks(selectedBooks.filter(b => b.loan === null)))
+            dispatch(setSelectedBooks(selectedBooks.filter(b => b.loan === null || b.loan === undefined)))
             setFilter('FILTERED')
             console.log('books', books)
         }

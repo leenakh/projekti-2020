@@ -103,9 +103,10 @@ body {
     text-align: left;
   }
   .nav.responsive .dropdown {
-    float: none;
+    float: left;
   }
   .nav.responsive .dropdown-menu {
+    width: 100%;
     position: relative;
   }
   .nav.responsive .dropdown .dropdown-button {
@@ -174,6 +175,27 @@ ul {
   border-style: none;
 }
 
+.customer-info {
+  position: absolute;
+}
+
+.loan-info {
+  margin-left: 20px;
+  float: left;
+}
+
+.loan-cell {
+  text-align: left;
+  min-width: 100px;
+}
+
+.loan-cell-title {
+  text-align: left;
+  min-width: 350px;
+  color: darkcyan;
+  font-weight: bold;
+}
+
 .choose-book {
   display: inline-block;
   vertical-align: top;
@@ -189,6 +211,13 @@ ul {
 
 .loan-info {
   float: right;
+}
+
+.title {
+  margin-left: 20px;
+  font-size: medium;
+  font-weight: bold;
+  color: darkcyan;
 }
 
 code {

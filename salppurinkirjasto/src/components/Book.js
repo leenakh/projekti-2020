@@ -17,7 +17,7 @@ const Book = ({ book }) => {
         <div className="book">
             <ul>
                 <li>
-                    <button className="book-info" onClick={toggleShowInfo} >{book.title}</button>
+                    <button className="book-info" onClick={toggleShowInfo} ><div className="title">{book.title}</div></button>
                 </li>
                 {showInfo ?
                     <div className="authors">
@@ -25,6 +25,8 @@ const Book = ({ book }) => {
                             <li><b>Kirjoittajat</b></li>
                             {book.authors.map(a =>
                                 <li key={a.name}>{a.name}</li>)}
+                            <li><b>Julkaisuvuosi</b></li>
+                            <li>{book.published}</li>
                         </ul>
                     </div> : null
                 }

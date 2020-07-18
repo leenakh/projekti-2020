@@ -21,6 +21,11 @@ const search = async (id) => {
     return response.data
 }
 
+const getLoans = async (id) => {
+    const response = await axios.get(`${baseUrl}/${id}/loans`)
+    return response.data
+}
+
 const create = async (newObject) => {
     const config = {
         headers: { Authorization: token }
@@ -31,7 +36,7 @@ const create = async (newObject) => {
 
 const update = async (id, newObject) => {
     const config = {
-        headers: {Authorization: token}
+        headers: { Authorization: token }
     }
     const response = await axios.put(`${baseUrl}/${id}`, newObject, config)
     return response.data
@@ -41,6 +46,7 @@ export default {
     getAll,
     getOne,
     search,
+    getLoans,
     create,
     update,
     setToken

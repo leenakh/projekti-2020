@@ -21,6 +21,11 @@ const bookSchema = new mongoose.Schema({
         maxlength: 13,
         required: true
     },
+    published: {
+        type: String,
+        minlength: 4,
+        maxlength: 4
+    },
     copy: {
         type: String,
         required: true

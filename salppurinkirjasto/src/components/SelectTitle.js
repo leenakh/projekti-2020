@@ -34,11 +34,14 @@ const SelectTitle = () => {
   return (
     <div>
       <ul>
+        <li><p>Löytyi <b>{bookTitles.length}</b> {bookTitles.length === 1 ? 'nimeke' : 'nimekettä'}.</p></li>
         {bookTitles.map(title =>
           <li key={title}>
-            {title}
-            <p><button onClick={() => handleSelectBookFromListOfTitles(title)}>Lainaa/palauta</button>
-              <button onClick={() => handleReserve(title)}>Varaa</button></p>
+            <div className="title">
+              {title}
+              <p><button onClick={() => handleSelectBookFromListOfTitles(title)}>Lainaa/palauta</button>
+                <button onClick={() => handleReserve(title)}>Varaa</button></p>
+            </div>
           </li>
         )}
       </ul>

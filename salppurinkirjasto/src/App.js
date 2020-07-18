@@ -19,6 +19,7 @@ import Message from './components/Message'
 import Reservation from './components/Reservation'
 import UserInfo from './components/UserInfo'
 import Calendar from './components/Calendar'
+import Customer from './components/Customer'
 
 const App = () => {
   const date = new Date().toISOString().substring(0, 10)
@@ -27,6 +28,7 @@ const App = () => {
   const returnDate = end.toISOString().substring(0, 10)
   const bookTitles = useSelector(state => state.bookTitles)
   const selectedBooks = useSelector(state => state.selectedBooks)
+  const customer = useSelector(state => state.customer)
   const [user, setUser] = useState(null)
   const [beginDate, setBeginDate] = useState(date)
   const [endDate, setEndDate] = useState(returnDate)
@@ -68,7 +70,7 @@ const App = () => {
         <div className="dropdown">
 
           <button className="dropdown-button">
-            <i classNme="fa fa-caret-down"></i>
+            <i className="fa fa-caret-down"></i>
           </button>
 
 
@@ -76,7 +78,8 @@ const App = () => {
             <Link className="dropdown-item" to="/">Etusivu</Link>
             <Link className="dropdown-item" to="/kirjat">Kirjasto</Link>
             {user !== null && user.username === 'admin' ? <Link className="dropdown-item" to="/kirjastonhoitaja">Kirjastonhoitaja</Link> : null}
-            {user !== null ? <Link className="dropdown-item" to={`/${user.username}`}>Omat tiedot</Link> : null}
+            {user !== null ? <Link className="dropdown-item" to={`/manage/${user.username}`}>Omat tiedot</Link> : null}
+            <Link className="dropdown-item" to="/asiakas">Asiakas</Link>
           </div>
         </div>
         <div className="logged-in-user">
@@ -117,7 +120,12 @@ const App = () => {
           {user !== null && bookTitles !== null ? reservation() : null}
           {selectedBooks !== [] && selectedBooks !== null ? <Calendar setBeginDate={setBeginDate} setEndDate={setEndDate} reservations={reservations} /> : null}
         </Route>
-        <Route path="/:username">
+        <Route path="/asiakas">
+          <div>
+            <Customer />
+          </div>
+        </Route>
+        <Route path="/manage/:username">
           <div>
             {user !== null ? <UserInfo user={user} borrowingBookForm={borrowingBookForm} setBeginDate={setBeginDate} setEndDate={setEndDate} /> : null}
           </div>

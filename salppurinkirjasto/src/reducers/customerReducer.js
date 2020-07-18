@@ -20,13 +20,11 @@ export const fetchCustomer = (customer) => {
     return async dispatch => {
         try {
             const requestedCustomer = await customerService.search(customer)
-            console.log('requested customer', requestedCustomer)
             dispatch(setCustomer(customer))
             if (requestedCustomer.length === 0) {
                 dispatch(createCustomer(customer))
             }
         } catch (exception) {
-
         }
     }
 }

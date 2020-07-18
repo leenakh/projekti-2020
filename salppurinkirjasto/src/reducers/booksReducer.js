@@ -25,7 +25,7 @@ export const setBooks = (books) => {
     }
 }
 
-export const createBook = (isbn, copy) => {
+export const createBook = (isbn, copy, year) => {
     return async dispatch => {
         try {
             const result = await finnaService.getOne(isbn)
@@ -34,6 +34,7 @@ export const createBook = (isbn, copy) => {
                 title: bookInfo.title,
                 authors: bookInfo.nonPresenterAuthors,
                 languages: bookInfo.languages,
+                published: year,
                 isbn: isbn,
                 copy: copy
             }
@@ -65,7 +66,7 @@ export const fetchBook = (title, isbn) => {
                 dispatch(setBooks(fetchedBooks))
                 dispatch(setSelectedBooks(fetchedBooks))
             } else {
-                dispatch(setErrorMessage(fetchBookFailMessage))
+                //dispatch(setErrorMessage(fetchBookFailMessage))
                 dispatch(setBookTitles([]))
                 setTimeout(() => {
                     dispatch(setErrorMessage(null))
