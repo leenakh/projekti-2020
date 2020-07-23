@@ -1,7 +1,5 @@
 const loansRouter = require('express').Router()
 const Loan = require('../models/loan')
-const moment = require('moment')
-const User = require('../models/user')
 const Customer = require('../models/customer')
 const Book = require('../models/book')
 const jwt = require('jsonwebtoken')
@@ -33,7 +31,6 @@ loansRouter.post('/', async (req, res) => {
     if (!token || !decodedToken.id) {
         return res.status(401).json({ error: 'token missing or invalid' })
     }
-    const user = await User.findById(decodedToken.id)
     const customer = await Customer.findOne({ username: body.customerId })
     const book = await Book.findById(body.bookId)
 

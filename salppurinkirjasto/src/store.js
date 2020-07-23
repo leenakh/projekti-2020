@@ -12,6 +12,7 @@ import customerReducer from './reducers/customerReducer'
 import selectedBooksReducer from './reducers/selectedBooksReducer'
 import bookTitlesReducer from './reducers/bookTitlesReducer'
 import loansReducer from './reducers/loansReducer'
+import customerInfoReducer from './reducers/customerInfoReducer'
 
 const reducer = combineReducers({
     books: booksReducer,
@@ -24,7 +25,8 @@ const reducer = combineReducers({
     customer: customerReducer,
     selectedBooks: selectedBooksReducer,
     bookTitles: bookTitlesReducer,
-    loans: loansReducer
+    loans: loansReducer,
+    customerInfo: customerInfoReducer
 })
 
 const store = createStore(

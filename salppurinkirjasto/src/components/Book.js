@@ -1,16 +1,11 @@
 import React, { useState } from 'react'
+import { dateFormat } from '../components/DateFormat'
 
 const Book = ({ book }) => {
     const [showInfo, setShowInfo] = useState(false)
 
     const toggleShowInfo = () => {
         setShowInfo(!showInfo)
-    }
-
-    const formatDate = (date) => {
-        const parts = date.split('-')
-        const dateString = `${parts[2]}.${parts[1]}.${parts[0]}`
-        return dateString
     }
 
     return (
@@ -36,8 +31,8 @@ const Book = ({ book }) => {
                         <ul>
                             <li><b>Lainaustiedot</b></li>
                             <li>Asiakas: {book.loan.customer}</li>
-                            <li>Lainattu: {formatDate(book.loan.beginDate)}</li>
-                            <li>Palautettava: {formatDate(book.loan.endDate)}</li>
+                            <li>Lainattu: {dateFormat(book.loan.beginDate)}</li>
+                            <li>Palautettava: {dateFormat(book.loan.endDate)}</li>
                         </ul>
                     </div> : null
                 }

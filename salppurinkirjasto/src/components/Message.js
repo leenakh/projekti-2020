@@ -7,14 +7,18 @@ const Message = () => {
 
     if (reduxMessage) {
         return (
-            <div id="message">
-                {reduxMessage}
+            <div id="overlay">
+                <div id="message">
+                    {reduxMessage}
+                </div>
             </div>
         )
     } else if (reduxErrorMessage) {
         return (
-            <div id="error">
-                {reduxErrorMessage}
+            <div id="overlay">
+                <div id="error">
+                    {reduxErrorMessage}
+                </div>
             </div>
         )
     } else {

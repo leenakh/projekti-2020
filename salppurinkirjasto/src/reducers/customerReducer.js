@@ -32,11 +32,10 @@ export const fetchCustomer = (customer) => {
 export const createCustomer = (customer) => {
     return async dispatch => {
         try {
-            const newCustomer = await customerService.create({
+            await customerService.create({
                 username: customer
             })
             dispatch(setCustomer(customer))
-            console.log('new customer', newCustomer)
         } catch (exception) {
 
         }

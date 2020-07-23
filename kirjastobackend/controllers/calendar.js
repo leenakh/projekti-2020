@@ -1,9 +1,7 @@
 const calendarRouter = require('express').Router()
 const Calendar = require('../models/calendar')
 const User = require('../models/user')
-const Reservation = require('../models/reservation')
 const jwt = require('jsonwebtoken')
-const logger = require('../utils/logger')
 const moment = require('moment')
 
 const getTokenFrom = req => {
@@ -17,7 +15,6 @@ const getTokenFrom = req => {
 calendarRouter.get('/', async (req, res) => {
     const calendarEntries = await Calendar.find({})
         .populate('user', { username: 1, firstName: 1, lastName: 1 })
-    console.log('calendarEntries', calendarEntries)
     res.json(calendarEntries.map(c => c.toJSON()))
 })
 
@@ -31,7 +28,6 @@ calendarRouter.get('/search/:search', async (req, res) => {
     const title = req.params.search
     const calendar = await Calendar.find({ title: title })
         .populate('user', { username: 1, firstName: 1, lastName: 1 })
-    console.log('calendar', calendar)
     res.json(calendar.map(c => c.toJSON()))
 })
 
@@ -58,7 +54,6 @@ calendarRouter.post('/', async (req, res) => {
         let returnedEntry = await calendarEntry.save()
         calendarEntry = calendarEntries.concat(returnedEntry)
         newDate = moment(newDate).add(1, 'day').format('YYYY-MM-DD')
-        console.log('newDate', newDate)
     }
     res.json(calendarEntries.map(c => c.toJSON()))
 })
@@ -68,8 +63,6 @@ calendarRouter.delete('/:id', async (req, res) => {
     const decodedToken = jwt.verify(token, process.env.SECRET)
     const calendarEntry = await Calendar.findById(req.params.id)
     const user = await User.findById(calendarEntry.user)
-    console.log('calendarEntry.user', calendarEntry.user)
-    console.log('decodedToken.id', decodedToken.id)
     if (!token || !decodedToken.id) {
         res.status(401).json({ error: 'Token missing or invalid.' })
     } else if (decodedToken.id === user._id.toString()) {
@@ -79,6 +72,5 @@ calendarRouter.delete('/:id', async (req, res) => {
         res.status(401).json({error: 'Unauthorized'})
     }
 })
-
 
 module.exports = calendarRouter

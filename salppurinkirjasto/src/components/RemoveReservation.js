@@ -54,26 +54,9 @@ const RemoveReservation = ({ id, reservations, setReservations }) => {
     const remove = async () => {
         try {
             const reservation = await reservationService.getOne(id)
-            //console.log('reservationToRemove', reservation)
-            /* const search = `title=${reservation.book}&isbn=`
-            const booksToChange = await bookService.search(search)
-            let changedBooks = books
-            let changedSelectedBooks = selectedBooks
-            let i = 0
-            for (i = 0; i < booksToChange.length; i++) {
-                let bookToChange = booksToChange[i]
-                let changedReservations = await bookToChange.reservations.filter(r => r.id !== id).map(r => r.id.toString())
-                let changedBook = await bookService.update(bookToChange.id, { reservations: changedReservations })
-                if (books.length < 0 && selectedBooks.length > 0) {
-                    changedBooks = await changedBooks.map(b => b.id === changedBook.id ? changedBook : b)
-                    changedSelectedBooks = await changedSelectedBooks.map(b => b.id === changedBook.id ? changedBook : b)
-                }
-            } */
             await removalOfReservationFromBook(id, reservation, books, selectedBooks, dispatch)
             await removalOfCalendarEntry(id, reservation)
             await removalOfReservation(id, reservations, setReservations)
-            /* dispatch(setBooks(changedBooks))
-            dispatch(setSelectedBooks(changedSelectedBooks)) */
             dispatch(setMessage('Varauksen poistaminen onnistui.'))
             setTimeout(() => {
                 dispatch(setMessage(''))

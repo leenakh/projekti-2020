@@ -2,7 +2,6 @@ const reservationsRouter = require('express').Router()
 const Reservation = require('../models/reservation')
 const moment = require('moment')
 const User = require('../models/user')
-const Book = require('../models/book')
 const jwt = require('jsonwebtoken')
 
 getTokenFrom = req => {
@@ -20,13 +19,11 @@ reservationsRouter.get('/', async (req, res) => {
 
 reservationsRouter.get('/:id', async (req, res) => {
     const reservation = await Reservation.findById(req.params.id)
-    //.populate('book', { title: 1, authors: 1, languages: 1, isbn: 1, copy: 1 })
     res.json(reservation.toJSON())
 })
 
 reservationsRouter.get('/:user/reservations', async (req, res) => {
     const user = await User.find({ username: req.params.user })
-    console.log('user', user)
     const reservations = await Reservation.find({ user: user[0]._id.toString() })
     res.json(reservations.map(r => r.toJSON()))
 })
@@ -39,7 +36,6 @@ reservationsRouter.post('/', async (req, res) => {
         return res.status(401).json({ error: 'token missing or invalid' })
     }
     const user = await User.findById(decodedToken.id)
-    //const book = await Book.findById(body.bookId)
 
     if (moment(body.beginDate).isSameOrBefore(moment(body.endDate))) {
         const reservation = new Reservation({
@@ -61,7 +57,6 @@ reservationsRouter.post('/', async (req, res) => {
 reservationsRouter.put('/:id', async (req, res) => {
     const token = getTokenFrom(req)
     const decodedToken = jwt.verify(token, process.env.SECRET)
-    //const user = await User.findById(decodedToken.id)
     if (!token || !decodedToken.id) {
         return res.status(401).json({ error: 'token missing or invalid' })
     }

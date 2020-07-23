@@ -6,7 +6,6 @@ const Confirmation = ({ execute, setShowConfirm, setShowInfo }) => {
         if (value === true) {
             execute()
         } else {
-            //setShowConfirm(false)
             console.log('Eiku')
         }
         setShowConfirm(false)

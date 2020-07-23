@@ -3,7 +3,6 @@ const Book = require('../models/book')
 const User = require('../models/user')
 const Customer = require('../models/customer')
 const Loan = require('../models/loan')
-const bcrypt = require('bcrypt')
 
 router.post('/bookdata', async (req, res) => {
     await Book.insertMany(req.body)

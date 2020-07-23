@@ -4,6 +4,7 @@ import Info from '../components/Info'
 import RemoveReservation from '../components/RemoveReservation'
 import ReceiveReservation from '../components/ReceiveReservation'
 import DisableReservation from './DisableReservation'
+import { dateFormat } from '../components/DateFormat'
 
 const UserInfo = ({ user, setBeginDate, setEndDate }) => {
     const [reservations, setReservations] = useState([])
@@ -29,11 +30,9 @@ const UserInfo = ({ user, setBeginDate, setEndDate }) => {
             }
             return 'Kyllä'
         }
-        const beginParts = information[3].split('-')
-        const endParts = information[4].split('-')
         const course = { propertyName: 'Opetusryhmä', propertyValue: `${information[5]}` }
-        const begin = { propertyName: 'Alkaa', propertyValue: `${beginParts[2]}.${beginParts[1]}.${beginParts[0]}` }
-        const end = { propertyName: 'Päättyy', propertyValue: `${endParts[2]}.${endParts[1]}.${endParts[0]}` }
+        const begin = { propertyName: 'Alkaa', propertyValue: dateFormat(information[3]) }
+        const end = { propertyName: 'Päättyy', propertyValue: dateFormat(information[4]) }
         const status = { propertyName: `Lunastettu`, propertyValue: `${statusValue()}` }
         return [title, copies, status, begin, end, course]
     }

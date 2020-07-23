@@ -40,7 +40,7 @@ export const ReturnBook = () => {
         <Info information={showInfo([book.title, book.copy, book.loan.customer])} /> 
         </> :
         null}
-        {showConfirm !== false ? <Confirmation execute={returnBook} setShowConfirm={setShowConfirm} /> : null}
+        {showConfirm !== false ? <Confirmation execute={returnBook} setShowConfirm={setShowConfirm} setShowInfo={setShowReturnInfo} /> : null}
       </div>
     </>
   )

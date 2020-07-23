@@ -57,16 +57,13 @@ export const fetchBook = (title, isbn) => {
     return async dispatch => {
         try {
             const search = `title=${title}&isbn=${isbn}`
-            console.log(search)
             fetchedBooks = await bookService.search(search)
             const uniqueBookTitles = [...new Set(fetchedBooks.map(b => b.title))]
-            console.log(uniqueBookTitles)
             if (uniqueBookTitles.length > 0) {
                 dispatch(setBookTitles(uniqueBookTitles))
                 dispatch(setBooks(fetchedBooks))
                 dispatch(setSelectedBooks(fetchedBooks))
             } else {
-                //dispatch(setErrorMessage(fetchBookFailMessage))
                 dispatch(setBookTitles([]))
                 setTimeout(() => {
                     dispatch(setErrorMessage(null))
@@ -77,12 +74,5 @@ export const fetchBook = (title, isbn) => {
         }
     }
 }
-
-/* export const updateBooksReservations = (bookTitle, reservationId) => {
-    return async dispatch => {
-        const books = await booksService.fetchBook(bookTitle, '')
-        const updatedBooks = await books.map(b => b.reservations.filter(r => r.id !== reservationId))
-    }
-} */
 
 export default booksReducer

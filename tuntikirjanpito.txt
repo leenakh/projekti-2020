@@ -55,12 +55,19 @@ PVM		TUNTIA		TEHTÄVÄ
 11.7.2020	1,5		Filtteröityjen tietojen päivittyminen näkymään korjattu. Varauskalenterin viimeistelyä: kalenteriruudun päivämäärän esittäminen näkymässä dynaamisesti, viikkonumeroiden esittäminen.
 15.7.2020	3		Responsiivisen alasvetovalikon toteutus. Kirjan tietojen esitystavan viimeistelyä (lainauslomakkeen avaaminen/sulkeminen, kirjoittajien ja lainaustietojen näyttäminen/piilottaminen). Komponenttien tyylin ja asettelun hiomista.
 17.7.2020	4,5		Customer-komponentti asiakkaan tietojen esittämistä varten. Alasvetovalikon hienosäätöä. CreateBook-lomakkeeseen mahdollisuus lisätä kirjalle julkaisuvuosi.
-18.7.2020	3		Customer-komponentin kehittelyä edelleen: asiakkaan lainojen esitysmuodon hiomista, filtteröinnin toteutus (kaikki lainat / palauttamattomat lainat), toiminnallisuus lainauskiellon asettamista varten.
+18.7.2020	4		Customer-komponentin kehittelyä edelleen: tyylittelyä, asiakkaan lainojen esitysmuodon hiomista, filtteröinnin toteutus (kaikki lainat / palauttamattomat lainat), toiminnallisuus lainauskiellon asettamista varten. Funktio päivämäärän formatointia varten.
+19.7.2020	2,5		Customer-komponentin tyylittelyä: lainojen esittäminen värikoodein (erääntyneet / laina-aikaa jäljellä tai palautetut lainat). Lainakieltojen asettaminen automaattisesti niille asiakkaille, joilla erääntyneitä lainoja (ajastettu toistuva funktio). Customer-komponentista pääsy kirjan lainauslomakkeelle (alustava toteutus). Sovelluksen rakenteen parannussuunnitelmien pohtimista.
+20.7.2020	1,5		Customer-komponentin reititysongelman selvittelyä ja (ainakin alustava) ratkaisu parametrisoitua routeria käyttämällä.
+21.7.2020	3,5		MaterialUI-tyylikirjaston käyttöönotto ja valikkokuvakkeen lisääminen. Asiakastietojen esittämiseen käytettävien komponenttien kehittämistä: asiakaslista reduxiin, tietokantayhteyksien harventamista. UseEffectin (lainakieltojen asettaminen automaattisesti) lakannut toimimasta; ongelman selvittelyä.
+22.7.2020	1		Automaattinen lainauskieltojen asettaminen siirretty backendin tehtäväksi. Tyylin hiomista.
+23.7.2020	4		Siivoilua. Päivämäärän käsittely muutettu käyttämään eriytettyä funktiota kaikissa komponenteissa (ja yksi uusi funktio kirjoitettu). Message-komponentin tyylittelyä.
 -----------------------------------
-Yhteensä	145
+Yhteensä	161,5
 
 TODO
-Lainauskielto automaattisesti?
+Customer-komponentin tekemät tietokantakyselyt: kaksin- ja kolminkertaiset yhteydenotot?
+Tietokantaan kertyvän datan rajaaminen?
+Responsiivisuus: fontin suurentaminen pienemmällä näytöllä?
 Hakutermisyötteen käsittely virtaviivaisemmaksi?
 Komponenttien näkyvyyden säätelyyn jokin patenttiratkaisu? Props.children?
 Lainan uusiminen

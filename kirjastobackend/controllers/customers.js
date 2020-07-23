@@ -1,7 +1,6 @@
 customersRouter = require('express').Router()
 const Customer = require('../models/customer')
 const Loan = require('../models/loan')
-const User = require('../models/user')
 const jwt = require('jsonwebtoken')
 
 const getTokenFrom = req => {
@@ -12,22 +11,41 @@ const getTokenFrom = req => {
 }
 
 customersRouter.get('/', async (req, res) => {
+    const token = getTokenFrom(req)
+    const decodedToken = jwt.verify(token, process.env.SECRET)
+    if (!token || !decodedToken.id) {
+        res.status(401).json({ error: 'token missing or invalid' })
+    }
     const customers = await Customer.find({})
     res.json(customers.map(customer => customer.toJSON()))
 })
 
 customersRouter.get('/search/:id', async (req, res) => {
+    const token = getTokenFrom(req)
+    const decodedToken = jwt.verify(token, process.env.SECRET)
+    if (!token || !decodedToken.id) {
+        res.status(401).json({ error: 'token missing or invalid' })
+    }
     const customers = await Customer.find({username: req.params.id})
-    console.log('customer', customers)
     res.json(customers.map(customer => customer.toJSON()))
 })
 
 customersRouter.get('/:id', async (req, res) => {
+    const token = getTokenFrom(req)
+    const decodedToken = jwt.verify(token, process.env.SECRET)
+    if (!token || !decodedToken.id) {
+        res.status(401).json({ error: 'token missing or invalid' })
+    }
     const customer = await Customer.findOne({ username: req.params.id })
     res.json(customer.toJSON())
 })
 
 customersRouter.get('/:id/loans', async (req, res) => {
+    const token = getTokenFrom(req)
+    const decodedToken = jwt.verify(token, process.env.SECRET)
+    if (!token || !decodedToken.id) {
+        res.status(401).json({ error: 'token missing or invalid' })
+    }
     const customersLoans = await Loan.find({ customer: req.params.id })
         .populate('book', { title: 1, authors: 1, copy: 1 })
     res.json(customersLoans.map(loan => loan.toJSON()))

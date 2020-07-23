@@ -7,22 +7,34 @@ const setToken = newToken => {
 }
 
 const getAll = async () => {
-    const response = await axios.get(baseUrl)
+    const config = {
+        headers: { Authorization: token }
+    }
+    const response = await axios.get(baseUrl, config)
     return response.data
 }
 
 const getOne = async (id) => {
-    const response = await axios.get(`${baseUrl}/${id}`)
+    const config = {
+        headers: { Authorization: token }
+    }
+    const response = await axios.get(`${baseUrl}/${id}`, config)
     return response.data
 }
 
 const search = async (id) => {
-    const response = await axios.get(`${baseUrl}/search/${id}`)
+    const config = {
+        headers: { Authorization: token }
+    }
+    const response = await axios.get(`${baseUrl}/search/${id}`, config)
     return response.data
 }
 
 const getLoans = async (id) => {
-    const response = await axios.get(`${baseUrl}/${id}/loans`)
+    const config = {
+        headers: { Authorization: token }
+    }
+    const response = await axios.get(`${baseUrl}/${id}/loans`, config)
     return response.data
 }
 

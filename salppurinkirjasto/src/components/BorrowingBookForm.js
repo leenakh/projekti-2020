@@ -4,6 +4,7 @@ import { setCustomer } from '../reducers/customerReducer'
 import { createLoan } from '../reducers/loansReducer'
 import Confirmation from '../components/Confirmation'
 import Info from '../components/Info'
+import { dateFormat } from '../components/DateFormat'
 
 export const BorrowingBookForm = ({ beginDate, setBeginDate, endDate, setEndDate }) => {
   const [showConfirm, setShowConfirm] = useState(false)
@@ -19,31 +20,25 @@ export const BorrowingBookForm = ({ beginDate, setBeginDate, endDate, setEndDate
     setEndDate(returnDate)
   }
   const customer = useSelector(state => state.customer)
+  const customers = useSelector(state => state.customerInfo)
   const books = useSelector(state => state.selectedBooks)
   const allBooks = useSelector(state => state.books)
   const book = useSelector(state => state.book)
-  const beginDateParts = beginDate.split('-')
-  const endDateParts = endDate.split('-')
-  const beginDateString = `${beginDateParts[2]}.${beginDateParts[1]}.${beginDateParts[0]}`
-  const endDateString = `${endDateParts[2]}.${endDateParts[1]}.${endDateParts[0]}`
 
   const showInfo = (information) => {
     const title = { propertyName: `Nimeke`, propertyValue: `${information[0]}` }
     const copy = { propertyName: `Nide`, propertyValue: `${information[1]}` }
-    const beginParts = information[2].split('-')
-    const endParts = information[3].split('-')
-    const begin = { propertyName: 'Alkaa', propertyValue: `${beginParts[2]}.${beginParts[1]}.${beginParts[0]}` }
-    const end = { propertyName: 'Päättyy', propertyValue: `${endParts[2]}.${endParts[1]}.${endParts[0]}` }
+    const begin = { propertyName: 'Alkaa', propertyValue: `${dateFormat(information[2])}` }
+    const end = { propertyName: 'Päättyy', propertyValue: `${dateFormat(information[3])}` }
     const customer = { propertyName: 'Asiakas', propertyValue: `${information[4]}` }
     return [title, copy, begin, end, customer]
   }
 
   const borrowBook = () => {
     setShowLoanInfo(false)
-    dispatch(createLoan(beginDate, endDate, customer, book.id, books, allBooks))
+    dispatch(createLoan(beginDate, endDate, customer, customers, book.id, books, allBooks))
       .then(() => {
         dispatch(setCustomer(''))
-        console.log('päivä')
       })
   }
 
@@ -67,7 +62,7 @@ export const BorrowingBookForm = ({ beginDate, setBeginDate, endDate, setEndDate
       </form>
       <div>
         {showLoanInfo !== false ? <Info information={showInfo([book.title, book.copy, beginDate, endDate, customer])} /> : null}
-        {showConfirm !== false ? <Confirmation execute={borrowBook} setShowConfirm={setShowConfirm} /> : null}
+        {showConfirm !== false ? <Confirmation execute={borrowBook} setShowConfirm={setShowConfirm} setShowInfo={setShowLoanInfo} /> : null}
       </div>
     </>
   )

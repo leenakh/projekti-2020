@@ -11,17 +11,12 @@ const ReceiveReservation = ({ id, setBeginDate, setEndDate }) => {
 
     const fetchReservedBooks = async (reservation) => {
         try {
-            console.log('search', reservation.book)
             const search = `title=${reservation.book}&isbn=`
             const reservedBooks = await bookService.search(search)
             let rBooks = []
             for (let b of reservedBooks) {
-                console.log('b', b)
                 for (let r of b.reservations) {
-                    console.log('r', r.id)
-                    console.log('id', id)
                     if (r.id === id) {
-                        console.log('b', b)
                         rBooks = [...rBooks, b]
                     }
                 }
@@ -41,11 +36,11 @@ const ReceiveReservation = ({ id, setBeginDate, setEndDate }) => {
         history.push("/lainaa")
     }
 
-        return (
-            <div>
-                <button onClick={handleReceive} >Lunasta varaus</button>
-            </div>
-        )
+    return (
+        <div>
+            <button onClick={handleReceive} >Lunasta varaus</button>
+        </div>
+    )
 }
 
 export default ReceiveReservation

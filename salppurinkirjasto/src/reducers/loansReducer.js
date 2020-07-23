@@ -3,6 +3,7 @@ import bookService from '../services/books'
 import customerService from '../services/customers'
 import { setBook } from '../reducers/bookReducer'
 import { setCustomer } from '../reducers/customerReducer'
+import { setCustomers } from '../reducers/customerInfoReducer'
 import { setMessage } from '../reducers/messageReducer'
 import { setErrorMessage } from '../reducers/errorMessageReducer'
 import { setBooks } from '../reducers/booksReducer'
@@ -16,6 +17,8 @@ export const loansReducer = (state = null, action) => {
     switch (action.type) {
         case 'SET_LOAN':
             return action.data
+        case 'CUSTOMERS_LOANS':
+            return action.data
         default:
             return state
     }
@@ -28,17 +31,17 @@ export const setLoan = (loan) => {
     }
 }
 
-export const createLoan = (beginDate, endDate, customer, bookId, books, allBooks) => {
+export const createLoan = (beginDate, endDate, customer, customers, bookId, books, allBooks) => {
     return async dispatch => {
         try {
             const requestedCustomer = await customerService.search(customer)
-            console.log('requested customer', requestedCustomer)
             dispatch(setCustomer(customer))
             if (requestedCustomer.length === 0) {
                 const newCustomer = await customerService.create({
                     username: customer
                 })
-                console.log('newCustomer', newCustomer)
+                const changedCustomers = [...customers, newCustomer]
+                dispatch(setCustomers(changedCustomers))
             }
             const loan = {
                 beginDate: beginDate,
@@ -83,26 +86,38 @@ export const returnLoan = (book, books, allBooks) => {
                 returned: true
             }
             const returnedBook = await bookService.update(book.id, { loanId: null })
-            console.log('returnedBook', returnedBook)
             const returnedLoan = await loanService.update(book.loan.id, changedLoan)
             dispatch(setBook(returnedBook))
             dispatch(setSelectedBooks(books.map(b => b.id !== returnedBook.id ? b : returnedBook)))
             const filteredAllBooks = allBooks.map(b => b.id !== returnedBook.id ? b : returnedBook)
             dispatch(setBooks(filteredAllBooks))
-            console.log('returnedLoan', returnedLoan)
             dispatch({
                 type: 'SET_LOAN',
                 data: returnedLoan
             })
             dispatch(setMessage(returningMessage))
-            setTimeout(() => {
+            /* setTimeout(() => {
                 dispatch(setMessage(null))
-            }, 5000)
+            }, 5000) */
         } catch (exception) {
             dispatch(setErrorMessage(returningFailMessage))
             setTimeout(() => {
                 dispatch(setErrorMessage(null))
             }, 5000)
+        }
+    }
+}
+
+export const getCustomersLoans = (customer) => {
+    return async dispatch => {
+        try {
+            const loans = await customerService.getLoans(customer)
+            dispatch({
+                type: 'CUSTOMERS_LOANS',
+                data: loans
+            })
+        } catch (exception) {
+            console.log('Asiakkaan lainojen hakeminen ei onnistunut.')
         }
     }
 }

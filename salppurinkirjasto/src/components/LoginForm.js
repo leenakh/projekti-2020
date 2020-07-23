@@ -28,8 +28,6 @@ export const LoginForm = ({ setUser }) => {
       reservationService.setToken(user.token)
       calendarService.setToken(user.token)
       setUser(user)
-      setUsername('')
-      setPassword('')
     } catch (exception) {
       dispatch(setErrorMessage(loginError))
       setTimeout(() => {

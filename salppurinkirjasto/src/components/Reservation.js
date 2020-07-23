@@ -1,21 +1,20 @@
 import React, { useState } from 'react'
 import Confirmation from '../components/Confirmation'
-import Calendar from '../components/Calendar'
 import { useDispatch, useSelector } from 'react-redux'
 import { setMessage } from '../reducers/messageReducer'
 import { setErrorMessage } from '../reducers/errorMessageReducer'
 import { setSelectedBooks } from '../reducers/selectedBooksReducer'
-import { setBooks, fetchBook } from '../reducers/booksReducer'
-import { setBookTitles } from '../reducers/bookTitlesReducer'
+import { setBooks } from '../reducers/booksReducer'
 import reservationService from '../services/reservations'
 import bookService from '../services/books'
 import calendarService from '../services/calendar'
 import Info from '../components/Info'
+import { dateFormat } from '../components/DateFormat'
 
 export const reservationMessage = 'Kirjan varaaminen onnistui.'
 export const reservationFailMessage = 'Kirjan varaaminen ei onnistunut.'
 
-const Reservation = ({ beginDate, setBeginDate, endDate, setEndDate, reservations, setReservations }) => {
+const Reservation = ({ beginDate, setBeginDate, endDate, setEndDate, setReservations }) => {
     const dispatch = useDispatch()
     const books = useSelector(state => state.books)
     const selectedBooks = useSelector(state => state.selectedBooks)
@@ -23,7 +22,6 @@ const Reservation = ({ beginDate, setBeginDate, endDate, setEndDate, reservation
     const [course, setCourse] = useState('')
     const [showConfirm, setShowConfirm] = useState(false)
     const [showReservationInfo, setShowReservationInfo] = useState(false)
-    const [reservationToMake, setReservationToMake] = useState(null)
 
     let bookToReserve = ''
     if (selectedBooks) {
@@ -39,19 +37,13 @@ const Reservation = ({ beginDate, setBeginDate, endDate, setEndDate, reservation
         const returnDate = end.toISOString().substring(0, 10)
         setEndDate(returnDate)
     }
-    const beginDateParts = beginDate.split('-')
-    const beginDateString = `${beginDateParts[2]}.${beginDateParts[1]}.${beginDateParts[0]}`
-    const endDateParts = endDate.split('-')
-    const endDateString = `${endDateParts[2]}.${endDateParts[1]}.${endDateParts[0]}`
 
     const showInfo = (information) => {
         const title = { propertyName: `Nimeke`, propertyValue: `${information[0]}` }
         const copies = { propertyName: `Niteitä`, propertyValue: `${information[1]}` }
-        const beginParts = information[2].split('-')
-        const endParts = information[3].split('-')
-        const course = {propertyName: 'Opetusryhmä', propertyValue: `${information[4]}`}
-        const begin = { propertyName: 'Alkaa', propertyValue: `${beginParts[2]}.${beginParts[1]}.${beginParts[0]}` }
-        const end = { propertyName: 'Päättyy', propertyValue: `${endParts[2]}.${endParts[1]}.${endParts[0]}` }
+        const course = { propertyName: 'Opetusryhmä', propertyValue: `${information[4]}` }
+        const begin = { propertyName: 'Alkaa', propertyValue: dateFormat(information[2]) }
+        const end = { propertyName: 'Päättyy', propertyValue: dateFormat(information[3]) }
         return [title, copies, begin, end, course]
     }
 
@@ -83,7 +75,6 @@ const Reservation = ({ beginDate, setBeginDate, endDate, setEndDate, reservation
                 setShowConfirm(false)
                 setShowReservationInfo(false)
                 await reservationService.remove(returnedReservation.id)
-                console.log('Liian vähän niteitä varattavissa.')
                 return
             }
             let i = 0
@@ -106,15 +97,13 @@ const Reservation = ({ beginDate, setBeginDate, endDate, setEndDate, reservation
                     numberOfReservedBooks++
                     booksToChange = booksToChange.map(b => b.id !== changedBook.id ? b : changedBook)
                     changedBooks = changedBooks.map(b => b.id !== changedBook.id ? b : changedBook)
-                    let returnedCalendarEntry = await calendarService.create({ title: changedBook.title, reservation: returnedReservation })
-                    console.log('returnedCalendar', returnedCalendarEntry)
+                    await calendarService.create({ title: changedBook.title, reservation: returnedReservation })
                 }
             }
             setReservations(reservations.concat(returnedReservation))
             setShowReservationInfo(false)
             dispatch(setSelectedBooks((changedBooks)))
             dispatch(setBooks(booksToChange))
-            //dispatch(setBookTitles(null))
             dispatch(setMessage(reservationMessage))
             setTimeout(() => {
                 dispatch(setMessage(''))
@@ -152,7 +141,7 @@ const Reservation = ({ beginDate, setBeginDate, endDate, setEndDate, reservation
             </form>
             <div>
                 {showReservationInfo !== false ? <Info information={showInfo([bookToReserve, numberOfCopies, beginDate, endDate, course])} /> : null}
-                {showConfirm !== false ? <Confirmation execute={makeReservation} setShowConfirm={setShowConfirm} setShowInfo={setShowReservationInfo}/> : null}
+                {showConfirm !== false ? <Confirmation execute={makeReservation} setShowConfirm={setShowConfirm} setShowInfo={setShowReservationInfo} /> : null}
             </div>
         </>
     )

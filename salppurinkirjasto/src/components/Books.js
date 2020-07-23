@@ -1,29 +1,25 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import Book from '../components/Book'
 import { ReturnBook } from '../components/ReturnBook'
 import { setSelectedBooks } from '../reducers/selectedBooksReducer'
-import { setBooks } from '../reducers/booksReducer'
 import ChooseBook from '../components/ChooseBook'
 
 const Books = ({ borrowingBookForm }) => {
     const selectedBooks = useSelector(state => state.selectedBooks)
-    //const books = useSelector(state => state.books)
     const dispatch = useDispatch()
     const book = useSelector(state => state.book)
     const [filter, setFilter] = useState('ALL')
-    const [books, setBooks] = useState(selectedBooks)
+    const [books] = useState(selectedBooks)
 
     const handleFilterBooks = () => {
         if (filter === 'ALL') {
             dispatch(setSelectedBooks(selectedBooks.filter(b => b.loan === null || b.loan === undefined)))
             setFilter('FILTERED')
-            console.log('books', books)
         }
         else if (filter === 'FILTERED') {
             dispatch(setSelectedBooks(books))
             setFilter('ALL')
-            console.log('books', books)
         }
     }
 

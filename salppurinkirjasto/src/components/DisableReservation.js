@@ -1,16 +1,11 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useHistory } from 'react-router-dom'
-import bookService from '../services/books'
 import reservationService from '../services/reservations'
-import { setSelectedBooks } from '../reducers/selectedBooksReducer'
-import { setBook } from '../reducers/bookReducer'
 import { removalOfReservationFromBook } from '../components/RemoveReservation'
 import { removalOfCalendarEntry } from '../components/RemoveReservation'
 
 const DisableReservation = ({ id, reservations, setReservations }) => {
     const dispatch = useDispatch()
-    const history = useHistory()
     const books = useSelector(state => state.books)
     const selectedBooks = useSelector(state => state.selectedBooks)
 

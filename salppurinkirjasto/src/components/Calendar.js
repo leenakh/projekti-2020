@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import calendarService from '../services/calendar'
-import loanService from '../services/loans'
+import { dateFormat } from '../components/DateFormat'
+import { dateFormatReverse } from '../components/DateFormat'
 
 const Calendar = ({ setBeginDate, setEndDate }) => {
     const books = useSelector(state => state.selectedBooks)
@@ -12,7 +13,6 @@ const Calendar = ({ setBeginDate, setEndDate }) => {
     useEffect(() => {
         const getCalendarEntries = async () => {
             const entries = await calendarService.search(books[0].title)
-            console.log('calendarEntries', entries)
             setCalendarEntries(entries)
         }
         getCalendarEntries()
@@ -30,8 +30,7 @@ const Calendar = ({ setBeginDate, setEndDate }) => {
         for (i = 0; i < 300; i++) {
             let newDateString = newDate.toISOString().substring(0, 10)
             let result = calendarEntries.filter(c => c.date === newDateString)
-            let dateStringParts = newDateString.split('-')
-            let dateString = `${dateStringParts[2]}.${dateStringParts[1]}.${dateStringParts[0]}`
+            let dateString = dateFormat(newDateString)
             let names = result.map(c => c.user.username)
             const uniqueNames = [...new Set(names)]
             //const uniqueNamesArray = Array.from(uniqueNames)
@@ -64,16 +63,12 @@ const Calendar = ({ setBeginDate, setEndDate }) => {
             i = 0
             while (i < 7) {
                 let reservation = reservations[y]
-                console.log('reservation', reservation)
                 let rs = row.reservation.concat(reservation)
                 row = { ...row, reservation: rs }
-                console.log('row', row)
                 i++
                 y++
             }
             rows = rows.concat(row)
-            console.log('rows', rows)
-
         }
         setRows(rows)
     }
@@ -83,8 +78,7 @@ const Calendar = ({ setBeginDate, setEndDate }) => {
     }
 
     const handleChooseDate = (begin) => {
-        const beginDateParts = begin.split('.')
-        const beginDate = `${beginDateParts[2]}-${beginDateParts[1]}-${beginDateParts[0]}`
+        const beginDate = dateFormatReverse(begin)
         setBeginDate(beginDate)
         const endDate = new Date(beginDate)
         endDate.setDate(endDate.getDate() + 28)

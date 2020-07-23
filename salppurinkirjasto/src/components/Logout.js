@@ -1,4 +1,5 @@
 import React from 'react'
+import { useHistory } from 'react-router-dom'
 import { setErrorMessage } from '../reducers/errorMessageReducer'
 import { useDispatch } from 'react-redux'
 import loanService from '../services/loans'
@@ -9,6 +10,7 @@ import calendarService from '../services/calendar'
 
 const Logout = ({ setUser }) => {
   const dispatch = useDispatch()
+  const history = useHistory()
   const handleLogout = async () => {
     try {
       window.localStorage.removeItem('loggedInUser')
@@ -18,6 +20,7 @@ const Logout = ({ setUser }) => {
       reservationService.setToken('')
       calendarService.setToken('')
       setUser(null)
+      history.push('/')
     } catch (exception) {
       dispatch(setErrorMessage('Could not log out'))
       setTimeout(() => {
