@@ -4,10 +4,10 @@ import { returnLoan } from '../reducers/loansReducer'
 import Confirmation from '../components/Confirmation'
 import Info from '../components/Info'
 
-export const ReturnBook = () => {
+export const ReturnBook = ({ book }) => {
   const books = useSelector(state => state.selectedBooks)
   const allBooks = useSelector(state => state.books)
-  const book = useSelector(state => state.book)
+  //const book = useSelector(state => state.book)
   const [showConfirm, setShowConfirm] = useState(false)
   const [showReturnInfo, setShowReturnInfo] = useState(false)
   const dispatch = useDispatch()
@@ -31,18 +31,14 @@ export const ReturnBook = () => {
   }
 
   return (
-    <>
-      <button id="return-button" onClick={handleReturnBook}>Palauta kirja</button>
+    <div className="return-container">
+      {!showConfirm ? <button className="return-button" onClick={handleReturnBook}>Palauta</button> : null}
       <div>
-        {showReturnInfo !== false ? 
-        <>
-        <p>Haluatko palauttaa tämän lainan?</p>
-        <Info information={showInfo([book.title, book.copy, book.loan.customer])} /> 
-        </> :
-        null}
+        {showReturnInfo !== false ?
+            <p>Haluatko palauttaa tämän lainan?</p> : null}
         {showConfirm !== false ? <Confirmation execute={returnBook} setShowConfirm={setShowConfirm} setShowInfo={setShowReturnInfo} /> : null}
       </div>
-    </>
+    </div>
   )
 }
 

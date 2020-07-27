@@ -133,15 +133,11 @@ const App = () => {
         </Route>
 
         <Route path="/asiakas/:id">
-          <div>
-            <Customer />
-          </div>
+          {user !== null ? <Customer /> : null}
         </Route>
 
         <Route path="/asiakas">
-          <div>
-            <Customer />
-          </div>
+          {user !== null ? <Customer /> : null}
         </Route>
 
         <Route path="/hallitse/:username">

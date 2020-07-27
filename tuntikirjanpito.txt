@@ -61,8 +61,12 @@ PVM		TUNTIA		TEHTÄVÄ
 21.7.2020	3,5		MaterialUI-tyylikirjaston käyttöönotto ja valikkokuvakkeen lisääminen. Asiakastietojen esittämiseen käytettävien komponenttien kehittämistä: asiakaslista reduxiin, tietokantayhteyksien harventamista. UseEffectin (lainakieltojen asettaminen automaattisesti) lakannut toimimasta; ongelman selvittelyä.
 22.7.2020	1		Automaattinen lainauskieltojen asettaminen siirretty backendin tehtäväksi. Tyylin hiomista.
 23.7.2020	4		Siivoilua. Päivämäärän käsittely muutettu käyttämään eriytettyä funktiota kaikissa komponenteissa (ja yksi uusi funktio kirjoitettu). Message-komponentin tyylittelyä.
+24.7.2020	3		Refaktorointia käyttäjäkokemuksen selkeyttämiseksi.
+25.7.2020	2		Tyylittelyä (css).
+26.7.2020	3		Tyylittelyä (css).
+27.7.2020	5		Käyttöliittymän logiikan yksinkertaistamista. Tyylittelyä (css).
 -----------------------------------
-Yhteensä	161,5
+Yhteensä	174,5
 
 TODO
 Customer-komponentin tekemät tietokantakyselyt: kaksin- ja kolminkertaiset yhteydenotot?

@@ -53,21 +53,27 @@ const UserInfo = ({ user, setBeginDate, setEndDate }) => {
 
     if (user) {
         return (
-            <>
-                <div>
-                    <h3>Omat varaukset</h3>
-                    <button onClick={toggle}>{toggleText}</button>
-                    <ul id="books">
-                        {reservationsToShow.map(r =>
-                            <li id="reservation" key={r.id}>
-                                <Info information={showInfo([r.book, r.numberOfCopies, r.received, r.beginDate, r.endDate, r.course])} />
-                                <RemoveReservation id={r.id} reservations={reservations} setReservations={setReservations} />
-                                {r.received === false ? <ReceiveReservation id={r.id} setBeginDate={setBeginDate} setEndDate={setEndDate} /> : null}
-                                {r.received === false ? <DisableReservation id={r.id} reservations={reservations} setReservations={setReservations} /> : null}
-                            </li>)}
-                    </ul>
-                </div>
-            </>
+            <div className="user-info-container">
+                <h3>Omat varaukset</h3>
+                <button className="filter" onClick={toggle}>{toggleText}</button>
+                <ul id="books">
+                    {reservationsToShow.map(r =>
+                        <li id="reservation" key={r.id}>
+                            <Info information={showInfo([r.book, r.numberOfCopies, r.received, r.beginDate, r.endDate, r.course])} />
+                            <div className="button-container">
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <td><RemoveReservation id={r.id} reservations={reservations} setReservations={setReservations} /></td>
+                                            <td>{r.received === false ? <ReceiveReservation id={r.id} setBeginDate={setBeginDate} setEndDate={setEndDate} /> : null}</td>
+                                            <td>{r.received === false ? <DisableReservation id={r.id} reservations={reservations} setReservations={setReservations} /> : null}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </li>)}
+                </ul>
+            </div>
         )
     }
     return null

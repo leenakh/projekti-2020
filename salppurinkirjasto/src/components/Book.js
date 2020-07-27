@@ -1,45 +1,46 @@
 import React, { useState } from 'react'
 import { dateFormat } from '../components/DateFormat'
+import ChooseBook from '../components/ChooseBook'
+import ReturnBook from '../components/ReturnBook'
+import { useSelector } from 'react-redux'
 
-const Book = ({ book }) => {
-    const [showInfo, setShowInfo] = useState(false)
+const Book = ({ currentBook, borrowingBookForm }) => {
+  const [showInfo, setShowInfo] = useState(false)
+  const book = useSelector(state => state.book)
 
-    const toggleShowInfo = () => {
-        setShowInfo(!showInfo)
-    }
+  return (
+    <div className="book">
+      <ul className="book-title-container">
+        <li className="book-title-container">
+          <div className="book-title-container">
+            <div className="book-copy" book={currentBook} >{currentBook.copy}</div><ChooseBook className="choose-book" book={currentBook} showInfo={showInfo} setShowInfo={setShowInfo} />
+          </div>
+        </li>
+      </ul>
+      {showInfo ?
+        <>
+          {currentBook.loan && book && currentBook.id === book.id ?
+            <div className="loan-info-container">
+              <table >
+                <tbody>
+                  <tr><td className="loan-info-cell">Asiakas</td><td>{currentBook.loan.customer}</td></tr>
+                  <tr><td className="loan-info-cell">Lainattu</td><td>{dateFormat(currentBook.loan.beginDate)}</td></tr>
+                  <tr><td className="loan-info-cell">Palautettava</td><td>{dateFormat(currentBook.loan.endDate)}</td></tr>
+                </tbody>
+              </table>
+              <div className="button-container">
+                <ReturnBook book={currentBook} />
+              </div>
+            </div> : null
+          }
+          <div>
+            {book && !currentBook.loan && book.id === currentBook.id ? borrowingBookForm() : null}
+          </div>
+        </> : null}
 
-    return (
-        <div className="book">
-            <ul>
-                <li>
-                    <button className="book-info" onClick={toggleShowInfo} ><div className="title">{book.title}</div></button>
-                </li>
-                {showInfo ?
-                    <div className="authors">
-                        <ul>
-                            <li><b>Kirjoittajat</b></li>
-                            {book.authors.map(a =>
-                                <li key={a.name}>{a.name}</li>)}
-                            <li><b>Julkaisuvuosi</b></li>
-                            <li>{book.published}</li>
-                        </ul>
-                    </div> : null
-                }
 
-                {showInfo && book.loan ?
-                    <div className="loan-info">
-                        <ul>
-                            <li><b>Lainaustiedot</b></li>
-                            <li>Asiakas: {book.loan.customer}</li>
-                            <li>Lainattu: {dateFormat(book.loan.beginDate)}</li>
-                            <li>Palautettava: {dateFormat(book.loan.endDate)}</li>
-                        </ul>
-                    </div> : null
-                }
-            </ul>
-
-        </div>
-    )
+    </div>
+  )
 }
 
 export default Book

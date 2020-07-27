@@ -135,17 +135,11 @@ const Calendar = ({ setBeginDate, setEndDate }) => {
         )
     }
 
-    const style = {
-        textAlign: 'left',
-        minWidth: 600,
-    }
-
     return (
-        <div>
+        <div className="calendar-container">
             {calendarEntries === null ?
                 <button onClick={handleGetCalendar}>Kalenteri</button> :
                 <table className="calendar-table">
-                    <caption style={style}>Varaukset - {books[0].title}</caption>
                     <tbody>
                         {rows.map(row => <tr key={Math.random()}>
                             <td className="calendar-cell">{weekNumber(row)}</td>

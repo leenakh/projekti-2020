@@ -5,8 +5,6 @@ const Confirmation = ({ execute, setShowConfirm, setShowInfo }) => {
     const handleConfirmation = (value) => {
         if (value === true) {
             execute()
-        } else {
-            console.log('Eiku')
         }
         setShowConfirm(false)
         setShowInfo(false)
@@ -14,8 +12,8 @@ const Confirmation = ({ execute, setShowConfirm, setShowInfo }) => {
 
     return (
         <div>
-            <button id="confirmation" onClick={() => handleConfirmation(true)}>Vahvista</button>
-            <button id="cancel" onClick={() => handleConfirmation(false)}>Peruuta</button>
+            <button className="confirm" onClick={() => handleConfirmation(true)}>Vahvista</button>
+            <button className="cancel" onClick={() => handleConfirmation(false)}>Peruuta</button>
         </div>
     )
 }

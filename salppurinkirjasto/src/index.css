@@ -126,6 +126,10 @@ body {
   color: white;
 }
 
+.calendar-container, .reservation-container, .book-title-container {
+  margin-top: 10px;
+}
+
 .calendar-table {
   min-width: 700px
 }
@@ -166,26 +170,41 @@ body {
   float: left;
 }
 
-ul {
-  list-style-type: none;
+.reserve-form {
+  margin-left: 20px;
 }
 
-.book-info {
-  background-color: transparent;
-  padding: 0%;
-  border-style: none;
-  font-size: medium;
-  font-weight: bold;
-  color: darkcyan;
+input {
+  outline-style: none;
+  border-style: hidden;
+  border-radius: 4px;
+  background-color: #eaf3ef;
+  padding: 4px;
+  height: 20px;
+}
+
+input:hover, input:focus, input:active, input:visited {
+  height: 18px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: rgb(121, 179, 179);
+}
+
+input[type="number"], input[type="date"], .course, .customer {
+  width: 10em;
+}
+
+ul {
+  list-style-type: none;
 }
 
 .customer-info {
   position: absolute;
 }
 
-.loan-info {
-  margin-left: 20px;
-  float: left;
+.loan-info-cell, .borrow-form-cell, .fetch-form-cell, .reserve-form-cell, .customer-form-cell, .login-form-cell, .logout-form-cell {
+  min-width: 100px;
+  font-weight: bolder;
 }
 
 .loan-cell {
@@ -214,24 +233,143 @@ ul {
   font-weight: bold;
 }
 
-.choose-book {
+.book-copy {
   display: inline-block;
-  vertical-align: top;
+  margin-bottom: 5px;
+  margin-top: 0px;
+  min-width: 25px;
+  height: 25px;
+  text-align: center;
+  vertical-align: middle;
+  color: darkcyan;
+  background-color: #eaf3ef;
+  font-weight: bold;
+  border-radius: 4px;
+  box-shadow: 0px 3px 6px 0px rgba(211, 221, 217, 1);
 }
 
-.book {
-  display: inline-block;
+.books-container, .user-info-container, .fetch-book-container {
+  padding: 10px;
 }
 
-.authors {
-  float: left;
+ul.book-title-container {
+  position: relative;
+  left: -30px;
 }
 
-.title {
-  margin-left: 20px;
+li.book-title-container {
+  vertical-align: middle;
+  position: relative;
+  left: 0px;
+}
+
+li.book-info-list-item, li.book {
+  margin: 10px;
+  vertical-align: middle;
+  border-style: solid;
+  border-radius: 8px;
+  border-width: 2px;
+  border-color: rgb(121, 179, 179);
+}
+
+.button-container {
+  margin-bottom: 10px;
+  padding: 10px;
+}
+
+.reserve-borrow-button-container {
+  margin-left: 30px;
+  margin-top: 10px;
+  padding: 10px;
+}
+
+.borrow-form-container, .loan-info-container, .customer-form-container, .confirmation-container, .login-form-container, .customer-info {
+  margin-top: 10px;
+  margin-left: 30px;
+}
+
+.book-info {
+  background-color: transparent;
+  padding: 0%;
+  border-style: none;
   font-size: medium;
   font-weight: bold;
   color: darkcyan;
+}
+
+.borrow-return-button, .reserve-button, .borrow-button, .filter, .fetch-book, .customer-button, .receive-button, .remove-button, .disable-button, .set-access-button, .return-button, .confirm, .cancel, .login {
+  display: inline-block;
+  margin-right: 10px;
+  background-color: darkcyan;
+  color: white;
+  font-weight: bolder;
+  border-style: none;
+  border-radius: 6px;
+  outline: none;
+  width: 80px;
+  height: 25px;
+  box-shadow: 0px 3px 6px 0px rgba(211, 221, 217, 1);
+}
+
+.filter {
+  width: 130px;
+}
+
+.logout {
+  font-weight: bolder;
+  border-style: solid;
+  border-width: 1px;
+  border-color: black;
+  border-radius: 6px;
+  outline-style: none;
+  background-color: white;
+  color: black;
+  width: 80px;
+  height: 25px;
+}
+
+.logout:hover {
+  background-color: black;
+  color: white;
+}
+
+.borrow-return-button:hover, .reserve-button:hover, .borrow-button:hover, .filter:hover, .fetch-book:hover, .customer-button:hover, .receive-button:hover, .remove-button:hover, .disable-button:hover, .set-access-button:hover, .return-button:hover, .confirm:hover, .cancel:hover, .login:hover {
+  background-color: white;
+  color: darkcyan;
+  border-style: solid;
+  border-color:rgb(121, 179, 179);
+}
+
+.author-name, .year {
+  font-size: smaller;
+  margin-left: 10px;
+  margin-bottom: 5px;
+  margin-top: 5px;
+  padding: 5px;
+  display: inline-block;
+  background-color: #eaf3ef;
+}
+
+.title, .title:visited, .title:focus, .title:active, .choose-book {
+  display: inline-block;
+  margin-left: 20px;
+  margin-top: 0px;
+  height: 25px;
+  vertical-align: text-top;
+  font-size: medium;
+  font-weight: bold;
+  color: darkcyan;
+  border-style: none;
+  outline-style: none;
+  background-color: transparent;
+}
+
+.title:hover {
+  background-color: lemonchiffon;
+}
+
+.book-info:hover {
+  background-color: white;
 }
 
 #overlay {
@@ -255,10 +393,8 @@ ul {
   width: 400px;
   height: 40px;
   border-radius: 20px;
-  border-bottom-left-radius: 40px;
-  border-bottom-right-radius: 40px;
   background-color: #eaf3ef;
-  box-shadow: 0px 8px 16px 0px rgba(211, 221, 217, 1);
+  box-shadow: 0px 6px 12px 0px rgba(211, 221, 217, 1);
 }
 
 #error {

@@ -126,22 +126,22 @@ const Reservation = ({ beginDate, setBeginDate, endDate, setEndDate, setReservat
     return (
         <>
             <div>
-                {bookToReserve !== '' ? <p>{bookToReserve}</p> : <p>Ei valittua kirjaa</p>}
+                {bookToReserve !== '' ? <div className="title">{bookToReserve}</div> : <p>Ei valittua kirjaa</p>}
             </div>
-            <form id="reserve" onSubmit={handleMakeReservation}>
-                <div>
-                    <p>Alkupäivä: <input type="date" value={beginDate} min={dateNow} required pattern="\d{4}-\d{2}-\d{2}" id="beginDate" onChange={({ target }) => handleDate(target.value)} /></p>
-                    <p>Loppupäivä: <input type="date" value={endDate} min={beginDate} id="endDate" onChange={({ target }) => setEndDate(target.value)} /></p>
-                    <p>Määrä: <input type="number" value={numberOfCopies} id="numberOfBooks" onChange={({ target }) => setNumberOfCopies(target.value)} /></p>
-                    <p>Opetusryhmä: <input type="text" value={course} id="course" onChange={({ target }) => setCourse(target.value)} /></p>
-                </div>
-                <div>
-                    <button id="borrow-button" type="submit">Varaa kirja</button>
-                </div>
-            </form>
-            <div>
-                {showReservationInfo !== false ? <Info information={showInfo([bookToReserve, numberOfCopies, beginDate, endDate, course])} /> : null}
-                {showConfirm !== false ? <Confirmation execute={makeReservation} setShowConfirm={setShowConfirm} setShowInfo={setShowReservationInfo} /> : null}
+            <div className="reservation-container">
+                <form className="reserve-form" onSubmit={handleMakeReservation}>
+                    <table>
+                        <tbody>
+                            <tr><td className="reserve-form-cell">Alkaa</td><td><input type="date" value={beginDate} min={dateNow} required pattern="\d{4}-\d{2}-\d{2}" id="beginDate" onChange={({ target }) => handleDate(target.value)} /></td></tr>
+                            <tr><td className="reserve-form-cell">Päättyy</td><td><input type="date" value={endDate} min={beginDate} id="endDate" onChange={({ target }) => setEndDate(target.value)} /></td></tr>
+                            <tr><td className="reserve-form-cell">Määrä</td><td><input type="number" value={numberOfCopies} id="numberOfBooks" onChange={({ target }) => setNumberOfCopies(target.value)} /></td></tr>
+                            <tr><td className="reserve-form-cell">Opetusryhmä</td><td><input type="text" value={course} className="course" onChange={({ target }) => setCourse(target.value)} /></td></tr>
+                        </tbody>
+                    </table>
+                    <div className="button-container">
+                        {!showConfirm ? <button className="reserve-button" type="submit">Varaa</button> : <Confirmation execute={makeReservation} setShowConfirm={setShowConfirm} setShowInfo={setShowReservationInfo} />}
+                    </div>
+                </form>
             </div>
         </>
     )

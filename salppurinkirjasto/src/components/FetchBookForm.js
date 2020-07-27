@@ -17,16 +17,19 @@ export const FetchBookForm = () => {
   }
 
   return (
-    <form onSubmit={handleFetchBook}>
-      <div>
-        <h3>Hae kirja ISBN-tunnuksen tai otsikon perusteella</h3>
-            ISBN: <input type="text" value={isbn} id="isbn" onChange={({ target }) => dispatch(setIsbn(target.value))} />
-            Title: <input type="text" value={title} id="title" onChange={({ target }) => dispatch(setTitle(target.value))} />
-      </div>
-      <div>
-        <button id="fetch" type="submit">Lähetä</button>
-      </div>
-    </form>
+    <div className="fetch-book-container">
+      <form className="fetch-book-form" onSubmit={handleFetchBook}>
+        <table>
+          <tbody>
+            <tr><td className="fetch-form-cell">ISBN-tunnus</td><td><input type="text" value={isbn} id="isbn" onChange={({ target }) => dispatch(setIsbn(target.value))} /></td></tr>
+            <tr><td className="fetch-form-cell">Nimeke</td><td><input type="text" value={title} id="title" onChange={({ target }) => dispatch(setTitle(target.value))} /></td></tr>
+          </tbody>
+        </table>
+        <div className="button-container">
+          <button className="fetch-book" type="submit">Hae</button>
+        </div>
+      </form>
+    </div>
   )
 }
 

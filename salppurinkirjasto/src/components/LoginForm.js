@@ -36,18 +36,19 @@ export const LoginForm = ({ setUser }) => {
     }
   }
   return (
-    <form onSubmit={handleLogin}>
-      <div><h3>Kirjaudu sisään</h3></div>
-      <div>
-        username: <input id="username" type="text" value={username} onChange={({ target }) => setUsername(target.value)} />
-      </div>
-      <div>
-        password: <input id="password" type="password" value={password} onChange={({ target }) => setPassword(target.value)} />
-      </div>
-      <div>
-        <button type="submit" id="login">Kirjaudu sisään</button>
-      </div>
-    </form>
+    <div className="login-form-container">
+      <form onSubmit={handleLogin}>
+        <table>
+          <tbody>
+            <tr><td className="login-form-cell">Käyttäjätunnus</td><td><input id="username" type="text" value={username} onChange={({ target }) => setUsername(target.value)} /></td></tr>
+            <tr><td className="login-form-cell">Salasana</td><td><input id="password" type="password" value={password} onChange={({ target }) => setPassword(target.value)} /></td></tr>
+          </tbody>
+        </table>
+        <div className="button-container">
+          <button type="submit" className="login">Kirjaudu</button>
+        </div>
+      </form>
+    </div>
   )
 }
 

@@ -77,7 +77,7 @@ const RemoveReservation = ({ id, reservations, setReservations }) => {
                     <p>Haluatko varmasti poistaa varauksen?</p>
                     <Confirmation execute={remove} setShowConfirm={setShowRemoveConfirm} />
                 </> :
-                <button onClick={handleRemove}>Poista varaus</button>}
+                <button className="remove-button" onClick={handleRemove}>Poista varaus</button>}
         </div>
 
 

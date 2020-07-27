@@ -30,7 +30,7 @@ const Logout = ({ setUser }) => {
   }
 
   return (
-    <p><button id="logout" onClick={handleLogout}>Kirjaudu ulos</button></p>
+    <p><button className="logout" onClick={handleLogout}>Poistu</button></p>
   )
 }
 

@@ -38,7 +38,7 @@ const ReceiveReservation = ({ id, setBeginDate, setEndDate }) => {
 
     return (
         <div>
-            <button onClick={handleReceive} >Lunasta varaus</button>
+            <button className="receive-button" onClick={handleReceive} >Lunasta varaus</button>
         </div>
     )
 }

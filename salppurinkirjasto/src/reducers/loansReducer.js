@@ -58,10 +58,15 @@ export const createLoan = (beginDate, endDate, customer, customers, bookId, book
             const returnedBook = await bookService.update(bookId, { loanId: returnedLoan.id })
             dispatch(setBook(returnedBook))
             if (!returnedBook.loan) {
+                await loanService.remove(returnedLoan.id)
+                dispatch({
+                    type: 'SET_LOAN',
+                    data: null
+                })
                 dispatch(setErrorMessage(failMessage))
                 setTimeout(() => {
                     dispatch(setErrorMessage(''))
-                }, 5000)
+                }, 3000)
                 dispatch(setBook(null))
             }
             const filteredBooks = books.map(b => b.id !== returnedBook.id ? b : returnedBook)
@@ -72,7 +77,7 @@ export const createLoan = (beginDate, endDate, customer, customers, bookId, book
             dispatch(setErrorMessage(failMessage))
             setTimeout(() => {
                 dispatch(setErrorMessage(null))
-            }, 5000)
+            }, 3000)
         }
     }
 }
@@ -96,14 +101,14 @@ export const returnLoan = (book, books, allBooks) => {
                 data: returnedLoan
             })
             dispatch(setMessage(returningMessage))
-            /* setTimeout(() => {
+            setTimeout(() => {
                 dispatch(setMessage(null))
-            }, 5000) */
+            }, 3000)
         } catch (exception) {
             dispatch(setErrorMessage(returningFailMessage))
             setTimeout(() => {
                 dispatch(setErrorMessage(null))
-            }, 5000)
+            }, 3000)
         }
     }
 }

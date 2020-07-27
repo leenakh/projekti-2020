@@ -17,25 +17,29 @@ const FetchCustomerForm = ({ customerName, setCustomerName }) => {
     }
 
     return (
-        <form id="customer-form" onSubmit={handleSubmitCustomer}>
-            <div>
-                Asiakas: <input type="text" value={customerName} id="customer-name" onChange={({ target }) => setCustomerName(target.value)} />
-            </div>
-            <div>
-                <button id="customer-button">Lähetä</button>
-            </div>
-        </form>
+        <div className="customer-form-container">
+            <form id="customer-form" onSubmit={handleSubmitCustomer}>
+                <table>
+                    <tbody>
+                        <tr><td className="customer-form-cell">Asiakas</td><td><input type="text" value={customerName} id="customer-name" onChange={({ target }) => setCustomerName(target.value)} /></td></tr>
+                    </tbody>
+                </table>
+                <div className="button-container">
+                    <button className="customer-button">Hae</button>
+                </div>
+            </form>
+        </div>
     )
 }
 
 const ToggleLoans = ({ customerInfo, setCustomerInfo }) => {
     const [showAll, setShowAll] = useState(true)
-    const [toggleText, setToggleText] = useState('Näytä kaikki lainat')
+    const [toggleText, setToggleText] = useState('Kaikki')
     const loans = useSelector(state => state.loans)
 
     const toggle = () => {
         setShowAll(!showAll)
-        setToggleText(showAll === false ? 'Näytä kaikki lainat' : 'Näytä palauttamattomat lainat')
+        setToggleText(showAll === false ? 'Kaikki' : 'Palauttamattomat')
         filterLoans()
     }
 
@@ -48,7 +52,7 @@ const ToggleLoans = ({ customerInfo, setCustomerInfo }) => {
         }
     }
 
-    return <button onClick={toggle} title="Vaihda">{toggleText}</button>
+    return <button className="filter" onClick={toggle} title="Vaihda">{toggleText}</button>
 }
 
 const Loan = ({ loan }) => {
@@ -152,9 +156,9 @@ const SetAccess = ({ customerInfo, setCustomerInfo }) => {
     useEffect(() => {
         const access = () => {
             if (customerInfo.info.accessAllowed) {
-                setAccessText('Aseta lainauskielto')
+                setAccessText('Aseta')
             } else {
-                setAccessText('Poista lainauskielto')
+                setAccessText('Poista')
             }
         }
         access()
@@ -168,7 +172,7 @@ const SetAccess = ({ customerInfo, setCustomerInfo }) => {
         dispatch(setCustomers(changedCustomers))
     }
     return (
-        <button onClick={() => handleSetAccess(!customerInfo.info.accessAllowed)}>{accessText}</button>
+        <button className="set-access-button" onClick={() => handleSetAccess(!customerInfo.info.accessAllowed)}>{accessText}</button>
     )
 }
 

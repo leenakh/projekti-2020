@@ -64,4 +64,14 @@ loansRouter.put('/:id', async (req, res) => {
     res.json(returnedLoan.toJSON())
 })
 
+loansRouter.delete('/:id', async (req, res) => {
+    const token = getTokenFrom(req)
+    const decodedToken = jwt.verify(token, process.env.SECRET)
+    if (!token || !decodedToken.id) {
+        return res.status(401).json({ error: 'token missing or invalid' })
+    }
+    await Loan.findByIdAndDelete(req.params.id)
+    res.status(204).end()
+})
+
 module.exports = loansRouter

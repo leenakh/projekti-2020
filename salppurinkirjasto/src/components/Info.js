@@ -2,7 +2,7 @@ import React from 'react'
 
 const Info = ({ information }) => {
     return (
-        <div>
+        <div >
             <table>
                 <tbody>
                     {information.map(i =>

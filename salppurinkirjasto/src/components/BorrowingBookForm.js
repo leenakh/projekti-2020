@@ -49,22 +49,21 @@ export const BorrowingBookForm = ({ beginDate, setBeginDate, endDate, setEndDate
   }
 
   return (
-    <>
+    <div className="borrow-form-container">
       <form id="borrow" onSubmit={handleBorrowingBook}>
-        <div>
-          <p>Alkupäivä: <input type="date" value={beginDate} min={dateNow} required pattern="\d{4}-\d{2}-\d{2}" id="beginDate" onChange={({ target }) => handleDate(target.value)} /></p>
-          <p>Loppupäivä: <input type="date" value={endDate} min={beginDate} id="endDate" onChange={({ target }) => setEndDate(target.value)} /></p>
-          <p>Nimi: <input type="text" value={customer} id="customer" onChange={({ target }) => dispatch(setCustomer(target.value))} /></p>
-        </div>
-        <div>
-          <button id="borrow-button" type="submit">Lainaa kirja</button>
+        <table>
+          <tbody>
+            <tr><td className="borrow-form-cell">Alkaa</td><td><input type="date" value={beginDate} min={dateNow} required pattern="\d{4}-\d{2}-\d{2}" id="beginDate" onChange={({ target }) => handleDate(target.value)} /></td></tr>
+            <tr><td className="borrow-form-cell">Päättyy</td><td><input type="date" value={endDate} min={beginDate} id="endDate" onChange={({ target }) => setEndDate(target.value)} /></td></tr>
+            <tr><td className="borrow-form-cell">Asiakas</td><td><input type="text" value={customer} className="customer" onChange={({ target }) => dispatch(setCustomer(target.value))} /></td></tr>
+          </tbody>
+        </table>
+        <div className="button-container">
+          {showConfirm ? <Confirmation execute={borrowBook} setShowConfirm={setShowConfirm} setShowInfo={setShowLoanInfo} /> :
+            <button className="borrow-button" type="submit">Lainaa</button>}
         </div>
       </form>
-      <div>
-        {showLoanInfo !== false ? <Info information={showInfo([book.title, book.copy, beginDate, endDate, customer])} /> : null}
-        {showConfirm !== false ? <Confirmation execute={borrowBook} setShowConfirm={setShowConfirm} setShowInfo={setShowLoanInfo} /> : null}
-      </div>
-    </>
+    </div>
   )
 }
 
