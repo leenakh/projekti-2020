@@ -10,7 +10,7 @@ const UserInfo = ({ user, setBeginDate, setEndDate }) => {
     const [reservations, setReservations] = useState([])
     const [reservationsToShow, setReservationsToShow] = useState([])
     const [showDisabled, setShowDisabled] = useState(false)
-    const [toggleText, setToggleText] = useState('Näytä kaikki varaukset')
+    const [toggleText, setToggleText] = useState('Kaikki')
 
     useEffect(() => {
         const usersReservations = async () => {
@@ -39,7 +39,7 @@ const UserInfo = ({ user, setBeginDate, setEndDate }) => {
 
     const toggle = () => {
         setShowDisabled(!showDisabled)
-        setToggleText(showDisabled === true ? 'Näytä kaikki varaukset' : 'Näytä aktiiviset varaukset')
+        setToggleText(showDisabled === true ? 'Kaikki' : 'Aktiiviset')
         filterReservations(reservations, showDisabled)
     }
 

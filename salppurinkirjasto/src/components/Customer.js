@@ -74,12 +74,20 @@ const Loan = ({ loan }) => {
         history.push(`/lainaa/${chosenBook.copy}`)
     }
 
+    const style = () => {
+        if (new Date().getTime() - new Date(loan.endDate).getTime() >= 86400000 && loan.returned === false) {
+            return 'loan-cell-red'
+        } else {
+            return 'loan-cell-green'
+        }
+    }
+
     return (
         <table>
             <tbody>
-                <tr><td className="loan-cell"><b>Nimeke</b></td><td className="loan-cell-title"><button title="Muokkaa lainaa" className="book-info" onClick={() => handleChooseBook(loan.book.id)}>{loan.book.title}</button></td><td><b>Nide</b></td><td>{loan.book.copy}</td></tr>
+                <tr><td className="loan-cell"><b>Nimeke</b></td><td className="loan-cell-title"><button title={loan.book.title} className="book-info" onClick={() => handleChooseBook(loan.book.id)}>{loan.book.title}</button></td><td className="loan-cell-copy"><b>Nide</b><span className="loan-cell-copy-number">{loan.book.copy}</span></td></tr>
                 <tr><td className="loan-cell"><b>Lainattu</b></td><td className="loan-cell"><b>Palautuspäivä</b></td><td className="loan-cell"><b>Palautettu</b></td></tr>
-                <tr><td className="loan-cell">{dateFormat(loan.beginDate)}</td><td className="loan-cell">{dateFormat(loan.endDate)}</td><td className="loan-cell">{returned(loan.returned)}</td></tr>
+                <tr><td className="loan-cell">{dateFormat(loan.beginDate)}</td><td className={style()}>{dateFormat(loan.endDate)}</td><td className={style()}>{returned(loan.returned)}</td></tr>
             </tbody>
         </table>
     )

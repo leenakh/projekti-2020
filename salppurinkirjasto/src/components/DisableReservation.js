@@ -23,7 +23,7 @@ const DisableReservation = ({ id, reservations, setReservations }) => {
 
     return (
         <div>
-            <button className="disable-button" onClick={handleDisableReservation} >Arkistoi varaus</button>
+            <button className="disable-button" onClick={handleDisableReservation} >Arkistoi</button>
         </div>
     )
 }

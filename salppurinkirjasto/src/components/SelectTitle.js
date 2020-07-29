@@ -61,7 +61,7 @@ const SelectTitle = () => {
   const bookTitles = useSelector(state => state.bookTitles)
 
   return (
-    <div>
+    <div className="book-info-list-container">
       <ul>
         <li><p>Löytyi <b>{bookTitles.length}</b> {bookTitles.length === 1 ? 'nimeke' : 'nimekettä'}.</p></li>
         {bookTitles.map(title =>

@@ -3,6 +3,8 @@ import { useSelector } from 'react-redux'
 import calendarService from '../services/calendar'
 import { dateFormat } from '../components/DateFormat'
 import { dateFormatReverse } from '../components/DateFormat'
+import CheckCircleIcon from '@material-ui/icons/CheckCircle'
+import BlockIcon from '@material-ui/icons/Block'
 
 const Calendar = ({ setBeginDate, setEndDate }) => {
     const books = useSelector(state => state.selectedBooks)
@@ -39,7 +41,7 @@ const Calendar = ({ setBeginDate, setEndDate }) => {
                     <div>
                         {uniqueNames.map(n =>
                             <div key={Math.random()}>
-                                <span className="reservation-text">{n}</span><br />
+                                <span className="reservation-text-names">{n}</span><br />
                             </div>)}
                     </div>
                 )
@@ -103,32 +105,23 @@ const Calendar = ({ setBeginDate, setEndDate }) => {
     const CalendarCell = ({ reservation }) => {
         const style = () => {
             if (books.length - reservation.reservations === 0) {
-                return {
-                    backgroundColor: 'red',
-                    border: 'none'
-                }
+                return 'calendar-cell-red'
             } else if (reservation.reservations === 0) {
-                return {
-                    backgroundColor: 'green',
-                    border: 'none'
-                }
+                return 'calendar-cell-green'
             } else {
-                return {
-                    backgroundColor: 'yellow',
-                    border: 'none'
-                }
+                return 'calendar-cell-yellow'
             }
         }
         return (
-            <td style={style()} className="calendar-cell">
+            <td className={style()}>
                 <div className="calendar-date-container">
                     <div className="calendar-date">{date}</div>
-                    <button id="calendar-button" style={style()} onMouseOver={() => handleMouseOver(reservation.date)} onClick={() => handleChooseDate(reservation.date)}>
-                        <span className="reservation-text">varauksia: </span>
+                    <button id="calendar-button" className="calendar-button" onMouseOver={() => handleMouseOver(reservation.date)} onClick={() => handleChooseDate(reservation.date)}>
+                        <span className="reservation-text-no"><BlockIcon fontSize="small" className="reservation-text-no" /></span>
                         <span className="reservations">{reservation.reservations}</span>
-                        <span className="reservation-text">varattavissa: </span>
-                        <span className="reservations">{books.length - reservation.reservations}</span>
-                        <span className="reservation-text">{reservation.names}</span>
+                        <span className="reservation-text-yes"><CheckCircleIcon fontSize="small" className="reservation-text-yes" /></span>
+                        <span className="reservations">{books.length - reservation.reservations}</span><br />
+                        <span className="reservation-text-names">{reservation.names}</span>
                     </button>
                 </div>
             </td>
@@ -142,7 +135,7 @@ const Calendar = ({ setBeginDate, setEndDate }) => {
                 <table className="calendar-table">
                     <tbody>
                         {rows.map(row => <tr key={Math.random()}>
-                            <td className="calendar-cell">{weekNumber(row)}</td>
+                            <td className="calendar-cell-week">{weekNumber(row)}</td>
                             <CalendarCell reservation={row.reservation[0]} />
                             <CalendarCell reservation={row.reservation[1]} />
                             <CalendarCell reservation={row.reservation[2]} />

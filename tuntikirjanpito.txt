@@ -65,8 +65,9 @@ PVM		TUNTIA		TEHTÄVÄ
 25.7.2020	2		Tyylittelyä (css).
 26.7.2020	3		Tyylittelyä (css).
 27.7.2020	5		Käyttöliittymän logiikan yksinkertaistamista. Tyylittelyä (css).
+29.7.2020	4		Tyylittelyä (css).
 -----------------------------------
-Yhteensä	174,5
+Yhteensä	178,5
 
 TODO
 Customer-komponentin tekemät tietokantakyselyt: kaksin- ja kolminkertaiset yhteydenotot?
