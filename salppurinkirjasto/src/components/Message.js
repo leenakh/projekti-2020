@@ -1,5 +1,7 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
+import CheckCircleIcon from '@material-ui/icons/CheckCircle'
+import BlockIcon from '@material-ui/icons/Block'
 
 const Message = () => {
     const reduxMessage = useSelector(state => state.message)
@@ -9,6 +11,7 @@ const Message = () => {
         return (
             <div id="overlay">
                 <div id="message">
+                    <CheckCircleIcon fontSize="large" /><br />
                     {reduxMessage}
                 </div>
             </div>
@@ -17,6 +20,7 @@ const Message = () => {
         return (
             <div id="overlay">
                 <div id="error">
+                    <BlockIcon fontSize="large" /><br />
                     {reduxErrorMessage}
                 </div>
             </div>

@@ -58,7 +58,7 @@ const Reservation = ({ beginDate, setBeginDate, endDate, setEndDate, setReservat
       }
       const booksToReserve = selectedBooks
       if (booksToReserve.length < reservation.numberOfCopies) {
-        dispatch(setErrorMessage(`Liian vähän niteitä varattavissa (${booksToReserve.length} nidettä).`))
+        dispatch(setErrorMessage(`Liian vähän niteitä varattavissa (${booksToReserve.length}).`))
         /* setTimeout(() => {
           dispatch(setErrorMessage(''))
         }, 3000) */
@@ -68,7 +68,7 @@ const Reservation = ({ beginDate, setBeginDate, endDate, setEndDate, setReservat
       const returnedReservation = await reservationService.create(reservation)
       const availableCopies = await bookService.getAvailability({ books: booksToReserve, reservation: returnedReservation })
       if (availableCopies.length < returnedReservation.numberOfCopies) {
-        dispatch(setErrorMessage(`Liian vähän niteitä varattavissa (${availableCopies.length} nidettä).`))
+        dispatch(setErrorMessage(`Liian vähän niteitä varattavissa (${availableCopies.length}).`))
         /* setTimeout(() => {
           dispatch(setErrorMessage(''))
         }, 3000) */

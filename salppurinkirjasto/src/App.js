@@ -70,6 +70,13 @@ const App = () => {
     <Router>
 
       <div className="nav responsive">
+      <div className="logged-in-user">
+          {user !== null ? <div>
+            {loginMessage()}
+            <Logout setUser={setUser} />
+          </div> : null
+          }
+        </div>
         <div className="dropdown">
           <button className="dropdown-button">
             <MenuIcon fontSize="large" />
@@ -81,13 +88,6 @@ const App = () => {
             {user !== null ? <Link className="dropdown-item" to={`/hallitse/${user.username}`}>Omat tiedot</Link> : null}
             {user !== null && user.username === 'admin' ? <Link className="dropdown-item" to="/kirjastonhoitaja">Kirjastonhoitaja</Link> : null}
           </div>
-        </div>
-        <div className="logged-in-user">
-          {user !== null ? <div>
-            {loginMessage()}
-            <Logout setUser={setUser} />
-          </div> : null
-          }
         </div>
       </div>
       {user === null ? <LoginForm setUser={setUser} /> : null}
