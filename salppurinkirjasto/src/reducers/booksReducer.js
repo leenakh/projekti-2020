@@ -3,6 +3,8 @@ import bookService from '../services/books'
 import { setErrorMessage } from '../reducers/errorMessageReducer'
 import { setBookTitles } from '../reducers/bookTitlesReducer'
 import { setSelectedBooks } from './selectedBooksReducer'
+import { setMessage } from './messageReducer'
+import { setBook } from './bookReducer'
 
 export const fetchBookMessage = 'Kirjat löytyivät!'
 export const fetchBookFailMessage = 'Kirjoja ei löytynyt.'
@@ -39,15 +41,22 @@ export const createBook = (isbn, copy, year) => {
                 copy: copy
             }
             const returnedBook = await bookService.create(newBook)
-            dispatch({
-                type: 'NEW_BOOK',
-                data: returnedBook
-            })
+            if (returnedBook) {
+                dispatch({
+                    type: 'NEW_BOOK',
+                    data: returnedBook
+                })
+                dispatch(setBook(returnedBook))
+                dispatch(setMessage('Uuden kirjan lisääminen onnistui.'))
+                setTimeout(() => {
+                    dispatch(setMessage(null))
+                }, 3000)
+            }
         } catch (exception) {
-            dispatch(setErrorMessage('Uuden kirjan luominen ei onnistunut!'))
+            dispatch(setErrorMessage('Uuden kirjan lisääminen ei onnistunut.'))
             setTimeout(() => {
                 dispatch(setErrorMessage(null))
-            }, 5000)
+            }, 3000)
         }
     }
 }

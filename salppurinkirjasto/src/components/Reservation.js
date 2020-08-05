@@ -59,9 +59,9 @@ const Reservation = ({ beginDate, setBeginDate, endDate, setEndDate, setReservat
       const booksToReserve = selectedBooks
       if (booksToReserve.length < reservation.numberOfCopies) {
         dispatch(setErrorMessage(`Liian vähän niteitä varattavissa (${booksToReserve.length}).`))
-        /* setTimeout(() => {
+        setTimeout(() => {
           dispatch(setErrorMessage(''))
-        }, 3000) */
+        }, 3000)
         setShowConfirm(false)
         return
       }
@@ -69,9 +69,9 @@ const Reservation = ({ beginDate, setBeginDate, endDate, setEndDate, setReservat
       const availableCopies = await bookService.getAvailability({ books: booksToReserve, reservation: returnedReservation })
       if (availableCopies.length < returnedReservation.numberOfCopies) {
         dispatch(setErrorMessage(`Liian vähän niteitä varattavissa (${availableCopies.length}).`))
-        /* setTimeout(() => {
+        setTimeout(() => {
           dispatch(setErrorMessage(''))
-        }, 3000) */
+        }, 3000)
         setShowConfirm(false)
         setShowReservationInfo(false)
         await reservationService.remove(returnedReservation.id)
@@ -105,14 +105,14 @@ const Reservation = ({ beginDate, setBeginDate, endDate, setEndDate, setReservat
       dispatch(setSelectedBooks((changedBooks)))
       dispatch(setBooks(booksToChange))
       dispatch(setMessage(reservationMessage))
-      /* setTimeout(() => {
+      setTimeout(() => {
         dispatch(setMessage(''))
-      }, 3000) */
+      }, 3000)
     } catch (exception) {
       dispatch(setErrorMessage(reservationFailMessage))
-      /* setTimeout(() => {
+      setTimeout(() => {
         dispatch(setErrorMessage(''))
-      }, 3000) */
+      }, 3000)
       console.log('Virhe!')
     }
   }
@@ -125,10 +125,10 @@ const Reservation = ({ beginDate, setBeginDate, endDate, setEndDate, setReservat
 
   return (
     <>
-      <div>
-        {bookToReserve !== '' ? <div className="reserve-form-title">{bookToReserve}</div> : <p>Ei valittua kirjaa</p>}
-      </div>
       <div className="reservation-container">
+        <div>
+          {bookToReserve !== '' ? <div className="reserve-form-title">{bookToReserve}</div> : <p>Ei valittua kirjaa</p>}
+        </div>
         <form className="reserve-form" onSubmit={handleMakeReservation}>
           <table>
             <tbody>

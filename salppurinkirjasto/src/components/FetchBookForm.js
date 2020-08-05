@@ -22,7 +22,7 @@ export const FetchBookForm = () => {
         <table>
           <tbody>
             <tr><td className="fetch-form-cell">ISBN-tunnus</td><td><input type="text" value={isbn} id="isbn" onChange={({ target }) => dispatch(setIsbn(target.value))} /></td></tr>
-            <tr><td className="fetch-form-cell">Nimeke</td><td><input type="text" value={title} id="title" onChange={({ target }) => dispatch(setTitle(target.value))} /></td></tr>
+            <tr><td className="fetch-form-cell">Nimeke</td><td><input type="text" placeholder="nimeke tai sen osa" value={title} id="title" onChange={({ target }) => dispatch(setTitle(target.value))} /></td></tr>
           </tbody>
         </table>
         <div className="button-container">

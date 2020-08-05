@@ -9,9 +9,10 @@ import { setBooks } from '../reducers/booksReducer'
 import calendarService from '../services/calendar'
 import Confirmation from '../components/Confirmation'
 
-const removalOfReservation = async (id, reservations, setReservations) => {
+const removalOfReservation = async (id, setReservationsToShow, reservations, setReservations) => {
     const changedReservations = reservations.filter(r => r.id !== id)
     setReservations(changedReservations)
+    setReservationsToShow(changedReservations)
     await reservationService.remove(id)
 }
 
@@ -45,7 +46,7 @@ export const removalOfReservationFromBook = async (id, reservation, books, selec
     dispatch(setSelectedBooks(changedSelectedBooks))
 }
 
-const RemoveReservation = ({ id, reservations, setReservations }) => {
+const RemoveReservation = ({ id, setReservationsToShow, reservations, setReservations }) => {
     const dispatch = useDispatch()
     const books = useSelector(state => state.books)
     const selectedBooks = useSelector(state => state.selectedBooks)
@@ -56,7 +57,7 @@ const RemoveReservation = ({ id, reservations, setReservations }) => {
             const reservation = await reservationService.getOne(id)
             await removalOfReservationFromBook(id, reservation, books, selectedBooks, dispatch)
             await removalOfCalendarEntry(id, reservation)
-            await removalOfReservation(id, reservations, setReservations)
+            await removalOfReservation(id, setReservationsToShow, reservations, setReservations)
             dispatch(setMessage('Varauksen poistaminen onnistui.'))
             setTimeout(() => {
                 dispatch(setMessage(''))
@@ -73,11 +74,10 @@ const RemoveReservation = ({ id, reservations, setReservations }) => {
     return (
         <div>
             {showRemoveConfirm !== false ?
-                <>
-                    <p>Haluatko varmasti poistaa varauksen?</p>
+                <div className="confirmation">
+                    Haluatko poistaa varauksen?<br />
                     <Confirmation execute={remove} setShowConfirm={setShowRemoveConfirm} />
-                </> :
-                <button className="remove-button" onClick={handleRemove}>Poista</button>}
+                </div> : <button className="remove-button" title="Poista varaus pysyvästi." onClick={handleRemove}>Poista</button>}
         </div>
 
 

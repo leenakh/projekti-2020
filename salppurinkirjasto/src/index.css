@@ -1,12 +1,20 @@
 body {
-  margin: 10px;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  margin: 0 auto;
+  width: 900px;
+  background: url("salppurin-kirjasto-piha.png");
+  background-repeat: no-repeat;
+  background-size: 900px;
+  background-color: darkcyan;
+  background-attachment: fixed;
+  background-position: center;
+  font-family: -apple-system, BlinkMacSystemFont, 'Geneva', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
+.nav-container {}
+
 .nav {
-  background-color: #333;
   overflow: hidden;
   padding: 10px;
 }
@@ -65,12 +73,12 @@ body {
 }
 
 .nav a:hover, .dropdown:hover .dropdown-button {
-  background-color: #555;
+  background-color: darkcyan;
   color: white;
 }
 
 .dropdown-menu a:hover {
-  background-color: #ddd;
+  background-color: rgb(190, 214, 214);
   color: black;
 }
 
@@ -83,7 +91,7 @@ body {
     display: none;
   }
   .nav a.icon {
-    float: left;
+    float: right;
     display: block;
   }
 }
@@ -103,7 +111,7 @@ body {
     text-align: left;
   }
   .nav.responsive .dropdown {
-    float: left;
+    float: right;
   }
   .nav.responsive .dropdown-menu {
     width: 100%;
@@ -132,8 +140,26 @@ body {
   float: right;
 }
 
-.calendar-container, .reservation-container, .book-title-container {
+.calendar-container, .reservation-container, .book-title-container, .created-book-container {
   margin-top: 10px;
+  padding: 10px;
+  width: 100%;
+  background-color: rgb(255, 255, 255, 0.75);
+}
+
+.book-title-container {
+  background-color: transparent;
+  padding: 0px;
+}
+
+.reservation-container {
+  background-color: transparent;
+}
+
+.reservation-list-item {
+  background-color: rgb(255, 255, 255, 0.75);
+  padding: 5px;
+  margin: 10px;
 }
 
 .calendar-table {
@@ -162,7 +188,7 @@ body {
   text-align: left;
   padding: 5px;
   border-style: none;
-  background-color: #eaf3ef;
+  background-color: rgb(217, 255, 238, 0.9);
 }
 
 .calendar-cell-red {
@@ -171,7 +197,7 @@ body {
   text-align: left;
   padding: 5px;
   border: none;
-  background-color: rgba(255, 0, 0, 0.185);
+  background-color: #ffd0d0;
 }
 
 .calendar-cell-yellow {
@@ -217,6 +243,10 @@ body {
   opacity: 1
 }
 
+.customer-info-cell {
+  padding-right: 20px;
+}
+
 .reservations {
   display: inline-block;
   margin-right: 20px;
@@ -250,7 +280,7 @@ input {
   outline-style: none;
   border-style: hidden;
   border-radius: 4px;
-  background-color: #eaf3ef;
+  background-color: #e2dfda;
   padding: 4px;
   height: 20px;
 }
@@ -272,13 +302,17 @@ ul {
 
 .customer-info {
   position: absolute;
+  background-color: rgb(255, 255, 255, 0.75);
+  width: max-content;
+  padding: 10px;
+  padding-right: 20px;
 }
 
 table {
   table-layout: fixed;
 }
 
-.loan-info-cell, .borrow-form-cell, .fetch-form-cell, .reserve-form-cell, .customer-form-cell, .login-form-cell, .logout-form-cell {
+.loan-info-cell, .borrow-form-cell, .fetch-form-cell, .reserve-form-cell, .customer-form-cell, .login-form-cell, .logout-form-cell, .create-book-cell {
   min-width: 100px;
   font-weight: bolder;
 }
@@ -293,14 +327,14 @@ table {
 
 .loan-green {
   height: 100px;
+  min-width: 600px;
   padding: 5px;
-  background-color: #eaf3ef;
+  background-color: rgb(217, 255, 238);
   margin-top: 12px;
   border-style: solid;
   border-radius: 8px;
   border-width: 2px;
   border-color: rgb(190, 214, 214);
-  box-shadow: 0px 3px 6px 0px rgba(211, 221, 217, 1);
 }
 
 .loan-red {
@@ -309,12 +343,18 @@ table {
   border-style: solid;
   border-radius: 8px;
   border-width: 2px;
+  background-color: white;
   border-color: rgb(190, 214, 214);
   box-shadow: 0px 3px 6px 0px rgba(211, 221, 217, 1);
 }
 
 .loan-cell-red {
-  background-color: rgba(255, 0, 0, 0.185);
+  background-color: rgba(255, 0, 0, 0.184);
+  padding: 5px;
+}
+
+.loan-cell-green {
+  padding: 5px;
 }
 
 .loan-cell-title {
@@ -326,7 +366,7 @@ table {
   max-width: 350px;
   height: 30px;
   padding-right: 10px;
-  color: darkcyan;
+  color: #008b8b;
   font-weight: bold;
 }
 
@@ -348,36 +388,43 @@ table {
   text-align: center;
   vertical-align: super;
   color: darkcyan;
-  background-color: #eaf3ef;
+
   font-weight: bold;
   border-radius: 4px;
-  box-shadow: 0px 3px 6px 0px rgba(211, 221, 217, 1);
+
 }
 
 .books-container, .user-info-container, .fetch-book-container, .book-info-list-container {
   padding: 10px;
-  width: max-content;
+  width: 90%;
+}
+
+.fetch-book-container {
+  background-color: transparent;
+}
+
+ul.books {
+  width: 100%;
 }
 
 ul.book-title-container {
   position: relative;
-  left: -30px;
+  
 }
 
 li.book-title-container {
+  background-color: transparent;
   position: relative;
   left: 0px;
 }
 
 li.book-info-list-item, li.book {
   min-height: 25px;
-  margin: 10px;
+  width: 100%;
   padding: 5px;
-  border-style: solid;
-  border-radius: 8px;
-  border-width: 2px;
-  border-color: rgb(190, 214, 214);
-  box-shadow: 0px 3px 6px 0px rgba(211, 221, 217, 1);
+  margin: 10px;
+  background-color: rgb(255, 255, 255, 0.75);
+
 }
 
 .button-container {
@@ -391,9 +438,10 @@ li.book-info-list-item, li.book {
   padding: 10px;
 }
 
-.borrow-form-container, .loan-info-container, .customer-form-container, .confirmation-container, .login-form-container, .customer-info {
+.borrow-form-container, .loan-info-container, .customer-form-container, .confirmation-container, .login-form-container, .customer-info, .create-book-form-container {
   margin-top: 10px;
   margin-left: 30px;
+  min-width: 700px;
 }
 
 .book-info, .book-info:active, .book-info:focus, .book-info:visited {
@@ -408,7 +456,7 @@ li.book-info-list-item, li.book {
   color: darkcyan;
 }
 
-.borrow-return-button, .reserve-button, .borrow-button, .filter, .fetch-book, .customer-button, .receive-button, .remove-button, .disable-button, .set-access-button, .return-button, .confirm, .cancel, .login {
+.borrow-return-button, .reserve-button, .borrow-button, .filter, .fetch-book, .customer-button, .receive-button, .remove-button, .disable-button, .set-access-button, .return-button, .confirm, .cancel, .login, .create-button {
   display: inline-block;
   margin-right: 10px;
   background-color: darkcyan;
@@ -419,36 +467,41 @@ li.book-info-list-item, li.book {
   outline: none;
   width: 80px;
   height: 25px;
-  box-shadow: 0px 3px 6px 0px rgba(211, 221, 217, 1);
+  box-shadow: 0px 2px 2px 0px rgba(64, 73, 73, 0.7);
 }
 
 .filter {
-  width: 130px;
+  width: 140px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.borrow-return-button:hover, .reserve-button:hover, .borrow-button:hover, .filter:hover, .fetch-book:hover, .customer-button:hover, .receive-button:hover, .remove-button:hover, .disable-button:hover, .set-access-button:hover, .return-button:hover, .confirm:hover, .cancel:hover, .login:hover, .create-button:hover {
+  background-color: #afadab;
+  color: white;
+  border-style: solid;
+  border-color: #afadab;
+  box-shadow: 0px 2px 2px 0px rgba(64, 73, 73, 0.7);
 }
 
 .logout {
   font-weight: bolder;
   border-style: solid;
   border-width: 1px;
-  border-color: black;
+  border-color: white;
   border-radius: 6px;
   outline-style: none;
   background-color: white;
-  color: black;
+  color: rgba(64, 73, 73);
   width: 80px;
   height: 25px;
+  box-shadow: 0px 2px 2px 0px rgba(64, 73, 73, 0.7);
 }
 
 .logout:hover {
-  background-color: black;
+  background-color: rgba(64, 73, 73);
+  border-color: rgba(64, 73, 73);
   color: white;
-}
-
-.borrow-return-button:hover, .reserve-button:hover, .borrow-button:hover, .filter:hover, .fetch-book:hover, .customer-button:hover, .receive-button:hover, .remove-button:hover, .disable-button:hover, .set-access-button:hover, .return-button:hover, .confirm:hover, .cancel:hover, .login:hover {
-  background-color: rgb(245, 245, 245);
-  color: darkcyan;
-  border-style: solid;
-  border-color: rgb(121, 179, 179);
 }
 
 .author-name, .year {
@@ -461,13 +514,21 @@ li.book-info-list-item, li.book {
   background-color: #eaf3ef;
 }
 
+::placeholder {
+  color: rgb(110, 110, 110);
+  font-family: 'Courier New', Courier, monospace;
+}
+
 .title, .title:visited, .title:focus, .title:active, .choose-book {
   display: inline-block;
   vertical-align: super;
+  text-align: left;
+  width: max-content;
   margin-left: 20px;
+  margin-right: 10px;
   font-size: medium;
   font-weight: bold;
-  color: darkcyan;
+  color: rgb(0, 112, 112);
   border-style: none;
   outline-style: none;
   background-color: transparent;
@@ -476,14 +537,17 @@ li.book-info-list-item, li.book {
 .title:hover, .book-info:hover {
   border-bottom-style: solid;
   border-bottom-width: 2px;
-  border-bottom-color: darkcyan;
+  border-bottom-color: rgb(0, 112, 112);
 }
 
 .reserve-form-title {
   font-size: large;
   font-weight: bold;
   color: darkcyan;
+  background-color: rgb(255, 255, 255, 0.75);
+  width: max-content;
   margin: 10px;
+  padding: 5px;
 }
 
 #overlay {
@@ -508,7 +572,7 @@ li.book-info-list-item, li.book {
   border-radius: 10px;
   border-width: 2px;
   background-color: rgba(255, 255, 255, 0.85);
-  box-shadow: 0px 4px 8px 0px rgb(155, 179, 169);
+  
 }
 
 #error {
@@ -524,7 +588,6 @@ li.book-info-list-item, li.book {
   vertical-align: middle;
   border-radius: 10px;
   background-color: rgba(255, 255, 255, 0.85);
-  box-shadow: 0px 4px 8px 0px rgba(155, 129, 127, 0.6);
 }
 
 code {

@@ -34,9 +34,7 @@ export const ReturnBook = ({ book }) => {
     <div className="return-container">
       {!showConfirm ? <button className="return-button" onClick={handleReturnBook}>Palauta</button> : null}
       <div>
-        {showReturnInfo !== false ?
-            <p>Haluatko palauttaa tämän lainan?</p> : null}
-        {showConfirm !== false ? <Confirmation execute={returnBook} setShowConfirm={setShowConfirm} setShowInfo={setShowReturnInfo} /> : null}
+        {showConfirm !== false ? <><div>Haluatko palauttaa tämän lainan?</div><Confirmation execute={returnBook} setShowConfirm={setShowConfirm} setShowInfo={setShowReturnInfo} /></> : null}
       </div>
     </div>
   )

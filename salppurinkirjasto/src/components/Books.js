@@ -3,11 +3,12 @@ import { useDispatch, useSelector } from 'react-redux'
 import Book from '../components/Book'
 import { setSelectedBooks } from '../reducers/selectedBooksReducer'
 
-const Books = ({ borrowingBookForm }) => {
+const FilterBooks = () => {
     const selectedBooks = useSelector(state => state.selectedBooks)
     const dispatch = useDispatch()
     const [filter, setFilter] = useState('ALL')
-    const [books] = useState(selectedBooks)
+    //const [books] = useState(selectedBooks)
+    const books = useSelector(state => state.books)
 
     const handleFilterBooks = () => {
         if (filter === 'ALL') {
@@ -20,21 +21,23 @@ const Books = ({ borrowingBookForm }) => {
         }
     }
 
-    const FilterBooks = () => {
-        let text = ''
-        let title = ''
-        if (filter === 'ALL') {
-            text = 'Lainattavissa'
-            title = 'Näytä vain lainattavissa olevat kirjat'
-        }
-        else if (filter === 'FILTERED') {
-            text = 'Kaikki'
-            title = 'Näytä kaikki kirjat'
-        }
-        return (
-            <button className="filter" onClick={handleFilterBooks} title={title} >{text}</button>
-        )
+    let text = ''
+    let title = ''
+    if (filter === 'ALL') {
+        text = 'Lainattavissa'
+        title = 'Näytä vain lainattavissa olevat kirjat'
     }
+    else if (filter === 'FILTERED') {
+        text = 'Kaikki'
+        title = 'Näytä kaikki kirjat'
+    }
+    return (
+        <button className="filter" onClick={handleFilterBooks} title={title} >{text}</button>
+    )
+}
+
+const Books = ({ borrowingBookForm }) => {
+    const selectedBooks = useSelector(state => state.selectedBooks)
 
     if (selectedBooks) {
         return (

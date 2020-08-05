@@ -19,9 +19,9 @@ import Reservation from './components/Reservation'
 import UserInfo from './components/UserInfo'
 import Calendar from './components/Calendar'
 import Customer from './components/Customer'
-import MenuIcon from '@material-ui/icons/Menu';
-import Typography from '@material-ui/core/Typography';
+import MenuIcon from '@material-ui/icons/Menu'
 import { getCustomers } from './reducers/customerInfoReducer'
+import BooksReserved from './components/BooksReserved'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -69,24 +69,26 @@ const App = () => {
 
     <Router>
 
-      <div className="nav responsive">
-      <div className="logged-in-user">
-          {user !== null ? <div>
-            {loginMessage()}
-            <Logout setUser={setUser} />
-          </div> : null
-          }
-        </div>
-        <div className="dropdown">
-          <button className="dropdown-button">
-            <MenuIcon fontSize="large" />
-          </button>
-          <div className="dropdown-menu" >
-            <Link className="dropdown-item" to="/">Etusivu</Link>
-            <Link className="dropdown-item" to="/kirjat">Kirjasto</Link>
-            <Link className="dropdown-item" to="/asiakas">Asiakas</Link>
-            {user !== null ? <Link className="dropdown-item" to={`/hallitse/${user.username}`}>Omat tiedot</Link> : null}
-            {user !== null && user.username === 'admin' ? <Link className="dropdown-item" to="/kirjastonhoitaja">Kirjastonhoitaja</Link> : null}
+      <div className="nav-container">
+        <div className="nav responsive">
+          <div className="logged-in-user">
+            {user !== null ? <div>
+              {loginMessage()}
+              <Logout setUser={setUser} />
+            </div> : null
+            }
+          </div>
+          <div className="dropdown">
+            <button className="dropdown-button">
+              <MenuIcon fontSize="large" />
+            </button>
+            <div className="dropdown-menu" >
+              <Link className="dropdown-item" to="/">Etusivu</Link>
+              <Link className="dropdown-item" to="/kirjat">Kirjasto</Link>
+              <Link className="dropdown-item" to="/asiakas">Asiakas</Link>
+              {user !== null ? <Link className="dropdown-item" to={`/hallitse/${user.username}`}>Omat tiedot</Link> : null}
+              {user !== null && user.username === 'admin' ? <Link className="dropdown-item" to="/kirjastonhoitaja">Kirjastonhoitaja</Link> : null}
+            </div>
           </div>
         </div>
       </div>
@@ -112,7 +114,7 @@ const App = () => {
         </Route>
 
         <Route path="/kirjastonhoitaja">
-          {user !== null && user.username === 'admin' ? <CreateBookForm /> : null}
+          {user !== null && user.username === 'admin' ? <CreateBookForm BorrowingBookForm={borrowingBookForm} /> : null}
         </Route>
 
         <Route path="/lainaa">
@@ -130,6 +132,10 @@ const App = () => {
         <Route path="/varaus">
           {user !== null && bookTitles !== null ? reservation() : null}
           {selectedBooks !== [] && selectedBooks !== null ? <Calendar setBeginDate={setBeginDate} setEndDate={setEndDate} reservations={reservations} /> : null}
+        </Route>
+
+        <Route path="/lunasta">
+          <BooksReserved borrowingBookForm={borrowingBookForm} />
         </Route>
 
         <Route path="/asiakas/:id">
@@ -150,8 +156,7 @@ const App = () => {
         </Route>
 
       </Switch>
-
-    </Router>
+    </Router >
   )
 }
 

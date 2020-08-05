@@ -1,13 +1,13 @@
 import React from 'react'
 
-const Confirmation = ({ execute, setShowConfirm, setShowInfo }) => {
+const Confirmation = ({ execute, setShowConfirm }) => {
 
     const handleConfirmation = (value) => {
         if (value === true) {
             execute()
         }
         setShowConfirm(false)
-        setShowInfo(false)
+        //setShowInfo(false)
     }
 
     return (

@@ -33,12 +33,13 @@ const ReceiveReservation = ({ id, setBeginDate, setEndDate }) => {
         dispatch(setSelectedBooks(booksToReceive))
         setBeginDate(reservation.beginDate)
         setEndDate(reservation.endDate)
-        history.push("/lainaa")
+        //history.push("/lainaa")
+        history.push("/lunasta")
     }
 
     return (
         <div>
-            <button className="receive-button" onClick={handleReceive} >Lunasta</button>
+            <button className="receive-button" title="Lainaa varaukseen kuuluvat niteet." onClick={handleReceive} >Lunasta</button>
         </div>
     )
 }

@@ -1,21 +1,29 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { setErrorMessage } from '../reducers/errorMessageReducer'
 import { setSelectedBooks } from '../reducers/selectedBooksReducer'
+import { setBooks, fetchBook } from '../reducers/booksReducer'
 
-const BookInfo = ({ bookTitle }) => {
+export const BookInfo = ({ bookTitle }) => {
   const books = useSelector(state => state.books)
+  const title = useSelector(state => state.title)
+  const isbn = useSelector(state => state.isbn)
   const [book, setBook] = useState(null)
   const dispatch = useDispatch()
   const history = useHistory()
   const [showInfo, setShowInfo] = useState(false)
+
+  useEffect(() => {
+    dispatch(fetchBook(title, isbn))
+  }, [])
 
   const handleSelectBookFromListOfTitles = (bookTitle) => {
     try {
       const booksForSelection = books.filter(b => b.title === bookTitle)
       setBook(booksForSelection[0])
       dispatch(setSelectedBooks(booksForSelection))
+      dispatch(setBooks(booksForSelection))
       history.push("/lainaa")
     } catch (exception) {
       dispatch(setErrorMessage('Kirjoja ei löytynyt.'))
@@ -64,10 +72,10 @@ const SelectTitle = () => {
     <div className="book-info-list-container">
       <ul>
         <li><p>Löytyi <b>{bookTitles.length}</b> {bookTitles.length === 1 ? 'nimeke' : 'nimekettä'}.</p></li>
-        {bookTitles.map(title =>
-          <li className="book-info-list-item" key={title}>
+        {bookTitles.map(t =>
+          <li className="book-info-list-item" key={t}>
             <div>
-              <BookInfo bookTitle={title} />
+              <BookInfo bookTitle={t} />
             </div>
           </li>
         )}

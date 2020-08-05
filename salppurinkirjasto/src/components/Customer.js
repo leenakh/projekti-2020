@@ -21,7 +21,7 @@ const FetchCustomerForm = ({ customerName, setCustomerName }) => {
             <form id="customer-form" onSubmit={handleSubmitCustomer}>
                 <table>
                     <tbody>
-                        <tr><td className="customer-form-cell">Asiakas</td><td><input type="text" value={customerName} id="customer-name" onChange={({ target }) => setCustomerName(target.value)} /></td></tr>
+                        <tr><td className="customer-form-cell">Asiakas</td><td><input type="text" placeholder="käyttäjätunnus" value={customerName} id="customer-name" onChange={({ target }) => setCustomerName(target.value)} /></td></tr>
                     </tbody>
                 </table>
                 <div className="button-container">
@@ -35,11 +35,13 @@ const FetchCustomerForm = ({ customerName, setCustomerName }) => {
 const ToggleLoans = ({ customerInfo, setCustomerInfo }) => {
     const [showAll, setShowAll] = useState(true)
     const [toggleText, setToggleText] = useState('Kaikki')
+    const [titleText, setTitleText] = useState('Näytä kaikki lainat')
     const loans = useSelector(state => state.loans)
 
     const toggle = () => {
         setShowAll(!showAll)
         setToggleText(showAll === false ? 'Kaikki' : 'Palauttamattomat')
+        setTitleText(showAll === false ? 'Näytä kaikki lainat' : 'Näytä vain palauttamattomat lainat')
         filterLoans()
     }
 
@@ -52,7 +54,7 @@ const ToggleLoans = ({ customerInfo, setCustomerInfo }) => {
         }
     }
 
-    return <button className="filter" onClick={toggle} title="Vaihda">{toggleText}</button>
+    return <button className="filter" onClick={toggle} title={titleText}>{toggleText}</button>
 }
 
 const Loan = ({ loan }) => {
@@ -137,9 +139,9 @@ const CustomerInfo = ({ customer, customerInfo, setCustomerInfo }) => {
             <div className="customer-info">
                 <table>
                     <tbody>
-                        <tr><td><b>Käyttäjätunnus</b></td><td>{customerInfo.info.username}</td></tr>
-                        <tr><td><b>Käyttöoikeus</b></td><td>{access(customerInfo.info.accessAllowed)}</td><td><SetAccess customerInfo={customerInfo} setCustomerInfo={setCustomerInfo} /></td></tr>
-                        <tr><td><b>Lainat</b></td></tr>
+                        <tr><td className="customer-info-cell"><b>Käyttäjätunnus</b></td><td className="customer-info-cell">{customerInfo.info.username}</td></tr>
+                        <tr><td className="customer-info-cell"><b>Käyttöoikeus</b></td><td className="customer-info-cell">{access(customerInfo.info.accessAllowed)}</td><td><SetAccess customerInfo={customerInfo} setCustomerInfo={setCustomerInfo} /></td></tr>
+                        <tr><td className="customer-info-cell"><b>Lainat</b></td></tr>
                     </tbody>
                 </table>
                 <div className="loan-info">
@@ -180,7 +182,7 @@ const SetAccess = ({ customerInfo, setCustomerInfo }) => {
         dispatch(setCustomers(changedCustomers))
     }
     return (
-        <button className="set-access-button" onClick={() => handleSetAccess(!customerInfo.info.accessAllowed)}>{accessText}</button>
+        <button className="set-access-button" title="Aseta tai poista lainauskielto tilapäisesti" onClick={() => handleSetAccess(!customerInfo.info.accessAllowed)}>{accessText}</button>
     )
 }
 
