@@ -7,7 +7,6 @@ const FilterBooks = () => {
     const selectedBooks = useSelector(state => state.selectedBooks)
     const dispatch = useDispatch()
     const [filter, setFilter] = useState('ALL')
-    //const [books] = useState(selectedBooks)
     const books = useSelector(state => state.books)
 
     const handleFilterBooks = () => {

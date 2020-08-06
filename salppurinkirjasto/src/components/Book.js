@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { dateFormat } from '../components/DateFormat'
 import ChooseBook from '../components/ChooseBook'
 import ReturnBook from '../components/ReturnBook'
+import BooksLoans from '../components/BooksLoans'
 import { useSelector } from 'react-redux'
 
 const Book = ({ currentBook, borrowingBookForm }) => {
@@ -36,9 +37,8 @@ const Book = ({ currentBook, borrowingBookForm }) => {
           <div>
             {book && !currentBook.loan && book.id === currentBook.id ? borrowingBookForm() : null}
           </div>
+          {book && currentBook.id === book.id ? <BooksLoans /> : null}
         </> : null}
-
-
     </div>
   )
 }

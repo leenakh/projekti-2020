@@ -20,6 +20,7 @@ import UserInfo from './components/UserInfo'
 import Calendar from './components/Calendar'
 import Customer from './components/Customer'
 import MenuIcon from '@material-ui/icons/Menu'
+import CopyrightIcon from '@material-ui/icons/Copyright'
 import { getCustomers } from './reducers/customerInfoReducer'
 import BooksReserved from './components/BooksReserved'
 
@@ -82,13 +83,13 @@ const App = () => {
             <button className="dropdown-button">
               <MenuIcon fontSize="large" />
             </button>
-            <div className="dropdown-menu" >
+            {user !== null ? <div className="dropdown-menu" >
               <Link className="dropdown-item" to="/">Etusivu</Link>
               <Link className="dropdown-item" to="/kirjat">Kirjasto</Link>
               <Link className="dropdown-item" to="/asiakas">Asiakas</Link>
-              {user !== null ? <Link className="dropdown-item" to={`/hallitse/${user.username}`}>Omat tiedot</Link> : null}
+              {user !== null ? <Link className="dropdown-item" to={`/hallitse/${user.username}`}>Omat varaukset</Link> : null}
               {user !== null && user.username === 'admin' ? <Link className="dropdown-item" to="/kirjastonhoitaja">Kirjastonhoitaja</Link> : null}
-            </div>
+            </div> : null }
           </div>
         </div>
       </div>
@@ -153,9 +154,14 @@ const App = () => {
         </Route>
 
         <Route path="/">
+          <div className="main-title">
+            <h1>Salppurin kirjasto</h1>
+          </div>
+          <div className="copyright"><CopyrightIcon className="copyright-icon" fontSize="small" /> Leena Hahtola 2020</div>
         </Route>
 
       </Switch>
+
     </Router >
   )
 }

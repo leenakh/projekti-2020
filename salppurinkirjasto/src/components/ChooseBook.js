@@ -18,7 +18,7 @@ const ChooseBook = ({ book, showInfo, setShowInfo }) => {
       //history.push(`/lainaa/${book.copy}`)
     } else if (!showBorrow) {
       dispatch(setBook(null))
-      history.push('/lainaa')
+      //history.push('/lainaa')
     }
   }
   return (

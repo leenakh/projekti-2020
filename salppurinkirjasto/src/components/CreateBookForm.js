@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { createBook } from '../reducers/booksReducer'
 import { setIsbn } from '../reducers/isbnReducer'
 import { setCopy } from '../reducers/copyReducer'
 import { BookInfo } from '../components/SelectTitle'
+import { setBook } from '../reducers/bookReducer'
 
 const CreateBookForm = () => {
   const dispatch = useDispatch()
@@ -11,6 +12,10 @@ const CreateBookForm = () => {
   const copy = useSelector(state => state.copy)
   const [year, setYear] = useState('')
   const book = useSelector(state => state.book)
+
+  useEffect(() => {
+    dispatch(setBook(null))
+  }, [])
 
   const handleCreateBook = async (event) => {
     event.preventDefault()
@@ -38,7 +43,7 @@ const CreateBookForm = () => {
           </div>
         </form>
       </div>
-        {book ? <div className="created-book-container"><BookInfo bookTitle={book.title} isbn={isbn} /></div> : null}
+      {book ? <div className="created-book-container"><BookInfo bookTitle={book.title} isbn={isbn} /></div> : null}
     </div>
   )
 
