@@ -1,3 +1,8 @@
-# projekti-2020
+# Full stack -kurssin harjoitustyö vapaavalintaisesta aiheesta
+## Kesä 2020
 
-[Dokumentaatio](salppurinkirjasto/ohjeet.md)
+Harjoitustyönä rakentamani kirjastojärjestelmäsovellus on käynnissä osoitteessa [osoite](jotain).
+
+Järjestelmän kuvaus ja käyttöohje löytyvät [tästä dokumentista](salppurinkirjasto/ohjeet.md).
+
+Projektin tuntikirjanpito on [tässä](tuntikirjanpito.txt).
