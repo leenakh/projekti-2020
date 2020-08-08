@@ -139,7 +139,7 @@ const CustomerInfo = ({ customer, customerInfo, setCustomerInfo }) => {
             <div className="customer-info">
                 <table>
                     <tbody>
-                        <tr><td className="customer-info-cell"><b>Käyttäjätunnus</b></td><td className="customer-info-cell">{customerInfo.info.username}</td></tr>
+                        <tr><td className="customer-info-cell"><b>Asiakastunnus</b></td><td className="customer-info-cell">{customerInfo.info.username}</td></tr>
                         <tr><td className="customer-info-cell"><b>Käyttöoikeus</b></td><td className="customer-info-cell">{access(customerInfo.info.accessAllowed)}</td><td><SetAccess customerInfo={customerInfo} setCustomerInfo={setCustomerInfo} /></td></tr>
                         <tr><td className="customer-info-cell"><b>Lainat</b></td></tr>
                     </tbody>

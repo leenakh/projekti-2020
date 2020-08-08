@@ -115,10 +115,11 @@ const isAvailable = async (book, reservation, user) => {
         }
         let r = bookToReserve.reservations[i]
         ownReservation = isLoan && moment().isSameOrAfter(r.beginDate) && moment(reservation.endDate).isSameOrBefore(r.endDate) && user === r.user.toString()
-        result = (moment(reservation.endDate).isBefore(r.beginDate)
+        result = ((moment(reservation.endDate).isBefore(r.beginDate)
             || moment(reservation.beginDate).isAfter(r.endDate))
             && (moment(reservation.endDate).isBefore(loanBeginDate)
-                || moment(reservation.beginDate).isAfter(loanEndDate))
+                || moment(reservation.beginDate).isAfter(loanEndDate)))
+                || r.received === true
         if (ownReservation === true) {
             return true
         } else if (result === false) {

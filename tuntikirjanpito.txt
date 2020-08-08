@@ -70,8 +70,10 @@ PVM		TUNTIA		TEHTÄVÄ
 3.8.2020	4		Tyylittelyä (css). Pieniä korjauksia UserInfo-komponentin toimintaan.
 4.8.2020	2		Tyylittelyä (css). Pieni korjaus SelectTitle-komponenttiin ja lisäys CreateBook-komponenttiin.
 5.8.2020	5		Pieniä korjauksia varauksen lunastamistoiminnallisuuteen (BooksReserved-komponentti) ja lisäys kirjan tietojen esittämiseen (BooksLoans-komponentti, joka näyttää kaikki yksittäisen niteen lainat). Ulkoasun viimeistelyä. Siivoamista.
+6.8.2020	2		Dokumentaation kirjoittamista.
+8.8.2020	2		Pieni korjaus kirjan lainaamisen ehtoihin (backend). Lisäys uloskirjautumistoiminnallisuuteen: tilan resetoiminen. Dokumentaation kirjoittamista.
 -----------------------------------
-Yhteensä	191,5
+Yhteensä	193,5
 
 TODO
 Tietokantaan kertyvän datan rajaaminen?
