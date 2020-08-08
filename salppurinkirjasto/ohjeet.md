@@ -4,7 +4,13 @@
 
 ### Käyttötarkoitus ja käyttöympäristö
 
-Sovellus on suunniteltu koulukirjaston käyttöön. Tämän vuoksi sovelluksella on joitakin erityispiirteitä:
+Sovelluksella on mahdollista hallinnoida kirjastotietokantaa ja siihen liittyviä lainaustietoja. Lisäksi sovellus sisältää kirjaston varausjärjestelmän. Sovelluksen toimintoja ovat siis
+- kirjojen lisääminen tietokantaan
+- kirjojen lainaaminen asiakkaille
+- lainojen palauttaminen
+- kirjavarausten tekeminen.
+
+Sovellus on suunniteltu koulukirjaston käyttöön. Tämän vuoksi sillä on joitakin erityispiirteitä:
 - Kirjaston asiakkaat eivät voi itse hallinnoida lainojaan, ja vain opettajat voivat olla kirjautuneita käyttäjiä.
 - Kirjoja käsitellään koulukirjastossa usein isoina nidesarjoina, joten käyttöliittymässäkin kunkin nimekkeen niteet esitetään kaikki samassa näkymässä, josta poistumatta on mahdollista myös käsitellä kunkin niteen lainaustilannetta.
 - Kirjojen varausjärjestelmä perustuu siihen, että opettaja varaa tiettyä oppilasryhmää varten tarvitsemansa niteet ja varaus kirjautuu opettajan nimelle. Varausta lunastaessaan opettaja kirjaa lainat oppilaille eli asiakkaille.
@@ -15,11 +21,11 @@ Sovellus on suunniteltu koulukirjaston käyttöön. Tämän vuoksi sovelluksella
 
 Järjestelmän ylläpitäjä luo käyttäjätunnukset. Ylläpitäjän lisäksi ainoa käyttäjäryhmä on lainoja hallinnoivat käyttäjät, joilla on oikeus lainata kirjoja asiakkaille, tehdä kirjavarauksia asiakkaiden puolesta ja palauttaa asiakkaiden lainoja. Käyttäjät voivat myös hallinnoida asiakkaiden lainauskieltoja (väliaikaisesti). Käyttäjät eivät voi rekisteröityä itse, ja asiakkailla ei ole lainkaan pääsyä järjestelmään.
 
-Käyttäjästä kirjataan järjestelmään seuraavat tiedot: etunimi, sukunimi ja käyttäjätunnus. Kirjautumiseen tietenkin tarvitaan myös salasana.
+Käyttäjästä kirjataan järjestelmään etunimi, sukunimi ja käyttäjätunnus. Kirjautumiseen tietenkin tarvitaan myös salasana.
 
 Asiakkaista kirjataan järjestelmään vain asiakastunnus, jonka täytyy olla uniikki. Lisäksi järjestelmässä pidetään tietoa siitä, onko asiakkaalla lupa käyttää kirjaston palveluja. Järjestelmä ajaa kerran vuorokaudessa ohjelman, jolla asetetaan lainauskiellot kaikille asiakkaille, joilla on erääntyneitä lainoja.
 
-Järjestelmän ylläpitäjällä on käytettävissään hallintanäkymä (päävalikossa `Kirjastonhoitaja`), jonka kautta hän voi lisätä kirjoja tietokantaan. Sovellus hakee kirjan tiedot ISBN-numeron perusteella Helmet-tietokannasta avoimen rajapinnan kautta. Lisäyslomakkeen kautta on kuitenkin syötettävä erikseen kirjan julkaisuvuosi (Helmet-tietokannasta sitä ei ole saatavilla) ja niteen numero.
+Järjestelmän ylläpitäjällä on käytettävissään hallintanäkymä (päävalikossa `Kirjastonhoitaja`), jonka kautta hän voi lisätä kirjoja tietokantaan. Sovellus hakee kirjan tiedot ISBN-numeron perusteella Helmet-tietokannasta avoimen rajapinnan kautta. Lisäyslomakkeella on kuitenkin syötettävä erikseen kirjan julkaisuvuosi (Helmet-tietokannasta sitä ei ole saatavilla) ja niteen numero.
 
 ## Käyttöohje
 
@@ -58,13 +64,13 @@ Voit valita haluamasi varauksen alkamispäivän suoraan kalenterista napsauttama
 
 Valitse päävalikosta `Omat varaukset`. Näkymässä esitetään oletuksena ne varaukset, jotka ovat aktiivisessa tilassa eli joita ei ole arkistoitu. Napsauttamalla painiketta `Kaikki` saat näkyviin myös arkistoidut varaukset.
 
-Napsauttamalla painiketta `Lunasta` pääset näkymään, jossa on luettelo kaikista varaukseen kuuluvista niteistä. Tässä näkymässä voit lainata varaukseen kuuluvia niteitä asiakkaille. Kaikkia niteitä ei tarvitse lainata yhdellä kertaa, vaan voit jatkaa lainaamista myöhemmin. Kun olet lainannut kaikki tarvitsemasi niteet, napsauta painiketta `Arkistoi`. Arkistoimisen jälkeen et voi enää lainata niteitä.
+Napsauttamalla painiketta `Lunasta` pääset näkymään, jossa on luettelo kaikista varaukseen kuuluvista niteistä. Tässä näkymässä voit lainata varaukseen kuuluvia niteitä asiakkaille. Kaikkia niteitä ei tarvitse lainata yhdellä kertaa, vaan voit jatkaa lainaamista myöhemmin. Kun olet lainannut kaikki tarvitsemasi niteet, napsauta painiketta `Arkistoi`. Arkistoimisen jälkeen varaus poistetaan lainaamatta jääneiltä niteiltä.
 
 Jos haluat poistaa varauksen ja kaikki siihen liittyvä tiedot pysyvästi, napsauta painiketta `Poista`.
 
 ### Asiakkaan tietojen tarkasteleminen
 
-Valitse päävalikosta `Asiakas`. Syötä hakulomakkeelle asiakastunnus. Avautuvassa näkymässä on luettelo asiakkaalle kirjatuista lainoista. Oletuksena esitetään vain ne lainat, jotka ovat palauttamatta. Napsauttamalla painiketta `Kaikki` saat näkyviin kaikki asiakkaalle kirjatut lainat.
+Valitse päävalikosta `Asiakas`. Syötä hakulomakkeelle asiakastunnus. Avautuvassa näkymässä on luettelo asiakkaalle kirjatuista lainoista. Oletuksena esitetään vain ne lainat, jotka ovat palauttamatta. Napsauttamalla painiketta `Kaikki` saat näkyviin myös asiakkaan palauttamat lainat.
 
 Vihreällä taustalla on merkitty ne lainat, jotka asiakas on palauttanut tai joissa on laina-aikaa vielä jäljellä. Erääntyneet lainat on merkitty punaisella raidalla. Nimekekenttää napsauttamalla pääset kirjan lainauslomakkeelle ja voit esim. palauttaa lainan tai jatkaa kirjan laina-aikaa.
 
