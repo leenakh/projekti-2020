@@ -73,10 +73,4 @@ PVM		TUNTIA		TEHTÄVÄ
 6.8.2020	2		Dokumentaation kirjoittamista.
 8.8.2020	2		Pieni korjaus kirjan lainaamisen ehtoihin (backend). Lisäys uloskirjautumistoiminnallisuuteen: tilan resetoiminen. Dokumentaation kirjoittamista.
 -----------------------------------
-Yhteensä	193,5
-
-TODO
-Tietokantaan kertyvän datan rajaaminen?
-Responsiivisuus: fontin suurentaminen pienemmällä näytöllä?
-Hakutermisyötteen käsittely virtaviivaisemmaksi?
-Komponenttien näkyvyyden säätelyyn jokin patenttiratkaisu? Props.children?
+Yhteensä	187,5
